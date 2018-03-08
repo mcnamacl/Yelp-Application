@@ -1,4 +1,3 @@
-
 class DataPoint {
 
   private String userId;

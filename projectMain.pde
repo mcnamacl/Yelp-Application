@@ -3,9 +3,14 @@
 ArrayList<DataPoint> dataPoints;
 ArrayList<String> userIds;
 Table table;
+PFont font;
+
+void settings() {
+  size(SCREENX, SCREENY);
+}
 
 void setup() {
-  
+  font = loadFont("Cambria-20.vlw");
   dataPoints = new ArrayList<DataPoint>();
   table = loadTable("testData.csv", "header");
   for (TableRow row : table.rows()) {
@@ -14,13 +19,16 @@ void setup() {
     dataPoints.add(dp);
     
   }
-  
-  for (DataPoint dp : dataPoints) {
-    println(dp);
-  }
 }
 
 void draw() {
+  background(backgroundColour);
+  int y = 10;
+  for (DataPoint dp : dataPoints) {
+    fill(textColour);
+    text(dp.toString(), 0, y, SCREENX, SCREENY);
+    y+=200;
+  }
 }
 
 void mousePressed() {
