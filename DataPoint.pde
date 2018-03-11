@@ -24,6 +24,46 @@ class DataPoint {
     this.cool = cool;
   }
 
+  public String getUserId() {
+    return userId;
+  }
+
+  public String getUserName() {
+    return userName;
+  }
+
+  public String getBusinessId() {
+    return businessId;
+  }
+
+  public String getBusinessName() {
+    return businessName;
+  }
+
+  public int getStars() {
+    return stars;
+  }
+
+  public String getDate() {
+    return date;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public int getUseful() {
+    return useful;
+  }
+
+  public int getFunny() {
+    return funny;
+  }
+
+  public int getCool() {
+    return cool;
+  }
+
   public String toString() {
     String string = "userID = " + this.userId + "\n";
     string += "userName = " + this.userName + "\n";
@@ -36,7 +76,5 @@ class DataPoint {
     string += "funny: " + this.funny + "\n";
     string += "cool: " + this.cool + "\n";
     return string;
-    
   }
-  
 }
