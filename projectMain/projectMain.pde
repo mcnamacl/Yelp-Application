@@ -26,7 +26,12 @@ void setup() {
   businesses = new ArrayList<Business>();
   loadData();
   loadReviewBusiness();
-  search = new Search();
+  Search search = new Search();
+  search.mostRecentReview(reviews);
+  for (Review re : reviews) {
+    println(re.getDate());
+  }
+  
 
   ////This should be an event Quiktrip is an example
   //ArrayList<Business> searchedBusinesses = search.searchBusinessList("Quiktrip No 453", businesses);
@@ -58,6 +63,7 @@ void loadData() {
     dataPoints.add(dp);
   }
 }
+
 //TODO change name DONEEE!!!
 void loadReviewBusiness() {
   for (DataPoint dp : dataPoints) {
