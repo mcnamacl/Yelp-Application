@@ -6,18 +6,6 @@ class Search {
   Search() {
   }
 
-
-  /*ArrayList searchBusinessList(String userSearch, ArrayList<Business> businesses) {
-    userSearch = userSearch.toLowerCase();
-    ArrayList<Business> foundBusinesses = new ArrayList<Business>();
-    int index;
-    for (index = 0; index < businesses.size(); index++) {
-      if (userSearch.equals(businesses.get(index).getBusinessName().toLowerCase())) {
-        foundBusinesses.add(businesses.get(index));
-      }
-    }
-    return foundBusinesses;
-  }*/
   
   ArrayList searchBusinessList(String userSearch) {
   userSearch = userSearch.toLowerCase();

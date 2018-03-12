@@ -33,13 +33,13 @@ void setup() {
   }
   
 
-  ////This should be an event Quiktrip is an example
-  //ArrayList<Business> searchedBusinesses = search.searchBusinessList("Quiktrip No 453", businesses);
-  //for (Business business : searchedBusinesses) {
-  //  search.getStars(business);
-  //  business.displayStarCategories();
-  //  //println(business.getBusinessName() + " " + business.getBusinessId());
-  //}
+  //This should be an event Quiktrip is an example
+  ArrayList<Business> searchedBusinesses = search.searchBusinessList("Quiktrip No 453");
+  for (Business business : searchedBusinesses) {
+    search.getStars(business);
+    business.displayStarCategories();
+    println(business.getBusinessName() + " " + business.getBusinessId());
+  }
 
 
   //interface element
