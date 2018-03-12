@@ -18,7 +18,6 @@ class typeToScreen {
     }
   }
 
-
   void keyPressed() {
     println(widget1.myText);
     if (keyCode == BACKSPACE) {
