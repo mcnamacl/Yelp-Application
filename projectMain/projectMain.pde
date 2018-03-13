@@ -1,24 +1,24 @@
-//String userId, String userName, String businessId, String businessName, int stars, String date, String text, int useful, int funny, int cool
-
+boolean canType=false;
+PFont stdFont;
+Widget searchbox;
+String myText = "Search...";  
+Screen screen1, screen2, currentScreen;
 ArrayList<DataPoint> dataPoints;
 ArrayList<Review> reviews;
 ArrayList<Business> businesses;
-//Map<String, Review> 
-Table table;
-PFont font, widgetFont;
-typeToScreen typeToScreen;
-Widget widget1;
-Search search;
 ArrayList<Screen> screens = new ArrayList<Screen>();
 Screen homeScreen;
 ArrayList<Widget> homescreenWidgets = new ArrayList<Widget>();
-
-void settings() {
-  size(SCREENX, SCREENY);
-}
+Table table;
+PFont font, widgetFont;
+Search search;
 
 void setup() {
+  size(500, 500);
+  textSize(30);
+  fill(0);
   widgetFont=loadFont("Arial-ItalicMT-30.vlw");
+  searchbox=new Widget(WIDGETX, WIDGETY, 280, 40, myText, color(blue), widgetFont, EVENT_BUTTON1);
   font = loadFont("Cambria-20.vlw");
   dataPoints = new ArrayList<DataPoint>();
   table = loadTable("reviews.csv", "header");
@@ -26,33 +26,82 @@ void setup() {
   businesses = new ArrayList<Business>();
   loadData();
   loadReviewBusiness();
-  Search search = new Search();
+  search = new Search();
   search.mostRecentReview(reviews);
-  for (Review re : reviews) {
-    println(re.getDate());
-  }
+  //for (Review re : reviews) {
+  //  println(re.getDate());
+  //}
+
+  // //This should be an event Quiktrip is an example
+  //ArrayList<Business> searchedBusinesses = search.searchBusinessList("Quiktrip No 453");
+  //for (Business business : searchedBusinesses) {
+  //  search.getStars(business);
+  //  business.displayStarCategories();
+  //  println(business.getBusinessName() + " " + business.getBusinessId());
+  //}
+}
+  
   
 
-  //This should be an event Quiktrip is an example
-  ArrayList<Business> searchedBusinesses = search.searchBusinessList("Quiktrip No 453");
-  for (Business business : searchedBusinesses) {
-    search.getStars(business);
-    business.displayStarCategories();
-    println(business.getBusinessName() + " " + business.getBusinessId());
-  }
-
-
-  //interface element
-  creationOfWidgets();
-  creationOfScreens();
+void draw() {
+  background(255);
+  searchbox.draw();
 }
 
-void draw() {
-  //cant stay as for loop needs to change based upon an event
-  for (Screen screen : screens) {
-    screen.draw();
+
+void mouseMoved(){
+    searchbox.setStroke(mouseX,mouseY);
   }
- typeToScreen.getEvent();
+
+
+void keyPressed() {
+  if (canType) {
+    if (key == BACKSPACE) { //<>//
+      if (searchbox.myText.length()-1 <= 0) {
+        searchbox.myText = "";
+      }
+      else if (myText.length() > 0) {
+        searchbox.myText = searchbox.myText.substring(0, searchbox.myText.length()-1);
+      }
+    } else if (keyCode == DELETE) {
+        searchbox.myText = "";
+    }
+    else if (keyCode == SHIFT || keyCode==ALT ||keyCode==UP ||keyCode==DOWN ||keyCode==LEFT||keyCode==RIGHT||keyCode==CONTROL) {
+    }
+    else if (key != ENTER && keyCode>=32 && keyCode<=127) {
+        searchbox.myText =searchbox.myText + key;
+    }
+    else if (key == ENTER) {
+        searchbox.returnString();
+        canType=false;
+          ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
+          println(searchbox.myText);
+          for (Business business : searchedBusinesses) {
+            search.getStars(business);
+            business.displayStarCategories();
+            println(business.getBusinessName() + " " + business.getBusinessId());
+          }
+    }
+  }
+}
+
+void mousePressed() {
+  int event;
+  event = searchbox.getEvent(mouseX, mouseY);
+  switch(event) {
+  case EVENT_BUTTON1:
+  if(searchbox.myText=="Search..."){
+      searchbox.myText="";
+    } 
+    canType=true;
+    break;
+  default:
+    canType=false;
+    if(searchbox.myText==""){
+      searchbox.myText="Search...";
+    }
+    break;    
+  }
 }
 
 
@@ -64,25 +113,10 @@ void loadData() {
   }
 }
 
-//TODO change name DONEEE!!!
+
 void loadReviewBusiness() {
   for (DataPoint dp : dataPoints) {
     reviews.add(new Review(dp.getUserName(), dp.getBusinessName(), dp.getBusinessId(), dp.getStars(), dp.getText(), dp.getDate(), dp.getUseful(), dp.getFunny(), dp.getCool()));
     businesses.add(new Business(dp.getBusinessName(), dp.getBusinessId()));
   }
-}
-
-void creationOfWidgets() {
-  int counter = 0;
-  for (int i = 0; i < 1; i++) {
-    counter++;
-    widget1=new Widget(WIDGETX, WIDGETY, 280, 40, "Search...", color(GREEN), widgetFont, counter);
-    homescreenWidgets.add(widget1);
-  }
-  typeToScreen = new typeToScreen(widget1);
-}
-
-void creationOfScreens(){
-  homeScreen = new Screen(HOMESCREEN_BACKGROUND, homescreenWidgets);
-  screens.add(homeScreen);
 }

@@ -15,4 +15,4 @@ final int WIDGETX=100;
 final int WIDGETY=300;
 final int EVENT_NULL=0;
 final int EVENT_BUTTON1=1; 
-final color GREEN=#00FF46;
+color blue=#0070FF;
