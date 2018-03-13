@@ -41,7 +41,69 @@ void setup() {
   //}
 }
   
- 
+  
+
+void draw() {
+  background(255);
+  searchbox.draw();
+}
+
+
+void mouseMoved(){
+    searchbox.setStroke(mouseX,mouseY);
+  }
+
+
+void keyPressed() {
+  if (canType) {
+    if (key == BACKSPACE) { //<>//
+      if (searchbox.myText.length()-1 <= 0) {
+        searchbox.myText = "";
+      }
+      else if (myText.length() > 0) {
+        searchbox.myText = searchbox.myText.substring(0, searchbox.myText.length()-1);
+      }
+    } else if (keyCode == DELETE) {
+        searchbox.myText = "";
+    }
+    else if (keyCode == SHIFT || keyCode==ALT ||keyCode==UP ||keyCode==DOWN ||keyCode==LEFT||keyCode==RIGHT||keyCode==CONTROL) {
+    }
+    else if (key != ENTER && keyCode>=32 && keyCode<=127) {
+        searchbox.myText =searchbox.myText + key;
+    }
+    else if (key == ENTER) {
+        searchbox.returnString();
+        canType=false;
+          ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
+          println(searchbox.myText);
+          for (Business business : searchedBusinesses) {
+            search.getStars(business);
+            business.displayStarCategories();
+            println(business.getBusinessName() + " " + business.getBusinessId());
+          }
+    }
+  }
+}
+
+void mousePressed() {
+  int event;
+  event = searchbox.getEvent(mouseX, mouseY);
+  switch(event) {
+  case EVENT_BUTTON1:
+  if(searchbox.myText=="Search..."){
+      searchbox.myText="";
+    } 
+    canType=true;
+    break;
+  default:
+    canType=false;
+    if(searchbox.myText==""){
+      searchbox.myText="Search...";
+    }
+    break;    
+  }
+}
+
 
 void loadData() {
   for (TableRow row : table.rows()) {
