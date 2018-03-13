@@ -28,9 +28,10 @@ class Widget {
   }
   
   int setStroke(int mouseX, int mouseY){
-    strokeColor=(0);
+    strokeColor=(150);
+    strokeWeight(2);
     if(mouseX>x && mouseX < x+width && mouseY >y && mouseY <y+height){
-        strokeColor=(255);
+        strokeColor=(0);
         return strokeColor;
      }
      return strokeColor;
@@ -38,10 +39,13 @@ class Widget {
   
   int getEvent(int mouseX, int mouseY){
      if(mouseX>x && mouseX < x+width && mouseY >y && mouseY <y+height){
-       //println("get event"); 
        return event;
      }
      return EVENT_NULL;
+  }
+  
+  String returnString(){
+    return searchbox.myText;
   }
   
 }
