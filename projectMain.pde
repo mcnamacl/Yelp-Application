@@ -41,7 +41,7 @@ void setup() {
   businessNames = new HashSet<String>();
   businessReviewMap = new TreeMap<String, ArrayList<Review>>();
   loadData();
-  loadReviewBusiness();s
+  loadReviewBusiness();
   search = new Search();
   search.createBusinessAZMap();
   search.mostRecentReview(reviews);
