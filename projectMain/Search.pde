@@ -86,16 +86,16 @@ class Search {
     return topTenBusinesses;
   }
 
-  //double getAverageStarsOfBusiness(String businessName) {
-  // ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
-  //  double total = 0;
-  //  double count = 0;
-  //  if (businessReviews != null) {
-  //    for (Review review : businessReviews) {
-  //      total += review.getStars();
-  //      count++;
-  //    }
-  //  }
-  //  return Double.parseDouble(String.format("%.2f", total/count));
-  //}
+  double getAverageStarsOfBusiness(String businessName) {
+   ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
+    double total = 0;
+    double count = 0;
+    if (businessReviews != null) {
+      for (Review review : businessReviews) {
+        total += review.getStars();
+        count++;
+      }
+    }
+    return Double.parseDouble(String.format("%.2f", total/count));
+  }
 }

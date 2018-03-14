@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Arrays;
 
 
-boolean canType=false, drawBarChart = false;
+boolean canType=false;
 PFont stdFont;
 PImage logoImage;
 Widget searchbox, homeButton;
@@ -26,7 +26,7 @@ PFont font, widgetFont;
 Search search;
 
 //charts
-BarChart barchart;
+TopRatedBusinessBarChart barchart;
 
 void settings() {
   size(SCREENX, SCREENY);
@@ -101,7 +101,7 @@ void keyPressed() {
         ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
         println(searchbox.myText);
 
-        println("Average stars: " + search.searchBusinessList(searchbox.myText));
+        println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
         /*for (Business business : searchedBusinesses) {
          search.getStars(business);
          business.displayStarCategories();
@@ -174,5 +174,5 @@ void loadReviewBusiness() {
 
 void displayChart() {
   Business[] topRatedBusinesses = search.getTopTenBusinesses();
-  barchart = new BarChart(150, 400, topRatedBusinesses);
+  barchart = new TopRatedBusinessBarChart(150, 400, topRatedBusinesses);
 }
