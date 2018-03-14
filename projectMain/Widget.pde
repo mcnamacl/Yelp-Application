@@ -4,6 +4,7 @@ class Widget {
   int event;
   color widgetColor, myTextColor;
   PFont widgetFont;
+  PImage logoImage;
   color strokeColor;
 
   Widget(int x,int y, int width, int height, String myText, color widgetColor, PFont widgetFont, int event){
@@ -18,13 +19,25 @@ class Widget {
     myTextColor= color(0);
    }
    
+   Widget(int x, int y, int width, int height, PImage logoImage, int event){
+    this.x=x; 
+    this.y=y; 
+    this.width = width; 
+    this.height= height;
+    this.logoImage= logoImage; 
+    this.event=event; 
+   }
+   
   void draw(){
     fill(widgetColor);
     stroke(strokeColor);
     rect(x,y,width,height);
     fill(myTextColor);
     text(myText, x+10, y+height-10);
-    
+  }
+  
+  void drawImage(){
+    image(logoImage,x,y);
   }
   
   int setStroke(int mouseX, int mouseY){
