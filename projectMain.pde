@@ -7,7 +7,8 @@ import java.util.Arrays;
 
 boolean canType=false;
 PFont stdFont;
-Widget searchbox;
+PImage logoImage;
+Widget searchbox,homeButton;
 String myText = "Search...";  
 Screen screen1, screen2, currentScreen, homeScreen;
 ArrayList<DataPoint> dataPoints;
@@ -27,8 +28,11 @@ void setup() {
   size(500, 500);
   textSize(30);
   fill(0);
+  logoImage=loadImage("logo.png");
   widgetFont=loadFont("Arial-ItalicMT-30.vlw");
-  searchbox=new Widget(WIDGETX, WIDGETY, 280, 40, myText, color(blue), widgetFont, EVENT_BUTTON1);
+  searchbox=new Widget(SEARCHBOXX, SEARHBOXY, 280, 40, myText, color(blue), widgetFont, EVENT_BUTTON1);
+  homeButton=new Widget(HOMEX, HOMEY,60,60,logoImage, EVENT_BUTTON2);
+  homeScreen=new Screen(color(HOMESCREEN_BACKGROUND),homescreenWidgets);
   font = loadFont("Cambria-20.vlw");
   dataPoints = new ArrayList<DataPoint>();
   table = loadTable("reviews.csv", "header");
@@ -37,12 +41,14 @@ void setup() {
   businessNames = new HashSet<String>();
   businessReviewMap = new TreeMap<String, ArrayList<Review>>();
   loadData();
-  loadReviewBusiness();
+  loadReviewBusiness();s
   search = new Search();
   search.createBusinessAZMap();
   search.mostRecentReview(reviews);
   println(businessReviewMap.keySet());
-
+  homescreenWidgets.add(searchbox);
+  homescreenWidgets.add(homeButton);
+  currentScreen=homeScreen;
 
   // //This should be an event Quiktrip is an example
   //ArrayList<Business> searchedBusinesses = search.searchBusinessList("Quiktrip No 453");
@@ -57,7 +63,10 @@ void setup() {
 
 void draw() {
   background(255);
+  fill(#0004B4);
+  rect(0,0,SCREENX,70);
   searchbox.draw();
+  homeButton.drawImage();
 }
 
 
@@ -77,7 +86,7 @@ void keyPressed() {
     } else if (keyCode == DELETE) {
       searchbox.myText = "";
     } else if (keyCode == SHIFT || keyCode==ALT ||keyCode==UP ||keyCode==DOWN ||keyCode==LEFT||keyCode==RIGHT||keyCode==CONTROL) {
-    } else if (key != ENTER && keyCode>=32 && keyCode<=127) {
+    } else if (key != ENTER && keyCode>=32 && keyCode<=223) {
       searchbox.myText =searchbox.myText + key;
     } else if (key == ENTER) {
       searchbox.returnString();
@@ -97,7 +106,8 @@ void keyPressed() {
 
 void mousePressed() {
   int event;
-  event = searchbox.getEvent(mouseX, mouseY);
+  //event = searchbox.getEvent(mouseX, mouseY);
+  event = currentScreen.getEvent(mouseX,mouseY);
   switch(event) {
   case EVENT_BUTTON1:
     if (searchbox.myText=="Search...") {
@@ -105,6 +115,12 @@ void mousePressed() {
     } 
     canType=true;
     break;
+    
+  case EVENT_BUTTON2:
+      searchbox.myText="Search...";
+      canType=false;
+    break;
+  
   default:
     canType=false;
     if (searchbox.myText=="") {

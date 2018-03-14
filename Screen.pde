@@ -1,36 +1,34 @@
 class Screen {
   color backgroundColor;
-  ArrayList <Widget> widgetList;
+  ArrayList <Widget> homescreenWidgets;
   int event;
 
   Screen(color backgroundColor, ArrayList widgetList) {
     this.backgroundColor=backgroundColor;
-    this.widgetList=widgetList;
+    this.homescreenWidgets=widgetList;
   }
   
   void draw() {
     background(backgroundColor);
-    for (int i = 0; i<widgetList.size(); i++) {
-      Widget aWidget = (Widget)widgetList.get(i);
+    for (int i = 0; i<homescreenWidgets.size(); i++) {
+      Widget aWidget = (Widget)homescreenWidgets.get(i);
       aWidget.draw();
     }
   }
   
   void addWidget(Widget w){
-    widgetList.add(w);
+    homescreenWidgets.add(w);
   }
   
   
   Widget getWidget(int index){
-    return widgetList.get(index);
+    return homescreenWidgets.get(index);
   }
   
    int getEvent(int mouseX, int mouseY){
-      for(int i=0; i<widgetList.size();i++){
-        //widgetList.get(i).getEvent(mouseX,mouseY);
-       if(mouseX>widgetList.get(i).x && mouseX < widgetList.get(i).x+widgetList.get(i).width && mouseY >widgetList.get(i).y && mouseY <widgetList.get(i).y+widgetList.get(i).height){
-          //println("forward/backward");
-         return widgetList.get(i).event;
+      for(int i=0; i<homescreenWidgets.size();i++){
+       if(mouseX>homescreenWidgets.get(i).x && mouseX < homescreenWidgets.get(i).x+homescreenWidgets.get(i).width && mouseY >homescreenWidgets.get(i).y && mouseY <homescreenWidgets.get(i).y+homescreenWidgets.get(i).height){
+         return homescreenWidgets.get(i).event;
      }
       }
      return EVENT_NULL;
