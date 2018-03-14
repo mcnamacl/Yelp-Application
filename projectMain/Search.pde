@@ -17,15 +17,10 @@ class Search {
     return foundBusinesses;
   }
 
-  double getStars(Business business) {
-    int total = 0;
-    int counter = 0;
+  public void getStars(Business business) {
     for (Review review : business.getReviews()) {
-      total = review.getStars() + total;
-      counter++;  
       business.returnStars()[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
     }
-    return total / counter;
   }
 
   public ArrayList<Review> mostRecentReview(ArrayList<Review> reviews) {
