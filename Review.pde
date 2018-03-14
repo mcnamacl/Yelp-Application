@@ -38,14 +38,9 @@ class Review {
   String getAuthor() {
     return author;
   }
-  void setAuthor(String author) {
-    this.author = author;
-  }
+
   String getBusiness() {
     return business;
-  }
-  void setBusiness(String business) {
-    this.business = business;
   }
   
   String getBusinessId(){

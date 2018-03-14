@@ -1,6 +1,5 @@
 class Business {
 
-  private int avStars;
   private String businessName;
   private String businessId;
   private ArrayList<Review> businessReviews;
@@ -9,7 +8,6 @@ class Business {
   public Business(String businessName, String businessId) {
     this.businessName = businessName;
     this.businessId = businessId;
-    this.avStars = 0;
     this.businessReviews = new ArrayList<Review>();     
     for (int i = 0; i < stars.length; i++) {
       stars[i] = 0;
@@ -19,10 +17,7 @@ class Business {
   int[] returnStars() {
     return stars;
   }
-  public int getAvStars() {
-    return avStars;
-  }
-
+  
   public String getBusinessName() {
     return businessName;
   }
@@ -55,8 +50,21 @@ class Business {
     }
   }
 
+  double getAverageStarsOfBusiness() {
+    ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
+    double total = 0;
+    double count = 0;
+    if (businessReviews != null) {
+      for (Review review : businessReviews) {
+        total += review.getStars();
+        count++;
+      }
+    }
+    return Double.parseDouble(String.format("%.2f", total/count));
+  }
+
   @Override
     public String toString() {
-    return "Business{" + "avStars=" + avStars + ", businessName=" + businessName + ", businessId=" + businessId + ", businessReviews=" + businessReviews + '}';
+    return "Business{" + ", businessName=" + businessName + ", businessId=" + businessId + ", businessReviews=" + businessReviews + '}';
   }
 }

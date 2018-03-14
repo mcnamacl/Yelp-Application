@@ -61,16 +61,41 @@ class Search {
     }
   }
 
-  double getAverageStarsOfBusiness(String businessName) {
-    ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
-    double total = 0;
-    double count = 0;
-    if (businessReviews != null) {
-      for (Review review : businessReviews) {
-        total += review.getStars();
-        count++;
+  public Business[] getTopTenBusinesses() {
+    Business[] topTenBusinesses = new Business[10];
+    Collections.sort(businesses, new Comparator<Business>() {
+      @Override
+        public int compare(Business b1, Business b2) {
+        Double av1 = ((Business) b1).getAverageStarsOfBusiness();
+        Double av2 = ((Business) b2).getAverageStarsOfBusiness();
+        return av1.compareTo(av2);
+      }
+    }  
+    );
+
+    int counter = 0;
+    ArrayList<String> gotStarsFor = new ArrayList<String>();
+    for (int i  = businesses.size(); counter < 10; i--) {
+      if (!gotStarsFor.contains(businesses.get(i-1).getBusinessName())) {
+        gotStarsFor.add(businesses.get(i-1).getBusinessName());
+        topTenBusinesses[counter] = businesses.get(i-1);
+        counter++;
+        println(businesses.get(i-1).getBusinessName() + " " + businesses.get(i-1).getBusinessId() + " " + businesses.get(i-1).getAverageStarsOfBusiness());
       }
     }
-    return Double.parseDouble(String.format("%.2f", total/count));
+    return topTenBusinesses;
   }
+
+  //double getAverageStarsOfBusiness(String businessName) {
+  // ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
+  //  double total = 0;
+  //  double count = 0;
+  //  if (businessReviews != null) {
+  //    for (Review review : businessReviews) {
+  //      total += review.getStars();
+  //      count++;
+  //    }
+  //  }
+  //  return Double.parseDouble(String.format("%.2f", total/count));
+  //}
 }
