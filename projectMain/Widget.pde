@@ -6,8 +6,9 @@ class Widget {
   PFont widgetFont;
   PImage logoImage;
   color strokeColor;
+  int xTextDistance,yTextDistance;
 
-  Widget(int x,int y, int width, int height, String myText, color widgetColor, PFont widgetFont, int event){
+  Widget(int x,int y, int width, int height, String myText, color widgetColor, PFont widgetFont, int event,int xTextDistance,int yTextDistance){
     this.x=x; 
     this.y=y; 
     this.width = width; 
@@ -16,6 +17,8 @@ class Widget {
     this.event=event; 
     this.widgetColor=widgetColor; 
     this.widgetFont=widgetFont;
+    this.xTextDistance=xTextDistance;
+    this.yTextDistance=yTextDistance;
     myTextColor= color(0);
    }
    
@@ -33,7 +36,8 @@ class Widget {
     stroke(strokeColor);
     rect(x,y,width,height);
     fill(myTextColor);
-    text(myText, x+10, y+height-10);
+    textFont(widgetFont);
+    text(myText, x+xTextDistance, y+height-yTextDistance);
   }
   
   void drawImage(){
