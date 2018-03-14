@@ -24,21 +24,20 @@ Map<String, ArrayList<Review>> businessReviewMap;
 Table table;
 PFont font, widgetFont;
 Search search;
-<<<<<<< .mine
+
 //charts
 BarChart barchart;
-=======>>>>>>> .theirs
-<<<<<<< .minevoid settings() {
+
+void settings() {
   size(SCREENX, SCREENY);
 }
 
-=======>>>>>>> .theirsvoid setup() {
-  size(500, 500);
+void setup() {
   textSize(30);
   fill(0);
   logoImage=loadImage("logo.png");
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
-  searchbox=new Widget(SEARCHBOXX, SEARHBOXY, 345, 25, myText, color(blue), widgetFont, EVENT_BUTTON1,5,5);
+  searchbox=new Widget(SEARCHBOXX, SEARHBOXY, 345, 25, myText, color(blue), widgetFont, EVENT_BUTTON1, 5, 5);
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
   homeScreen=new Screen(color(HOMESCREEN_BACKGROUND), homescreenWidgets);
   font = loadFont("Cambria-20.vlw");
@@ -57,10 +56,11 @@ BarChart barchart;
   homescreenWidgets.add(searchbox);
   homescreenWidgets.add(homeButton);
   currentScreen=homeScreen;
-<<<<<<< .mine
+
   //chart
   displayChart();
-=======>>>>>>> .theirs}
+}
+
 
 
 
@@ -70,12 +70,10 @@ void draw() {
   rect(0, 0, SCREENX, 70);
   searchbox.draw();
   homeButton.drawImage();
-<<<<<<< .mine
   //tmp bar chart display
   noStroke();
   barchart.draw();
-=======>>>>>>> .theirs}
-
+}
 
 void mouseMoved() {
   searchbox.setStroke(mouseX, mouseY);
@@ -83,37 +81,34 @@ void mouseMoved() {
 
 
 void keyPressed() {
-   if (canType) {
-      if (key == BACKSPACE) {
-        if (searchbox.myText.length()-1 <= 0) {
-          searchbox.myText = "";
-        } else if (myText.length() > 0) {
-          searchbox.myText = searchbox.myText.substring(0, searchbox.myText.length()-1);
-        }
-      } 
-      if (searchbox.myText.length() <=36){
-        if (keyCode == DELETE) {
-          searchbox.myText = "";
-        } 
-        else if (keyCode == SHIFT || keyCode==ALT ||keyCode==UP ||keyCode==DOWN ||keyCode==LEFT||keyCode==RIGHT||keyCode==CONTROL) {
-        } 
-        else if (key != ENTER && keyCode>=32 && keyCode<=223) {
-          searchbox.myText =searchbox.myText + key;
-        } 
-        else if (key == ENTER) {
-          searchbox.returnString();
-          canType=false;
-          ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-          println(searchbox.myText);
-          
-          println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
-        /*for (Business business : searchedBusinesses) {
-          search.getStars(business);
-          business.displayStarCategories();
-          println(business.getBusinessName() + " " + business.getBusinessId());
-        }*/
+  if (canType) {
+    if (key == BACKSPACE) {
+      if (searchbox.myText.length()-1 <= 0) {
+        searchbox.myText = "";
+      } else if (myText.length() > 0) {
+        searchbox.myText = searchbox.myText.substring(0, searchbox.myText.length()-1);
       }
-<<<<<<< .mine    } else if (keyCode == DELETE) {
+    } 
+    if (searchbox.myText.length() <=36) {
+      if (keyCode == DELETE) {
+        searchbox.myText = "";
+      } else if (keyCode == SHIFT || keyCode==ALT ||keyCode==UP ||keyCode==DOWN ||keyCode==LEFT||keyCode==RIGHT||keyCode==CONTROL) {
+      } else if (key != ENTER && keyCode>=32 && keyCode<=223) {
+        searchbox.myText =searchbox.myText + key;
+      } else if (key == ENTER) {
+        searchbox.returnString();
+        canType=false;
+        ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
+        println(searchbox.myText);
+
+        println("Average stars: " + search.searchBusinessList(searchbox.myText));
+        /*for (Business business : searchedBusinesses) {
+         search.getStars(business);
+         business.displayStarCategories();
+         println(business.getBusinessName() + " " + business.getBusinessId());
+         }*/
+      }
+    } else if (keyCode == DELETE) {
       searchbox.myText = "";
     } else if (keyCode == SHIFT || keyCode==ALT ||keyCode==UP ||keyCode==DOWN ||keyCode==LEFT||keyCode==RIGHT||keyCode==CONTROL) {
     } else if (key != ENTER && keyCode>=32 && keyCode<=223) {
@@ -131,9 +126,8 @@ void keyPressed() {
        }*/
     }
   }
-=======     }
-   }
->>>>>>> .theirs}
+}
+
 
 void mousePressed() {
   int event;
@@ -176,9 +170,9 @@ void loadReviewBusiness() {
     reviews.add(new Review(dp.getUserName(), dp.getBusinessName(), dp.getBusinessId(), dp.getStars(), dp.getText(), dp.getDate(), dp.getUseful(), dp.getFunny(), dp.getCool()));
     businesses.add(new Business(dp.getBusinessName(), dp.getBusinessId()));
   }
-<<<<<<< .mine}
+}
 
 void displayChart() {
   Business[] topRatedBusinesses = search.getTopTenBusinesses();
   barchart = new BarChart(150, 400, topRatedBusinesses);
-=======>>>>>>> .theirs}
+}
