@@ -81,7 +81,7 @@ class Search {
         topTenBusinesses[counter] = businesses.get(i-1);
         counter++;
         println(businesses.get(i-1).getBusinessName() + " " + businesses.get(i-1).getBusinessId() + " " + businesses.get(i-1).getAverageStarsOfBusiness());
-      }
+     }
     }
     return topTenBusinesses;
   }
