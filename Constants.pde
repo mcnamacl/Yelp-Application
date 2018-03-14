@@ -1,4 +1,4 @@
-final int SCREENX = 1500;
+final int SCREENX = 500;
 final int SCREENY = 500;
 final color TEXT_COLOUR = #D83737;
 final color BACKGROUND_COLOUR = #B8F5FA;
@@ -17,3 +17,5 @@ final int HOMEY=5;
 final int EVENT_NULL=0;
 final int EVENT_BUTTON1=1;
 final int EVENT_BUTTON2=2;
+
+final color BARCHART_COLOUR = #3F7FD1;

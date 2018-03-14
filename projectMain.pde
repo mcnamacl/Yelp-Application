@@ -23,9 +23,14 @@ Map<String, ArrayList<Review>> businessReviewMap;
 Table table;
 PFont font, widgetFont;
 Search search;
+BarChart barchart;
+
+
+void settings(){
+   size(SCREENX, SCREENY);
+}
 
 void setup() {
-  size(500, 500);
   textSize(30);
   fill(0);
   logoImage=loadImage("logo.png");
@@ -49,6 +54,8 @@ void setup() {
   homescreenWidgets.add(searchbox);
   homescreenWidgets.add(homeButton);
   currentScreen=homeScreen;
+  
+  displayChart();
 
   // //This should be an event Quiktrip is an example
   //ArrayList<Business> searchedBusinesses = search.searchBusinessList("Quiktrip No 453");
@@ -67,6 +74,10 @@ void draw() {
   rect(0,0,SCREENX,70);
   searchbox.draw();
   homeButton.drawImage();
+  
+  //tmp bar chart display
+  noStroke();
+  barchart.draw();
 }
 
 
@@ -145,4 +156,9 @@ void loadReviewBusiness() {
     reviews.add(new Review(dp.getUserName(), dp.getBusinessName(), dp.getBusinessId(), dp.getStars(), dp.getText(), dp.getDate(), dp.getUseful(), dp.getFunny(), dp.getCool()));
     businesses.add(new Business(dp.getBusinessName(), dp.getBusinessId()));
   }
+}
+
+void displayChart(){
+  int[] barHeights = {3,4,5};
+  barchart = new BarChart(100, 400, barHeights);
 }
