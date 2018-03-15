@@ -8,16 +8,16 @@ import java.util.Arrays;
 boolean canType=false, drawGraph = false, goToGraph = false;
 PFont stdFont;
 PImage logoImage;
-Widget searchbox, homeButton;
+Widget searchbox, homeButton, leaderboardsButton,  mostReviewed, topStars, topHundred;
 String myText = "Search...";  
 String searchText;
-Screen screen1, screen2, currentScreen, homeScreen;
+Screen currentScreen, homeScreen, leaderboardsScreen;
 ArrayList<DataPoint> dataPoints;
 ArrayList<Review> reviews;
 ArrayList<Business> businesses = new ArrayList<Business>();
 ArrayList<Screen> screens = new ArrayList<Screen>();
 ArrayList<Widget> homescreenWidgets = new ArrayList<Widget>();
-
+ArrayList<Widget> leaderboardsWidgets = new ArrayList<Widget>();
 Set<String> businessNames;
 Map<String, ArrayList<Review>> businessReviewMap; 
 
@@ -38,8 +38,11 @@ void setup() {
   logoImage=loadImage("logo.png");
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
   searchbox=new Widget(SEARCHBOXX, SEARHBOXY, 345, 25, myText, color(blue), widgetFont, EVENT_BUTTON1, 5, 5);
+  leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 130, 25, "Leaderboards", color(150), widgetFont, EVENT_BUTTON3, 5, 5);
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
   homeScreen=new Screen(color(HOMESCREEN_BACKGROUND), homescreenWidgets);
+  leaderboardsScreen= new Screen(color(HOMESCREEN_BACKGROUND), leaderboardsWidgets);
+  mostReviewed= new Widget(RADIOBUTTONX, RADIOBUTTONY, 150, 30, "Top star rating", color(150), widgetFont,EVENT_BUTTON4 ,10, 10 );
   font = loadFont("Cambria-20.vlw");
   dataPoints = new ArrayList<DataPoint>();
   table = loadTable("reviews.csv", "header");
@@ -53,21 +56,30 @@ void setup() {
   search.createBusinessAZMap();
   search.mostRecentReview(reviews);
   println(businessReviewMap.keySet());
-  homescreenWidgets.add(searchbox);
-  homescreenWidgets.add(homeButton);
+  homeScreen.addWidget(searchbox);
+  //homeScreen.addWidget(homeButton);
+  homeScreen.addWidget(leaderboardsButton);
+  leaderboardsScreen.addWidget(mostReviewed);
+  leaderboardsScreen.addWidget(searchbox);
   currentScreen=homeScreen;
 }
 
 
 void draw() {
   background(255);
+  currentScreen.draw();+
+  
   fill(#0004B4);
+  noStroke();
   rect(0, 0, SCREENX, 70);
   searchbox.draw();
   homeButton.drawImage();
+  //leaderboardsButton.draw();
+  
 
-  //tmp bar chart display
+  //tmp bar chart display- EVENT
   //displayTopRatedChart();
+  
   if (drawGraph) {
     noStroke();
     if (goToGraph) {
@@ -82,6 +94,7 @@ void draw() {
 
 void mouseMoved() {
   searchbox.setStroke(mouseX, mouseY);
+  leaderboardsButton.setStroke(mouseX, mouseY);
 }
 
 
@@ -106,20 +119,38 @@ void keyPressed() {
 
         ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
 
-        //BUSINESS STAR RATINGS GRAPH
+        //BUSINESS STAR RATINGS GRAPH- EVENT
         println(searchbox.myText);
         drawGraph = true;
        displayBusinessStarsChart(searchedBusinesses);
         println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
       }
-    } 
-  }
+    }
+    }
 }
+  
+
 
 
 void mousePressed() {
   int event;
-  //event = searchbox.getEvent(mouseX, mouseY);
+  event = homeButton.getEvent(mouseX, mouseY);
+    switch(event) {
+  case EVENT_BUTTON2:
+    searchbox.myText="Search...";
+    canType=false;
+    currentScreen=homeScreen;
+    break;
+  
+  default:
+    canType=false;
+    if (searchbox.myText=="") {
+      searchbox.myText="Search...";
+    }
+    break;
+  }
+  
+  
   event = currentScreen.getEvent(mouseX, mouseY);
   switch(event) {
   case EVENT_BUTTON1:
@@ -128,13 +159,13 @@ void mousePressed() {
     } 
     canType=true;
     break;
-
-  case EVENT_BUTTON2:
-    searchbox.myText="Search...";
-    canType=false;
+  
+  case EVENT_BUTTON3:
+   // println("im working");
+    currentScreen=leaderboardsScreen;
     goToGraph = false;
     break;
-
+  
   default:
     canType=false;
     if (searchbox.myText=="") {
