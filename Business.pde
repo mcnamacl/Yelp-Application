@@ -17,7 +17,7 @@ class Business {
   int[] returnStars() {
     return stars;
   }
-  
+
   public String getBusinessName() {
     return businessName;
   }
@@ -62,6 +62,7 @@ class Business {
     }
     return Double.parseDouble(String.format("%.2f", total/count));
   }
+
 
   @Override
     public String toString() {

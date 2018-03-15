@@ -17,11 +17,6 @@ class Search {
     return foundBusinesses;
   }
 
-  public void getStars(Business business) {
-    for (Review review : business.getReviews()) {
-      business.returnStars()[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
-    }
-  }
 
   public ArrayList<Review> mostRecentReview(ArrayList<Review> reviews) {
     //ArrayList<Review> sortedList = new ArrayList<Review>();
@@ -45,6 +40,11 @@ class Search {
     return foundReviews;
   }
 
+  void getStars(Business business) {
+    for (Review review : business.getReviews()) {
+      business.returnStars()[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
+    }
+  }
 
   void createBusinessAZMap() {
     for (Business business : businesses) {
@@ -81,13 +81,13 @@ class Search {
         topTenBusinesses[counter] = businesses.get(i-1);
         counter++;
         println(businesses.get(i-1).getBusinessName() + " " + businesses.get(i-1).getBusinessId() + " " + businesses.get(i-1).getAverageStarsOfBusiness());
-     }
+      }
     }
     return topTenBusinesses;
   }
 
   double getAverageStarsOfBusiness(String businessName) {
-   ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
+    ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
     double total = 0;
     double count = 0;
     if (businessReviews != null) {

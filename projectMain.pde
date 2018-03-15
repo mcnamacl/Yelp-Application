@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Arrays;
 
 
-boolean canType=false;
+boolean canType=false, drawGraph = false, goToGraph = false;
 PFont stdFont;
 PImage logoImage;
 Widget searchbox, homeButton;
@@ -26,7 +26,7 @@ PFont font, widgetFont;
 Search search;
 
 //charts
-TopRatedBusinessBarChart barchart;
+BusinessBarChart barchart;
 
 void settings() {
   size(SCREENX, SCREENY);
@@ -56,9 +56,6 @@ void setup() {
   homescreenWidgets.add(searchbox);
   homescreenWidgets.add(homeButton);
   currentScreen=homeScreen;
-
-  //chart
-  displayChart();
 }
 
 
@@ -71,8 +68,17 @@ void draw() {
   searchbox.draw();
   homeButton.drawImage();
   //tmp bar chart display
-  noStroke();
-  barchart.draw();
+  displayTopRatedChart();
+  if (drawGraph) {
+    noStroke();
+    if (goToGraph) {
+      barchart.draw();
+    } else {
+      fill(0);
+      textSize(20);
+      text("Sorry there are no ratings for this business.", 70, SCREENY/2);
+    }
+  }
 }
 
 void mouseMoved() {
@@ -98,10 +104,17 @@ void keyPressed() {
       } else if (key == ENTER) {
         searchbox.returnString();
         canType=false;
-        ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-        println(searchbox.myText);
 
-        println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
+
+        //BUSINESS STAR RATINGS GRAPH
+        //ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
+        //println(searchbox.myText);
+        //drawGraph = true;
+        //displayBusinessStarsChart(searchedBusinesses);
+        //println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
+
+
+
         /*for (Business business : searchedBusinesses) {
          search.getStars(business);
          business.displayStarCategories();
@@ -116,8 +129,11 @@ void keyPressed() {
     } else if (key == ENTER) {
       searchbox.returnString();
       canType=false;
-      ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-      println(searchbox.myText);
+      
+      //BUSINESS STAR RATINGS GRAPH
+      //ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
+      //println(searchbox.myText);
+      //displayBusinessStarsChart(searchedBusinesses);
 
       /*for (Business business : searchedBusinesses) {
        search.getStars(business);
@@ -172,7 +188,27 @@ void loadReviewBusiness() {
   }
 }
 
-void displayChart() {
+void displayTopRatedChart() {
+  drawGraph = true;
+  goToGraph = true;
   Business[] topRatedBusinesses = search.getTopTenBusinesses();
-  barchart = new TopRatedBusinessBarChart(150, 400, topRatedBusinesses);
+  barchart = new BusinessBarChart(150, 400, topRatedBusinesses);
+}
+
+void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
+  if (!goToGraph) {
+    for (Business business : businessStarsList) {
+      search.getStars(business);
+      println(business.returnStars());
+      for (int i : business.returnStars()) {
+        println(business.returnStars());
+        if (i != 0) {
+          goToGraph = true;
+        }
+      }
+      if (goToGraph) {
+        barchart = new BusinessBarChart(150, 400, businessStarsList.get(0).returnStars());
+      }
+    }
+  }
 }
