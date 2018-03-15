@@ -9,7 +9,7 @@ final int THREE_STARS = 2;
 final int FOUR_STARS = 3;
 final int FIVE_STARS = 4;
 
-color blue=#0070FF;
+final color blue=#0070FF;
 final int SEARCHBOXX=90;
 final int SEARHBOXY=15;
 final int HOMEX=10;
