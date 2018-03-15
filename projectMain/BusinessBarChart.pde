@@ -4,6 +4,7 @@ class BusinessBarChart extends Chart {
   String type;
   ArrayList<Integer> starRatingsList;
   String businessName;
+  float interval;
 
   BusinessBarChart(int x, int y, Business[] businessChart) {
     super(x, y);
@@ -21,6 +22,7 @@ class BusinessBarChart extends Chart {
       starRatingsList.add(i);
     }
     Collections.sort(starRatingsList);
+    interval = (float)(SCREENY-200)/starRatingsList.get(4);
   }
 
   void draw() {
@@ -44,9 +46,8 @@ class BusinessBarChart extends Chart {
   }
 
   void drawBar(double bar, int x, int y, String businessName) {
-    noTint();
     int iY = 0;
-    while (iY <= bar*50) {
+    while (iY <= bar*interval) {
       fill(BARCHART_COLOUR);
       rect(x, y, 25, iY);
       y --;
@@ -67,26 +68,25 @@ class BusinessBarChart extends Chart {
   void drawTopRatedBusiness() {
     fill(0);
     int tmpY = y;
-    float interval = (float)(y-businessChart[0].getAverageStarsOfBusiness()*50)/(float)businessChart[0].getAverageStarsOfBusiness();
+    float bInterval = (float)(y-businessChart[0].getAverageStarsOfBusiness()*50)/(float)businessChart[0].getAverageStarsOfBusiness();
     for (int i = 0; i < 6; i++) {
       text(i, float(x-20), tmpY+2);
-      tmpY = tmpY - (int)interval;
+      tmpY = tmpY - (int)bInterval;
     }
     stroke(0);
-    line((float)x-5, (float)y, (float)x-5, (float)(y-interval*5));
+    line((float)x-5, (float)y, (float)x-5, (float)(y-bInterval*5));
     line((float)x-5, (float)y+2, (float)x+5+businessChart.length*30, (float)y+2);
   }
 
   void drawRatings() {
     fill(0);
     int tmpY = y;
-    float interval = (float)(starRatingsList.get(4)*50)/(starRatingsList.get(4));
     for (int i = 0; i <= starRatingsList.get(4); i++) {
-      text(i, float(x-20), tmpY);
+      text(i, float(x-30), tmpY);
       tmpY = tmpY - (int)interval;
     }
     stroke(0);
-    line((float)x-5, (float)y, (float)x-5, (float)(y-starRatingsList.get(4)*50));
+    line((float)x-5, (float)y, (float)x-5, (float)(y-starRatingsList.get(4)*interval));
     line((float)x-5, (float)y+2, (float)x+5+5*30, (float)y+2);
     textSize(20);
     fill(0);
