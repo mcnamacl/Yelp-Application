@@ -7,6 +7,7 @@ class Widget {
   PImage logoImage;
   color strokeColor;
   int xTextDistance,yTextDistance;
+  boolean isClickableText = false;
 
   Widget(int x,int y, int width, int height, String myText, color widgetColor, PFont widgetFont, int event,int xTextDistance,int yTextDistance){
     this.x=x; 
@@ -31,9 +32,30 @@ class Widget {
     this.event=event; 
    }
    
+   //constuctor for clickable text
+   Widget(int x,int y, int width, int height, String myText, color widgetColor, PFont widgetFont, int event,int xTextDistance,int yTextDistance,boolean isClickableText){
+    this.x=x; 
+    this.y=y; 
+    this.width = width; 
+    this.height= height;
+    this.myText=myText; 
+    this.event=event; 
+    this.widgetColor=widgetColor; 
+    this.widgetFont=widgetFont;
+    this.xTextDistance=xTextDistance;
+    this.yTextDistance=yTextDistance;
+    this.isClickableText=isClickableText;
+    myTextColor= color(0);
+   }
+   
   void draw(){
+    setStroke(mouseX,mouseY);
     fill(widgetColor);
-    stroke(strokeColor);
+    if (isClickableText){
+      myTextColor=strokeColor;
+      noStroke();
+    }
+    else stroke(strokeColor);
     rect(x,y,width,height);
     fill(myTextColor);
     textFont(widgetFont);
