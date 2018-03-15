@@ -59,8 +59,6 @@ void setup() {
 }
 
 
-
-
 void draw() {
   background(255);
   fill(#0004B4);
