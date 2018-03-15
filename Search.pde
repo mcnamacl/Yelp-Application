@@ -29,6 +29,27 @@ class Search {
     Collections.sort(reviews, new SortByName());
     return reviews;
   }
+  
+  public ArrayList<Review> sortByCool(ArrayList<Review> reviews) {
+    Collections.sort(reviews, new SortByCool());
+    return reviews;
+  }
+  
+  public ArrayList<Review> sortByUseful(ArrayList<Review> reviews) {
+    Collections.sort(reviews, new SortByUseful());
+    return reviews;
+  }
+  
+  public ArrayList<Review> sortByFunny(ArrayList<Review> reviews) {
+    Collections.sort(reviews, new SortByFunny());
+    return reviews;
+  }
+  
+  
+  
+  
+  
+  
 
   public ArrayList<Review> searchReviewByBusinessName(ArrayList<Review> reviews, String businessName) {
     ArrayList<Review> foundReviews = new ArrayList<Review>();
@@ -107,4 +128,6 @@ class Search {
     }
     return Double.parseDouble(String.format("%.2f", total/count));
   }
+  
+  
 }

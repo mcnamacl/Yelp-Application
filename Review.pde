@@ -57,6 +57,18 @@ class Review {
   Date getDate() {
     return date;
   }
+  
+  int getFunny() {
+    return this.funny;
+  }
+  
+  int getUseful() {
+    return this.useful;
+  }
+  
+  int getCool() {
+    return this.cool;
+  }
 
   @Override
     public String toString() {
