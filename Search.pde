@@ -44,12 +44,6 @@ class Search {
     Collections.sort(reviews, new SortByFunny());
     return reviews;
   }
-  
-  
-  
-  
-  
-  
 
   public ArrayList<Review> searchReviewByBusinessName(ArrayList<Review> reviews, String businessName) {
     ArrayList<Review> foundReviews = new ArrayList<Review>();

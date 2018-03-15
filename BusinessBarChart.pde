@@ -80,8 +80,7 @@ class BusinessBarChart extends Chart {
   void drawRatings() {
     fill(0);
     int tmpY = y;
-    float interval = (float)((y-starRatingsList.get(4)*50)/(starRatingsList.get(4)*2));
-    println(interval);
+    float interval = (float)(starRatingsList.get(4)*50)/(starRatingsList.get(4));
     for (int i = 0; i <= starRatingsList.get(4); i++) {
       text(i, float(x-20), tmpY);
       tmpY = tmpY - (int)interval;
