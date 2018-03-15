@@ -69,7 +69,7 @@ void draw() {
   homeButton.drawImage();
 
   //tmp bar chart display
-  displayTopRatedChart();
+  //displayTopRatedChart();
   if (drawGraph) {
     noStroke();
     if (goToGraph) {
@@ -111,7 +111,7 @@ void keyPressed() {
         //BUSINESS STAR RATINGS GRAPH
         println(searchbox.myText);
         drawGraph = true;
-       // displayBusinessStarsChart(searchedBusinesses);
+       displayBusinessStarsChart(searchedBusinesses);
         println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
       }
     } else if (keyCode == DELETE) {

@@ -1,5 +1,5 @@
-final int SCREENX = 500;
-final int SCREENY = 500;
+final int SCREENX = 1000;
+final int SCREENY = 700;
 final color TEXT_COLOUR = #D83737;
 final color BACKGROUND_COLOUR = #B8F5FA;
 final color HOMESCREEN_BACKGROUND = #CAC7E8;
