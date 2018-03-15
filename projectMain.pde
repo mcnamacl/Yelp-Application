@@ -67,9 +67,9 @@ void draw() {
   rect(0, 0, SCREENX, 70);
   searchbox.draw();
   homeButton.drawImage();
-  
+
   //tmp bar chart display
-  //displayTopRatedChart();
+  displayTopRatedChart();
   if (drawGraph) {
     noStroke();
     if (goToGraph) {
@@ -111,16 +111,8 @@ void keyPressed() {
         //BUSINESS STAR RATINGS GRAPH
         println(searchbox.myText);
         drawGraph = true;
-        displayBusinessStarsChart(searchedBusinesses);
+       // displayBusinessStarsChart(searchedBusinesses);
         println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
-
-
-        //  println(searchedBusinesses.get(0).getBusinessName());
-        for (Business business : searchedBusinesses) {
-          // println("The branch: " + business.getBusinessId());
-          search.getStarsForOneBusiness(business, null);
-          // business.displayStarCategories();
-        }
       }
     } else if (keyCode == DELETE) {
       searchbox.myText = "";
@@ -132,16 +124,11 @@ void keyPressed() {
       canType=false;
 
       ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
+      
       //BUSINESS STAR RATINGS GRAPH
-      //println(searchbox.myText);
+      println(searchbox.myText);
+      drawGraph = true;
       //displayBusinessStarsChart(searchedBusinesses);
-
-      //  println(searchedBusinesses.get(0).getBusinessName());
-      for (Business business : searchedBusinesses) {
-        // println("The branch: " + business.getBusinessId());
-        search.getStarsForOneBusiness(business, null);
-        // business.displayStarCategories();
-      }
     }
   }
 }
