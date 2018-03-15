@@ -67,8 +67,9 @@ void draw() {
   rect(0, 0, SCREENX, 70);
   searchbox.draw();
   homeButton.drawImage();
+  
   //tmp bar chart display
-  // displayTopRatedChart();
+  //displayTopRatedChart();
   if (drawGraph) {
     noStroke();
     if (goToGraph) {
@@ -105,21 +106,21 @@ void keyPressed() {
         searchbox.returnString();
         canType=false;
 
+        ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
 
         //BUSINESS STAR RATINGS GRAPH
-        ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
         println(searchbox.myText);
         drawGraph = true;
         displayBusinessStarsChart(searchedBusinesses);
         println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
 
 
-
-        /*for (Business business : searchedBusinesses) {
-         search.getStars(business);
-         business.displayStarCategories();
-         println(business.getBusinessName() + " " + business.getBusinessId());
-         }*/
+        //  println(searchedBusinesses.get(0).getBusinessName());
+        for (Business business : searchedBusinesses) {
+          // println("The branch: " + business.getBusinessId());
+          search.getStarsForOneBusiness(business, null);
+          // business.displayStarCategories();
+        }
       }
     } else if (keyCode == DELETE) {
       searchbox.myText = "";
@@ -130,16 +131,17 @@ void keyPressed() {
       searchbox.returnString();
       canType=false;
 
-      //BUSINESS STAR RATINGS GRAPH
       ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-      println(searchbox.myText);
-      displayBusinessStarsChart(searchedBusinesses);
+      //BUSINESS STAR RATINGS GRAPH
+      //println(searchbox.myText);
+      //displayBusinessStarsChart(searchedBusinesses);
 
-      /*for (Business business : searchedBusinesses) {
-       search.getStars(business);
-       business.displayStarCategories();
-       println(business.getBusinessName() + " " + business.getBusinessId());
-       }*/
+      //  println(searchedBusinesses.get(0).getBusinessName());
+      for (Business business : searchedBusinesses) {
+        // println("The branch: " + business.getBusinessId());
+        search.getStarsForOneBusiness(business, null);
+        // business.displayStarCategories();
+      }
     }
   }
 }
@@ -202,7 +204,6 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   if (goToGraph) {
     String name = businessStarsList.get(0).getBusinessName();
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
-    println(stars);
     barchart = new BusinessBarChart(150, 400, stars, name);
   }
 }

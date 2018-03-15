@@ -60,18 +60,22 @@ class Search {
     }
     return foundReviews;
   }
-  
-  int[] getStarsForCollectionOfBusinesses(ArrayList<Business> searchedBusinesses){
+
+  int[] getStarsForCollectionOfBusinesses(ArrayList<Business> searchedBusinesses) {
     int[] starsForBusinesses = new int[5];
-    for (Business business : searchedBusinesses){
+    for (Business business : searchedBusinesses) {
       getStarsForOneBusiness(business, starsForBusinesses);
     }
+    println(starsForBusinesses);
     return starsForBusinesses;
   }
 
   int[] getStarsForOneBusiness(Business business, int[] starsForBusiness) {
     for (Review review : business.getReviews()) {
-      starsForBusiness[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
+      if (starsForBusiness !=null) {
+        starsForBusiness[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
+      }
+      business.returnStars()[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
     }
     return starsForBusiness;
   }
@@ -110,7 +114,7 @@ class Search {
         gotStarsFor.add(businesses.get(i-1).getBusinessName());
         topTenBusinesses[counter] = businesses.get(i-1);
         counter++;
-        println(businesses.get(i-1).getBusinessName() + " " + businesses.get(i-1).getBusinessId() + " " + businesses.get(i-1).getAverageStarsOfBusiness());
+      //  println(businesses.get(i-1).getBusinessName() + " " + businesses.get(i-1).getBusinessId() + " " + businesses.get(i-1).getAverageStarsOfBusiness());
       }
     }
     return topTenBusinesses;
