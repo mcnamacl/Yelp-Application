@@ -29,7 +29,7 @@ Search search;
 BusinessBarChart barchart;
 
 void settings() {
-  size(SCREENX, SCREENY);
+  size(SCREENX, SCREENY, P3D);
 }
 
 void setup() {
@@ -114,22 +114,7 @@ void keyPressed() {
        displayBusinessStarsChart(searchedBusinesses);
         println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
       }
-    } else if (keyCode == DELETE) {
-      searchbox.myText = "";
-    } else if (keyCode == SHIFT || keyCode==ALT ||keyCode==UP ||keyCode==DOWN ||keyCode==LEFT||keyCode==RIGHT||keyCode==CONTROL) {
-    } else if (key != ENTER && keyCode>=32 && keyCode<=223) {
-      searchbox.myText =searchbox.myText + key;
-    } else if (key == ENTER) {
-      searchbox.returnString();
-      canType=false;
-
-      ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-      
-      //BUSINESS STAR RATINGS GRAPH
-      println(searchbox.myText);
-      drawGraph = true;
-      //displayBusinessStarsChart(searchedBusinesses);
-    }
+    } 
   }
 }
 
@@ -149,6 +134,7 @@ void mousePressed() {
   case EVENT_BUTTON2:
     searchbox.myText="Search...";
     canType=false;
+    goToGraph = false;
     break;
 
   default:
@@ -191,6 +177,6 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   if (goToGraph) {
     String name = businessStarsList.get(0).getBusinessName();
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
-    barchart = new BusinessBarChart(150, 400, stars, name);
+    barchart = new BusinessBarChart(150, 650, stars, name);
   }
 }

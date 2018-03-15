@@ -29,17 +29,17 @@ class Search {
     Collections.sort(reviews, new SortByName());
     return reviews;
   }
-  
+
   public ArrayList<Review> sortByCool(ArrayList<Review> reviews) {
     Collections.sort(reviews, new SortByCool());
     return reviews;
   }
-  
+
   public ArrayList<Review> sortByUseful(ArrayList<Review> reviews) {
     Collections.sort(reviews, new SortByUseful());
     return reviews;
   }
-  
+
   public ArrayList<Review> sortByFunny(ArrayList<Review> reviews) {
     Collections.sort(reviews, new SortByFunny());
     return reviews;
@@ -57,21 +57,23 @@ class Search {
 
   int[] getStarsForCollectionOfBusinesses(ArrayList<Business> searchedBusinesses) {
     int[] starsForBusinesses = new int[5];
+    int[] tmpStarsForBusinesses = new int[5];
     for (Business business : searchedBusinesses) {
-      getStarsForOneBusiness(business, starsForBusinesses);
+      getStarsForOneBusiness(business);
+      tmpStarsForBusinesses = business.returnStars();
+      for (int i = 0; i < tmpStarsForBusinesses.length; i++){
+        int tmpN = starsForBusinesses[i] + tmpStarsForBusinesses[i];
+        starsForBusinesses[i] = tmpN;
+      }
     }
     println(starsForBusinesses);
     return starsForBusinesses;
   }
 
-  int[] getStarsForOneBusiness(Business business, int[] starsForBusiness) {
+  void getStarsForOneBusiness(Business business) {
     for (Review review : business.getReviews()) {
-      if (starsForBusiness !=null) {
-        starsForBusiness[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
-      }
       business.returnStars()[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
     }
-    return starsForBusiness;
   }
 
   void createBusinessAZMap() {
@@ -108,7 +110,7 @@ class Search {
         gotStarsFor.add(businesses.get(i-1).getBusinessName());
         topTenBusinesses[counter] = businesses.get(i-1);
         counter++;
-      //  println(businesses.get(i-1).getBusinessName() + " " + businesses.get(i-1).getBusinessId() + " " + businesses.get(i-1).getAverageStarsOfBusiness());
+        //  println(businesses.get(i-1).getBusinessName() + " " + businesses.get(i-1).getBusinessId() + " " + businesses.get(i-1).getAverageStarsOfBusiness());
       }
     }
     return topTenBusinesses;
@@ -126,6 +128,4 @@ class Search {
     }
     return Double.parseDouble(String.format("%.2f", total/count));
   }
-  
-  
 }
