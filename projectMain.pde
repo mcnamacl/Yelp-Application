@@ -68,7 +68,7 @@ void draw() {
   searchbox.draw();
   homeButton.drawImage();
   //tmp bar chart display
-  displayTopRatedChart();
+  // displayTopRatedChart();
   if (drawGraph) {
     noStroke();
     if (goToGraph) {
@@ -76,7 +76,7 @@ void draw() {
     } else {
       fill(0);
       textSize(20);
-      text("Sorry there are no ratings for this business.", 70, SCREENY/2);
+      text("Sorry there are no ratings for this business.", 60, SCREENY/2);
     }
   }
 }
@@ -107,11 +107,11 @@ void keyPressed() {
 
 
         //BUSINESS STAR RATINGS GRAPH
-        //ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-        //println(searchbox.myText);
-        //drawGraph = true;
-        //displayBusinessStarsChart(searchedBusinesses);
-        //println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
+        ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
+        println(searchbox.myText);
+        drawGraph = true;
+        displayBusinessStarsChart(searchedBusinesses);
+        println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
 
 
 
@@ -129,11 +129,11 @@ void keyPressed() {
     } else if (key == ENTER) {
       searchbox.returnString();
       canType=false;
-      
+
       //BUSINESS STAR RATINGS GRAPH
-      //ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-      //println(searchbox.myText);
-      //displayBusinessStarsChart(searchedBusinesses);
+      ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
+      println(searchbox.myText);
+      displayBusinessStarsChart(searchedBusinesses);
 
       /*for (Business business : searchedBusinesses) {
        search.getStars(business);
@@ -196,19 +196,13 @@ void displayTopRatedChart() {
 }
 
 void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
-  if (!goToGraph) {
-    for (Business business : businessStarsList) {
-      search.getStars(business);
-      println(business.returnStars());
-      for (int i : business.returnStars()) {
-        println(business.returnStars());
-        if (i != 0) {
-          goToGraph = true;
-        }
-      }
-      if (goToGraph) {
-        barchart = new BusinessBarChart(150, 400, businessStarsList.get(0).returnStars());
-      }
-    }
+  if (!businessStarsList.isEmpty()) {
+    goToGraph = true;
+  }
+  if (goToGraph) {
+    String name = businessStarsList.get(0).getBusinessName();
+    int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
+    println(stars);
+    barchart = new BusinessBarChart(150, 400, stars, name);
   }
 }

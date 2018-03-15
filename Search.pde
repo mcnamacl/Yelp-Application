@@ -39,11 +39,20 @@ class Search {
     }
     return foundReviews;
   }
-
-  void getStars(Business business) {
-    for (Review review : business.getReviews()) {
-      business.returnStars()[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
+  
+  int[] getStarsForCollectionOfBusinesses(ArrayList<Business> searchedBusinesses){
+    int[] starsForBusinesses = new int[5];
+    for (Business business : searchedBusinesses){
+      getStarsForOneBusiness(business, starsForBusinesses);
     }
+    return starsForBusinesses;
+  }
+
+  int[] getStarsForOneBusiness(Business business, int[] starsForBusiness) {
+    for (Review review : business.getReviews()) {
+      starsForBusiness[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
+    }
+    return starsForBusiness;
   }
 
   void createBusinessAZMap() {

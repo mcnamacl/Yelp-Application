@@ -39,6 +39,7 @@ class Business {
     }
     return businessReviews;
   }
+  
 
   public void displayStarCategories() {
     int counter = 0;
