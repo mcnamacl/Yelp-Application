@@ -96,6 +96,9 @@ class BusinessBarChart extends Chart {
       text(i, (float) tmpX, (float)y+20);
       tmpX = tmpX + 30;
     }
+    textSize(15);
+    text("Stars", (float) x + 40, y + 60);
+    textSize(20);
     text(businessName, (float) x + 10, y + 40);
   }
 
