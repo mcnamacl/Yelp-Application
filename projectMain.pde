@@ -4,7 +4,7 @@ import java.util.TreeMap;
 import java.util.Map;
 import java.util.Arrays;
 
-
+ArrayList<ReviewBox> recentReviews;
 boolean canType=false, drawGraph = false, goToGraph = false;
 PFont stdFont;
 PImage logoImage;
@@ -62,12 +62,14 @@ void setup() {
   leaderboardsScreen.addWidget(mostReviewed);
   leaderboardsScreen.addWidget(searchbox);
   currentScreen=homeScreen;
+  recentReviews = initRecentReviewBoxes();
+  //rb = new ReviewBox(100,100,150,300,"James","green spuds","asd as d s s ss s s s sas  dawd i ams a aso yeroas a sldkjahlw asoidja audkaka asd",4);
 }
 
 
 void draw() {
   background(255);
-  currentScreen.draw();+
+  currentScreen.draw();
   
   fill(#0004B4);
   noStroke();
@@ -90,6 +92,7 @@ void draw() {
       text("Sorry there are no ratings for this business.", 60, SCREENY/2);
     }
   }
+  drawRecentReviewBoxes(recentReviews);
 }
 
 void mouseMoved() {
@@ -208,4 +211,27 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
     barchart = new BusinessBarChart(150, 650, stars, name);
   }
+}
+
+// this method creates an arraylist of reviewBox containing the most recent reviews
+ArrayList<ReviewBox> initRecentReviewBoxes(){
+  ArrayList<Review> mostRecentReviews = search.mostRecentReview(reviews);
+  ArrayList<ReviewBox> list = new ArrayList<ReviewBox>();
+  int x=50;
+  int y=100;
+  for (int i=0; i<=2; i++){
+    Review review = mostRecentReviews.get(i);
+    ReviewBox rb = new ReviewBox(x,y,150,200,review.getAuthor(),review.getBusiness(),review.getText(),review.getStars());
+    y+=215;
+    list.add(rb);
+  }
+  return list;
+}
+
+// this method draws the arrayList that was created above
+void drawRecentReviewBoxes(ArrayList<ReviewBox> list){
+  for (int i=0; i<list.size(); i++){
+    list.get(i).draw();
+  }
+  
 }
