@@ -16,15 +16,16 @@ class ReviewBox{
     this.review=review;
     this.stars=stars;
     businessButton = new Widget(x+5,y+5,40,15,this.businessName,color(200),widgetFont,0,2,2,true);
-    seeFullReviewButton = new Widget(x+5,y+70,40,15,"..read full review",color(200),widgetFont,0,2,2,true);
+    seeFullReviewButton = new Widget(x+5,y+150,40,15,"..read full review",color(200),widgetFont,0,2,2,true);
   }
   
   void draw(){
+    fill(255,0,0);
     rect(x,y,width,height);
     businessButton.draw();
     seeFullReviewButton.draw();
     fill(defaultTextColour);
-    text(review,x+5,y+30,x+20,y+20);
+    text(review,x+5,y+30,100,100);
   }
   
   
