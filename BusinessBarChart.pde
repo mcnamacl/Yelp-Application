@@ -5,11 +5,20 @@ class BusinessBarChart extends Chart {
   ArrayList<Integer> starRatingsList;
   String businessName;
   float interval;
+  Bar[] bars;
 
   BusinessBarChart(int x, int y, Business[] businessChart) {
     super(x, y);
     this.businessChart = businessChart;
     type = "average";
+    interval = (float)(y-businessChart[0].getAverageStarsOfBusiness()*50)/(float)businessChart[0].getAverageStarsOfBusiness();
+    bars = new Bar[businessChart.length];
+    int tmpX = x;
+    int tmpY = y;
+    for (int i = 0; i < businessChart.length; i++){
+      bars[i] = new Bar(businessChart[i].getAverageStarsOfBusiness()*interval, tmpX, tmpY, businessChart[i].getBusinessName());
+      tmpX+=30;
+    }
   }
 
   BusinessBarChart(int x, int y, int[] starRatings, String businessName) {
@@ -23,58 +32,35 @@ class BusinessBarChart extends Chart {
     }
     Collections.sort(starRatingsList);
     interval = (float)(SCREENY-200)/starRatingsList.get(4);
+    bars = new Bar[starRatings.length];
+    int tmpX = x;
+    int tmpY = y;
+    for (int i = 0; i < starRatings.length; i++){
+      bars[i] = new Bar(starRatings[i]*interval, tmpX, tmpY);
+      tmpX+=30;
+    }
   }
 
   void draw() {
-    int tmpX = x;
-    int tmpY = y;
     if (type.equals("average")) {
       drawTopRatedBusiness();
       drawScores();
       noStroke();
-      for (int i = 0; i < businessChart.length; i++) {
-        drawBar(businessChart[i].getAverageStarsOfBusiness(), tmpX, tmpY, businessChart[i].getBusinessName());
-        tmpX+=30;
-      }
     } else if (type.equals("ratings")) {
       drawRatings();
-      for (int i = 0; i < starRatings.length; i++) {
-        drawBar(starRatings[i], tmpX, tmpY, null);
-        tmpX+=30;
-      }
-    }
-  }
-
-  void drawBar(double bar, int x, int y, String businessName) {
-    int iY = 0;
-    while (iY <= bar*interval) {
-      fill(BARCHART_COLOUR);
-      rect(x, y, 25, iY);
-      y --;
-      iY ++;
-    }
-    if (businessName != null) {
-      pushMatrix();
-      translate(x+5, y);
-      rotate(HALF_PI);
-      translate(-x, -y);
-      textSize(15);
-      fill(#DFFF12);
-      text(businessName, x+5, y);
-      popMatrix();
+      noStroke();
     }
   }
 
   void drawTopRatedBusiness() {
     fill(0);
     int tmpY = y;
-    float bInterval = (float)(y-businessChart[0].getAverageStarsOfBusiness()*50)/(float)businessChart[0].getAverageStarsOfBusiness();
     for (int i = 0; i < 6; i++) {
       text(i, float(x-20), tmpY+2);
-      tmpY = tmpY - (int)bInterval;
+      tmpY = tmpY - (int)interval;
     }
     stroke(0);
-    line((float)x-5, (float)y, (float)x-5, (float)(y-bInterval*5));
+    line((float)x-5, (float)y, (float)x-5, (float)(y-interval*5));
     line((float)x-5, (float)y+2, (float)x+5+businessChart.length*30, (float)y+2);
   }
 

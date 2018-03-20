@@ -8,8 +8,8 @@ import java.util.Arrays;
 ArrayList<ReviewBox> recentReviews;
 boolean canType=false, drawGraph = false, goToGraph = false;
 PFont stdFont;
-PImage logoImage,yellowStar,greyStar;
-Widget searchbox, homeButton, leaderboardsButton,  mostReviewed, topStars, topHundred;
+PImage logoImage, yellowStar, greyStar;
+Widget searchbox, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred;
 String myText = "Search...";  
 String searchText;
 Screen currentScreen, homeScreen, leaderboardsScreen;
@@ -43,7 +43,7 @@ void setup() {
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
   homeScreen=new Screen(color(HOMESCREEN_BACKGROUND), homescreenWidgets);
   leaderboardsScreen= new Screen(color(HOMESCREEN_BACKGROUND), leaderboardsWidgets);
-  mostReviewed= new Widget(RADIOBUTTONX, RADIOBUTTONY, 150, 30, "Top star rating", color(150), widgetFont,EVENT_BUTTON4 ,10, 10 );
+  mostReviewed= new Widget(RADIOBUTTONX, RADIOBUTTONY, 150, 30, "Top star rating", color(150), widgetFont, EVENT_BUTTON4, 10, 10 );
   font = loadFont("Cambria-20.vlw");
   dataPoints = new ArrayList<DataPoint>();
   table = loadTable("reviews.csv", "header");
@@ -73,30 +73,31 @@ void setup() {
 
 void draw() {
   background(255);
+
   currentScreen.draw();
-  
+
   fill(#0004B4);
   noStroke();
   rect(0, 0, SCREENX, 70);
   searchbox.draw();
   homeButton.drawImage();
   //leaderboardsButton.draw();
-  
 
-  //tmp bar chart display- EVENT
-  //displayTopRatedChart();
-  
+
+
   if (drawGraph) {
     noStroke();
     if (goToGraph) {
       barchart.draw();
+      for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++){
+      }
     } else {
       fill(0);
       textSize(20);
       text("Sorry there are no ratings for this business.", 60, SCREENY/2);
     }
   }
-  drawRecentReviewBoxes(recentReviews);
+  //drawRecentReviewBoxes(recentReviews);
 }
 
 void mouseMoved() {
@@ -129,26 +130,28 @@ void keyPressed() {
         //BUSINESS STAR RATINGS GRAPH- EVENT
         println(searchbox.myText);
         drawGraph = true;
-       displayBusinessStarsChart(searchedBusinesses);
+        displayBusinessStarsChart(searchedBusinesses);
         println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
       }
     }
-    }
+  }
 }
-  
+
 
 
 
 void mousePressed() {
   int event;
   event = homeButton.getEvent(mouseX, mouseY);
-    switch(event) {
+  switch(event) {
   case EVENT_BUTTON2:
     searchbox.myText="Search...";
     canType=false;
+    goToGraph=false;
+    drawGraph = false;
     currentScreen=homeScreen;
     break;
-  
+
   default:
     canType=false;
     if (searchbox.myText=="") {
@@ -156,8 +159,8 @@ void mousePressed() {
     }
     break;
   }
-  
-  
+
+
   event = currentScreen.getEvent(mouseX, mouseY);
   switch(event) {
   case EVENT_BUTTON1:
@@ -166,13 +169,15 @@ void mousePressed() {
     } 
     canType=true;
     break;
-  
+
   case EVENT_BUTTON3:
-   // println("im working");
+    // println("im working");
     currentScreen=leaderboardsScreen;
-    goToGraph = false;
+    displayTopRatedChart();
+     goToGraph = true;
+     drawGraph = true;
     break;
-  
+
   default:
     canType=false;
     if (searchbox.myText=="") {
@@ -211,6 +216,7 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
     goToGraph = true;
   }
   if (goToGraph) {
+    drawGraph = true;
     String name = businessStarsList.get(0).getBusinessName();
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
     barchart = new BusinessBarChart(150, 650, stars, name);
@@ -218,14 +224,14 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
 }
 
 // this method creates an arraylist of reviewBox containing the most recent reviews
-ArrayList<ReviewBox> initRecentReviewBoxes(){
+ArrayList<ReviewBox> initRecentReviewBoxes() {
   ArrayList<Review> mostRecentReviews = search.mostRecentReview(reviews);
   ArrayList<ReviewBox> list = new ArrayList<ReviewBox>();
   int x=50;
   int y=140;
-  for (int i=0; i<=2; i++){
+  for (int i=0; i<=2; i++) {
     Review review = mostRecentReviews.get(i);
-    ReviewBox rb = new ReviewBox(x,y,380,180,review.getAuthor(),review.getBusiness(),review.getText(),review.getStars());
+    ReviewBox rb = new ReviewBox(x, y, 380, 180, review.getAuthor(), review.getBusiness(), review.getText(), review.getStars());
     y+=186;
     list.add(rb);
   }
@@ -233,9 +239,8 @@ ArrayList<ReviewBox> initRecentReviewBoxes(){
 }
 
 // this method draws the arrayList that was created above
-void drawRecentReviewBoxes(ArrayList<ReviewBox> list){
-  for (int i=0; i<list.size(); i++){
+void drawRecentReviewBoxes(ArrayList<ReviewBox> list) {
+  for (int i=0; i<list.size(); i++) {
     list.get(i).draw();
   }
-  
 }
