@@ -1,5 +1,10 @@
 import java.util.Collections;
 
+Set<String> businessNames;
+Map<String, ArrayList<Review>> businessReviewMap; 
+Set<String> reviewerNames;
+Map<String, ArrayList<Review>> reviewerReviewMap;
+
 class Search {
 
   ArrayList searchBusinessList(String userSearch) {
@@ -15,6 +20,17 @@ class Search {
       }
     }
     return foundBusinesses;
+  }
+  
+  public void printBusinesses() {
+    String businesses = ""; 
+    Set<String> keys = businessReviewMap.keySet(); 
+    for (String key : keys) {
+      businesses += searchBusinessList(key).get(0).getBusinessName() + ", ";
+    }
+    businesses = businesses.substring(0, businesses.lastIndexOf(",")); 
+    businesses += "."; 
+    println(businesses);
   }
 
 
@@ -76,6 +92,7 @@ class Search {
     }
   }
 
+// Initialises map of business and that business's reviews
   void createBusinessAZMap() {
     for (Business business : businesses) {
       businessNames.add(business.getBusinessName());
@@ -88,6 +105,23 @@ class Search {
         }
       }
       businessReviewMap.put(name, businessReviews);
+    }
+  }
+  
+   // Initialises map of reviewer's name and all that reviewer's reviews
+  // Can be used to determine if reviewer is harsh or easliy pleased
+  void createReviewerMap() {
+    for (Review review : reviews) {
+      reviewerNames.add(review.getAuthor().toLowerCase());
+    }
+    for (String name : reviewerNames) {
+      ArrayList<Review> reviewerReviews = new ArrayList<Review>();
+      for (Review review : reviews) {
+        if (review.getAuthor().toLowerCase().equals(name)) {
+          reviewerReviews.add(review);
+        }
+      }
+      reviewerReviewMap.put(name, reviewerReviews);
     }
   }
 
@@ -128,4 +162,33 @@ class Search {
     }
     return Double.parseDouble(String.format("%.2f", total/count));
   }
+  
+   /*public Term[] autoComplete(String searchQuery) {
+      
+      take in hashmap <weights and queries> (<business name string, number of reviews>)
+       construct terms into array
+       get k amount of queries to show
+       prefix = user types in (after two chars entered)
+       
+      //weightedMap
+      Term[] terms = new Term[businessReviewMap.size()];
+      int i = 0;
+      for (Map.Entry<String, ArrayList<Review>> entry : businessReviewMap.entrySet()) {
+        int weight = entry.getValue().size();
+        String query = entry.getKey();
+  
+        terms[i] = new Term(query, weight);
+        i++;
+      }
+      println(Arrays.toString(terms));
+      AutoComplete autoComplete = new AutoComplete(terms);
+      String prefix = searchQuery;
+     
+      Term[] results = autoComplete.allMatches(prefix);
+      if (results.length > 0) {
+        return results;
+      }
+      println("wut");
+      return null;
+    }*/
 }

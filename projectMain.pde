@@ -19,8 +19,6 @@ ArrayList<Business> businesses = new ArrayList<Business>();
 ArrayList<Screen> screens = new ArrayList<Screen>();
 ArrayList<Widget> homescreenWidgets = new ArrayList<Widget>();
 ArrayList<Widget> leaderboardsWidgets = new ArrayList<Widget>();
-Set<String> businessNames;
-Map<String, ArrayList<Review>> businessReviewMap; 
 
 Table table;
 PFont font, widgetFont;
@@ -53,10 +51,13 @@ void setup() {
   businesses = new ArrayList<Business>();
   businessNames = new HashSet<String>();
   businessReviewMap = new TreeMap<String, ArrayList<Review>>();
+  reviewerReviewMap = new TreeMap<String, ArrayList<Review>>();
+  reviewerNames = new HashSet<String>();
   loadData();
   loadReviewBusiness();
   search = new Search();
   search.createBusinessAZMap();
+   search.createReviewerMap();
   search.mostRecentReview(reviews);
   println(businessReviewMap.keySet());
   homeScreen.addWidget(searchbox);
