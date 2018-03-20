@@ -8,7 +8,7 @@ import java.util.Arrays;
 ArrayList<ReviewBox> recentReviews;
 boolean canType=false, drawGraph = false, goToGraph = false;
 PFont stdFont;
-PImage logoImage, yellowStar, greyStar;
+PImage logoImage, yellowStar, greyStar, backgroundPhoto;
 Widget searchbox, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred;
 String myText = "Search...";  
 String searchText;
@@ -21,7 +21,7 @@ ArrayList<Widget> homescreenWidgets = new ArrayList<Widget>();
 ArrayList<Widget> leaderboardsWidgets = new ArrayList<Widget>();
 
 Table table;
-PFont font, widgetFont;
+PFont font, widgetFont, barFont, businessFont;
 Search search;
 
 //charts
@@ -34,17 +34,18 @@ void settings() {
 void setup() {
   textSize(30);
   fill(0);
+  backgroundPhoto = loadImage("background photo.jpg");
   logoImage=loadImage("logo.png");
   yellowStar=loadImage("yellowStar.png");
   greyStar=loadImage("greyStar.png");
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
-  searchbox=new Widget(SEARCHBOXX, SEARHBOXY, 345, 25, myText, color(blue), widgetFont, EVENT_BUTTON1, 5, 5);
-  leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 130, 25, "Leaderboards", color(150), widgetFont, EVENT_BUTTON3, 5, 5);
+  searchbox=new Widget(SEARCHBOXX, SEARHBOXY, 345, 25, myText, color(255), widgetFont, EVENT_BUTTON1, 5, 5);
+  leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(150), widgetFont, EVENT_BUTTON3, 20, 20);
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
-  homeScreen=new Screen(color(HOMESCREEN_BACKGROUND), homescreenWidgets);
+  homeScreen=new Screen(backgroundPhoto, homescreenWidgets);
   leaderboardsScreen= new Screen(color(HOMESCREEN_BACKGROUND), leaderboardsWidgets);
-  mostReviewed= new Widget(RADIOBUTTONX, RADIOBUTTONY, 150, 30, "Top star rating", color(150), widgetFont, EVENT_BUTTON4, 10, 10 );
-  font = loadFont("Cambria-20.vlw");
+  mostReviewed= new Widget(RADIOBUTTONX, RADIOBUTTONY, 160, 50, "Top star rating", color(150), widgetFont, EVENT_BUTTON4, 20, 20 );
+  font = loadFont("Calibri-BoldItalic-48.vlw");
   dataPoints = new ArrayList<DataPoint>();
   table = loadTable("reviews.csv", "header");
   reviews = new ArrayList<Review>();
@@ -57,7 +58,7 @@ void setup() {
   loadReviewBusiness();
   search = new Search();
   search.createBusinessAZMap();
-   search.createReviewerMap();
+  search.createReviewerMap();
   search.mostRecentReview(reviews);
   println(businessReviewMap.keySet());
   homeScreen.addWidget(searchbox);
@@ -76,20 +77,33 @@ void draw() {
 
   currentScreen.draw();
 
-  fill(#0004B4);
-  noStroke();
+  fill(0);
+  blendMode(BLEND);
+  stroke(30);
+  strokeWeight(15);
+  stroke(60);
+  strokeWeight(10);
+  stroke(100);
+  strokeWeight(5);
   rect(0, 0, SCREENX, 70);
+  
+  
   searchbox.draw();
   homeButton.drawImage();
   //leaderboardsButton.draw();
 
 
+  if (currentScreen == homeScreen) {
+    noStroke();
+    drawRecentReviewBoxes(recentReviews);
+  }
 
+  //draws the relevant bar chart
   if (drawGraph) {
     noStroke();
     if (goToGraph) {
       barchart.draw();
-      for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++){
+      for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++) {
       }
     } else {
       fill(0);
@@ -97,7 +111,6 @@ void draw() {
       text("Sorry there are no ratings for this business.", 60, SCREENY/2);
     }
   }
-  //drawRecentReviewBoxes(recentReviews);
 }
 
 void mouseMoved() {
@@ -124,14 +137,15 @@ void keyPressed() {
       } else if (key == ENTER) {
         searchbox.returnString();
         canType=false;
+        
+        currentScreen=leaderboardsScreen;
 
         ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-
-        //BUSINESS STAR RATINGS GRAPH- EVENT
         println(searchbox.myText);
+
         drawGraph = true;
+        //draws the amount of the stars the business searched has if business is in data base
         displayBusinessStarsChart(searchedBusinesses);
-        println("Average stars: " + search.getAverageStarsOfBusiness(searchbox.myText));
       }
     }
   }
@@ -173,9 +187,13 @@ void mousePressed() {
   case EVENT_BUTTON3:
     // println("im working");
     currentScreen=leaderboardsScreen;
+    break;
+
+  case EVENT_BUTTON4:
+    currentScreen=leaderboardsScreen;
     displayTopRatedChart();
-     goToGraph = true;
-     drawGraph = true;
+    goToGraph = true;
+    drawGraph = true;
     break;
 
   default:
@@ -204,13 +222,16 @@ void loadReviewBusiness() {
   }
 }
 
+
+//initialises the 10 top rated businesses bar chart
 void displayTopRatedChart() {
   drawGraph = true;
   goToGraph = true;
   Business[] topRatedBusinesses = search.getTopTenBusinesses();
-  barchart = new BusinessBarChart(150, 400, topRatedBusinesses);
+  barchart = new BusinessBarChart(900, 700, topRatedBusinesses);
 }
 
+//initialises the business searched star chart
 void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   if (!businessStarsList.isEmpty()) {
     goToGraph = true;
@@ -219,7 +240,7 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
     drawGraph = true;
     String name = businessStarsList.get(0).getBusinessName();
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
-    barchart = new BusinessBarChart(150, 650, stars, name);
+    barchart = new BusinessBarChart(900, 700, stars, name);
   }
 }
 

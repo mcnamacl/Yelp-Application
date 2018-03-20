@@ -30,9 +30,9 @@ class Business {
     return businessReviews;
   }
 
+  //gets all the reviews for a particular business
   public ArrayList<Review> getReviews() {
     for (Review review : reviews) {
-      //println(reviews);
       if (review.getBusiness().equals(businessName) && review.getBusinessId().equals(businessId)) {
         businessReviews.add(review);
       }
@@ -40,7 +40,7 @@ class Business {
     return businessReviews;
   }
   
-
+  //prints all the stars a business has in the relevent categories
   public void displayStarCategories() {
     int counter = 0;
     for (int i : stars) {
