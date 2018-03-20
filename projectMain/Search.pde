@@ -7,7 +7,7 @@ Map<String, ArrayList<Review>> reviewerReviewMap;
 
 class Search {
 
-  ArrayList searchBusinessList(String userSearch) {
+  ArrayList<Business> searchBusinessList(String userSearch) {
     userSearch = userSearch.toLowerCase();
     ArrayList<Business> foundBusinesses = new ArrayList<Business>();
     int index;
