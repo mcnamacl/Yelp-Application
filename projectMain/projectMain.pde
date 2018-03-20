@@ -1,4 +1,5 @@
-import java.util.Set; //<>//
+ //<>//
+import java.util.Set;
 import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.Map;
@@ -7,7 +8,7 @@ import java.util.Arrays;
 ArrayList<ReviewBox> recentReviews;
 boolean canType=false, drawGraph = false, goToGraph = false;
 PFont stdFont;
-PImage logoImage;
+PImage logoImage,yellowStar,greyStar;
 Widget searchbox, homeButton, leaderboardsButton,  mostReviewed, topStars, topHundred;
 String myText = "Search...";  
 String searchText;
@@ -36,6 +37,8 @@ void setup() {
   textSize(30);
   fill(0);
   logoImage=loadImage("logo.png");
+  yellowStar=loadImage("yellowStar.png");
+  greyStar=loadImage("greyStar.png");
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
   searchbox=new Widget(SEARCHBOXX, SEARHBOXY, 345, 25, myText, color(blue), widgetFont, EVENT_BUTTON1, 5, 5);
   leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 130, 25, "Leaderboards", color(150), widgetFont, EVENT_BUTTON3, 5, 5);
@@ -218,11 +221,11 @@ ArrayList<ReviewBox> initRecentReviewBoxes(){
   ArrayList<Review> mostRecentReviews = search.mostRecentReview(reviews);
   ArrayList<ReviewBox> list = new ArrayList<ReviewBox>();
   int x=50;
-  int y=100;
+  int y=140;
   for (int i=0; i<=2; i++){
     Review review = mostRecentReviews.get(i);
-    ReviewBox rb = new ReviewBox(x,y,150,200,review.getAuthor(),review.getBusiness(),review.getText(),review.getStars());
-    y+=215;
+    ReviewBox rb = new ReviewBox(x,y,380,180,review.getAuthor(),review.getBusiness(),review.getText(),review.getStars());
+    y+=186;
     list.add(rb);
   }
   return list;
