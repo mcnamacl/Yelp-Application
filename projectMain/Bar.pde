@@ -19,14 +19,14 @@ class Bar {
     iY = 0;
   }
 
+  //draws the bars so as they are rising upwards 
   boolean drawBar() {
-    println(iY);
     if (iY < barHeight) {
-      y -=2;
-      iY +=2;
+      y -=5;
+      iY +=5;
     }
     fill(BARCHART_COLOUR);
-    rect(x, y, 25, iY);
+    rect(x, y, 40, iY);
     if (businessName != null) {
       int tmpX=x;
       int tmpY=y;
@@ -34,7 +34,6 @@ class Bar {
       translate(tmpX+5, tmpY);
       rotate(HALF_PI);
       translate(-tmpX, -tmpY);
-      textSize(15);
       fill(#DFFF12);
       text(businessName, tmpX+5, tmpY);
       popMatrix();

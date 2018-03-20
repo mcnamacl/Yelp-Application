@@ -2,14 +2,30 @@ class Screen {
   color backgroundColor;
   ArrayList <Widget> homescreenWidgets;
   int event;
+  PImage backgroundImage;
+  String type;
 
   Screen(color backgroundColor, ArrayList widgetList) {
+    type = "colour";
     this.backgroundColor=backgroundColor;
     this.homescreenWidgets=widgetList;
   }
   
+   Screen(PImage backgroundImage, ArrayList widgetList) {
+    type = "image";
+    this.backgroundImage=backgroundImage;
+    backgroundImage.resize(SCREENX, SCREENY);
+    this.homescreenWidgets=widgetList;
+  }
+  
+  
   void draw() {
+    if (type.equals("colour")){
     background(backgroundColor);
+    }
+    else {
+      background(backgroundImage);
+    }
     for (int i = 0; i<homescreenWidgets.size(); i++) {
       Widget aWidget = (Widget)homescreenWidgets.get(i);
       aWidget.draw();

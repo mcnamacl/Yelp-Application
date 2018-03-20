@@ -59,6 +59,7 @@ class Widget {
     rect(x,y,width,height);
     fill(myTextColor);
     textFont(widgetFont);
+    textSize(20);
     text(myText, x+xTextDistance, y+height-yTextDistance);
   }
   
@@ -67,10 +68,10 @@ class Widget {
   }
   
   int setStroke(int mouseX, int mouseY){
-    strokeColor=(150);
+    strokeColor=(200);
     strokeWeight(2);
     if(mouseX>x && mouseX < x+width && mouseY >y && mouseY <y+height){
-        strokeColor=(0);
+        strokeColor=(HIGHLIGHT);
         return strokeColor;
      }
      return strokeColor;
@@ -85,6 +86,5 @@ class Widget {
   
   String returnString(){
     return searchbox.myText;
-  }
-  
+  } 
 }
