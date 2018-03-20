@@ -4,16 +4,18 @@ class DisplayStars{
   PImage greyStar;
   PImage[] starPictures = new PImage[5];
   
-  DisplayStars(int stars, int starWidth, int x, int y){
+  DisplayStars(int stars, int starWidth, int x, int y,PImage yellowStar,PImage greyStar){
     this.stars=stars;
     this.starWidth=starWidth;
     this.x=x;
     this.y=y;
+    this.yellowStar=yellowStar;
+    this.greyStar=greyStar;
   }
   
-  void initDisplayStars(){
+  void initDisplayStars(){ //<>//
     int starsCopy = stars;
-    for (int i = 0; i<5; i++){
+    for (int i = 0; i<starPictures.length; i++){
       if (starsCopy>=0){
         starPictures[i] = yellowStar;
         starsCopy--;
@@ -25,8 +27,7 @@ class DisplayStars{
   
   void draw(){
     for (int i=0; i<starPictures.length; i++){
-      PImage drawStar = starPictures[i];
-      image(drawStar,x,y);
+      image(starPictures[i],x,y);
       x+=starWidth;
     }
   }
