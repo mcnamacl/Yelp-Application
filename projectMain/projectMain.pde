@@ -8,7 +8,7 @@ import java.util.Arrays;
 ArrayList<ReviewBox> recentReviews;
 boolean canType=false, drawGraph = false, goToGraph = false;
 PFont stdFont;
-PImage logoImage, yellowStar, greyStar, backgroundPhoto;
+PImage logoImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards;
 Widget searchbox, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful;
 String myText = "Search...";  
 String searchText;
@@ -35,6 +35,7 @@ void setup() {
   textSize(30);
   fill(0);
   backgroundPhoto = loadImage("background photo.jpg");
+  backgroundPhotoLeaderBoards = loadImage("leaderboards photo.jpg");
   logoImage=loadImage("logo.png");
   yellowStar=loadImage("yellowStar.png");
   greyStar=loadImage("greyStar.png");
@@ -43,7 +44,7 @@ void setup() {
   leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(150), widgetFont, EVENT_BUTTON3, 20, 20);
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
   homeScreen=new Screen(backgroundPhoto, homescreenWidgets);
-  leaderboardsScreen= new Screen(color(HOMESCREEN_BACKGROUND), leaderboardsWidgets);
+  leaderboardsScreen= new Screen(backgroundPhotoLeaderBoards, leaderboardsWidgets);
   topStars= new Widget(RADIOBUTTONX, TOPSTARSY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top star rating", color(255), widgetFont, EVENT_BUTTON4, 10, 10 );
   mostReviewed= new Widget(RADIOBUTTONX, MOSTREVIEWEDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most reviewed", color(255), widgetFont, EVENT_BUTTON5, 10, 10 );
   topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 100 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
