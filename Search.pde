@@ -21,7 +21,7 @@ class Search {
     }
     return foundBusinesses;
   }
-  
+
   public void printBusinesses() {
     String businesses = ""; 
     Set<String> keys = businessReviewMap.keySet(); 
@@ -45,19 +45,34 @@ class Search {
     return reviews;
   }
 
-  public ArrayList<Review> sortByCool(ArrayList<Review> reviews) {
+  //get top 10 coolest reviews
+  public Review[] sortByCool() {
+    Review[] coolReviews = new Review[10];
     Collections.sort(reviews, new SortByCool());
-    return reviews;
+    for (int i = 0; i < 10; i++) {
+      coolReviews[i] = (reviews.get(i));
+    }
+    return coolReviews;
   }
 
-  public ArrayList<Review> sortByUseful(ArrayList<Review> reviews) {
+  //get top 10 most useful reviews
+  public Review[] sortByUseful() {
+    Review[] usefulReviews = new Review[10];
     Collections.sort(reviews, new SortByUseful());
-    return reviews;
+    for (int i = 0; i < 10; i++) {
+      usefulReviews[i] = (reviews.get(i));
+    }
+    return usefulReviews;
   }
 
-  public ArrayList<Review> sortByFunny(ArrayList<Review> reviews) {
+  //get top 10 funniest reviews
+  public Review[] sortByFunny() {
+    Review[] funnyReviews = new Review[10];
     Collections.sort(reviews, new SortByFunny());
-    return reviews;
+    for (int i = 0; i < 10; i++) {
+      funnyReviews[i] = (reviews.get(i));
+    }
+    return funnyReviews;
   }
 
   public ArrayList<Review> searchReviewByBusinessName(ArrayList<Review> reviews, String businessName) {
@@ -76,7 +91,7 @@ class Search {
     for (Business business : searchedBusinesses) {
       getStarsForOneBusiness(business);
       tmpStarsForBusinesses = business.returnStars();
-      for (int i = 0; i < tmpStarsForBusinesses.length; i++){
+      for (int i = 0; i < tmpStarsForBusinesses.length; i++) {
         int tmpN = starsForBusinesses[i] + tmpStarsForBusinesses[i];
         starsForBusinesses[i] = tmpN;
       }
@@ -91,7 +106,7 @@ class Search {
     }
   }
 
-// Initialises map of business and that business's reviews
+  // Initialises map of business and that business's reviews
   void createBusinessAZMap() {
     for (Business business : businesses) {
       businessNames.add(business.getBusinessName());
@@ -106,13 +121,13 @@ class Search {
       businessReviewMap.put(name, businessReviews);
     }
   }
-  
-   // Initialises map of reviewer's name and all that reviewer's reviews
+
+  // Initialises map of reviewer's name and all that reviewer's reviews
   // Can be used to determine if reviewer is harsh or easliy pleased
   void createReviewerMap() {
     for (Review review : reviews) {
-     // reviewerNames.add(review.getAuthor().toLowerCase());
-     reviewerIds.add(review.getAuthorId());
+      // reviewerNames.add(review.getAuthor().toLowerCase());
+      reviewerIds.add(review.getAuthorId());
     }
     for (String id : reviewerIds) {
       ArrayList<Review> reviewerReviews = new ArrayList<Review>();
@@ -127,16 +142,7 @@ class Search {
 
   public Business[] getTopTenBusinesses() {
     Business[] topTenBusinesses = new Business[10];
-    Collections.sort(businesses, new Comparator<Business>() {
-      @Override
-        public int compare(Business b1, Business b2) {
-        Double av1 = ((Business) b1).getAverageStarsOfBusiness();
-        Double av2 = ((Business) b2).getAverageStarsOfBusiness();
-        return av1.compareTo(av2);
-      }
-    }  
-    );
-
+    sortBusinesses();
     int counter = 0;
     ArrayList<String> gotStarsFor = new ArrayList<String>();
     for (int i  = businesses.size(); counter < 10; i--) {
@@ -147,6 +153,33 @@ class Search {
       }
     }
     return topTenBusinesses;
+  }
+
+  public Business[] getTop20Businesses() {
+    Business[] top20Businesses = new Business[20];
+    sortBusinesses();
+    int counter = 0;
+    ArrayList<String> gotStarsFor = new ArrayList<String>();
+    for (int i  = businesses.size(); counter < 20; i--) {
+      if (!gotStarsFor.contains(businesses.get(i-1).getBusinessName())) {
+        gotStarsFor.add(businesses.get(i-1).getBusinessName());
+        top20Businesses[counter] = businesses.get(i-1);
+        counter++;
+      }
+    }
+    return top20Businesses;
+  }
+
+  void sortBusinesses() {
+    Collections.sort(businesses, new Comparator<Business>() {
+      @Override
+        public int compare(Business b1, Business b2) {
+        Double av1 = ((Business) b1).getAverageStarsOfBusiness();
+        Double av2 = ((Business) b2).getAverageStarsOfBusiness();
+        return av1.compareTo(av2);
+      }
+    }  
+    );
   }
 
   double getAverageStarsOfBusiness(String businessName) {
@@ -161,33 +194,52 @@ class Search {
     }
     return Double.parseDouble(String.format("%.2f", total/count));
   }
-  
-   /*public Term[] autoComplete(String searchQuery) {
-      
-      take in hashmap <weights and queries> (<business name string, number of reviews>)
-       construct terms into array
-       get k amount of queries to show
-       prefix = user types in (after two chars entered)
-       
-      //weightedMap
-      Term[] terms = new Term[businessReviewMap.size()];
-      int i = 0;
-      for (Map.Entry<String, ArrayList<Review>> entry : businessReviewMap.entrySet()) {
-        int weight = entry.getValue().size();
-        String query = entry.getKey();
-  
-        terms[i] = new Term(query, weight);
-        i++;
+
+  Business[] mostReviewed() {
+    Collections.sort(businesses, new Comparator<Business>() {
+      @Override
+        public int compare(Business b1, Business b2) {
+          Integer size1 = ((Business) b1).amountOfReviews();
+          Integer size2 = ((Business) b2).amountOfReviews();
+        return size1.compareTo(size2);
       }
-      println(Arrays.toString(terms));
-      AutoComplete autoComplete = new AutoComplete(terms);
-      String prefix = searchQuery;
-     
-      Term[] results = autoComplete.allMatches(prefix);
-      if (results.length > 0) {
-        return results;
-      }
-      println("wut");
-      return null;
-    }*/
+    }
+    );
+    
+    Business[] mostReviewed = new Business[10];
+    for (int i  = 0; i < mostReviewed.length; i++) {
+      mostReviewed[i] = businesses.get(businesses.size()-(i+1));
+    }
+    return mostReviewed;
+  }
+
+
+  /*public Term[] autoComplete(String searchQuery) {
+   
+   take in hashmap <weights and queries> (<business name string, number of reviews>)
+   construct terms into array
+   get k amount of queries to show
+   prefix = user types in (after two chars entered)
+   
+   //weightedMap
+   Term[] terms = new Term[businessReviewMap.size()];
+   int i = 0;
+   for (Map.Entry<String, ArrayList<Review>> entry : businessReviewMap.entrySet()) {
+   int weight = entry.getValue().size();
+   String query = entry.getKey();
+   
+   terms[i] = new Term(query, weight);
+   i++;
+   }
+   println(Arrays.toString(terms));
+   AutoComplete autoComplete = new AutoComplete(terms);
+   String prefix = searchQuery;
+   
+   Term[] results = autoComplete.allMatches(prefix);
+   if (results.length > 0) {
+   return results;
+   }
+   println("wut");
+   return null;
+   }*/
 }

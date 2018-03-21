@@ -63,6 +63,11 @@ class Business {
     }
     return Double.parseDouble(String.format("%.2f", total/count));
   }
+  
+  int amountOfReviews(){
+    getReviews();
+    return businessReviews.size();
+  }
 
 
   @Override
