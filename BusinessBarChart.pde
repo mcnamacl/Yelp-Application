@@ -5,7 +5,7 @@ class BusinessBarChart {
   String type;
   ArrayList<Integer> starRatingsList;
   String businessName;
-  float interval;
+  float interval, lineY1, lineX1, lineY2, lineX2;
   Bar[] bars;
 
   //sets up the bar chart for the star ratings of the top 10 businesses
@@ -22,6 +22,11 @@ class BusinessBarChart {
       bars[i] = new Bar(businessChart[i].getAverageStarsOfBusiness()*interval, tmpX, tmpY, businessChart[i].getBusinessName());
       tmpX+=50;
     }
+    lineX1 = x-5;
+    lineY1 = y-interval*5;
+    
+    lineX2 = x+5+businessChart.length*50;
+    lineY2 = y+2;
   }
 
   //sets up the bar chart for the star ratings of a particular business
@@ -44,10 +49,17 @@ class BusinessBarChart {
       bars[i] = new Bar(starRatings[i]*interval, tmpX, tmpY);
       tmpX+=50;
     }
+    lineX1 = x-5;
+    lineY1 = y-starRatingsList.get(4)*interval;
+    
+    lineX2 = x+5+5*50;
+    lineY2 = y+2;
   }
 
   //draws the relevent barchart
   void draw() {
+    fill(HIGHLIGHT, 60);
+    rect(x-30, y, (lineX2 - lineX1)+30, (lineY1 - lineY2) - 10);
     if (type.equals("average")) {
       drawTopRatedBusiness();
       drawScores();
@@ -60,31 +72,32 @@ class BusinessBarChart {
 
   //sets up the graph for the top rated businesses
   void drawTopRatedBusiness() {
-    fill(0);
+    fill(255);
     int tmpY = y;
+    textSize(20);
     for (int i = 0; i < 6; i++) {
       text(i, float(x-20), tmpY+2);
       tmpY = tmpY - (int)interval;
     }
-    stroke(0);
-    line((float)x-5, (float)y, (float)x-5, (float)(y-interval*5));
-    line((float)x-5, (float)y+2, (float)x+5+businessChart.length*50, (float)y+2);
+    stroke(255);
+    line((float)x-5, (float)y, lineX1, lineY1);
+    line((float)x-5, (float)y+2, lineX2, lineY2);
   }
 
 
   //sets up the graph for the business ratings
   void drawRatings() {
-    fill(0);
+    fill(255);
     int tmpY = y;
     for (int i = 0; i <= starRatingsList.get(4); i++) {
       text(i, float(x-30), tmpY);
       tmpY = tmpY - (int)interval;
     }
-    stroke(0);
-    line((float)x-5, (float)y, (float)x-5, (float)(y-starRatingsList.get(4)*interval));
-    line((float)x-5, (float)y+2, (float)x+5+5*50, (float)y+2);
+    stroke(255);
+    line((float)x-5, (float)y, lineX1, lineY1);
+    line((float)x-5, (float)y+2, lineX2, lineY2);
     textSize(20);
-    fill(0);
+    fill(255);
     int tmpX = x+5;
     for (int i = 1; i < 6; i++) {
       textSize(20);
@@ -98,7 +111,7 @@ class BusinessBarChart {
 
   //prints the average stars of the business underneath the bars in the 10 top rated businesses chart
   void drawScores() {
-    fill(0);
+    fill(255);
     int tmpX = x;
     for (int i = 0; i < 10; i++) {
       textSize(18);

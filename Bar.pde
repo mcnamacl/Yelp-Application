@@ -25,7 +25,7 @@ class Bar {
       y -=5;
       iY +=5;
     }
-    fill(BARCHART_COLOUR);
+    fill(BARCHART_COLOUR, 170);
     rect(x, y, 40, iY);
     if (businessName != null) {
       int tmpX=x;
@@ -35,6 +35,7 @@ class Bar {
       rotate(HALF_PI);
       translate(-tmpX, -tmpY);
       fill(#DFFF12);
+      textSize(25);
       text(businessName, tmpX+5, tmpY);
       popMatrix();
     }

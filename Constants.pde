@@ -38,4 +38,4 @@ final int LEADERBOARDSY=90;
 final color HIGHLIGHT = #86C232;
 final color DEFAULT_TEXT_COLOUR = #61892F;
 
-final color BARCHART_COLOUR = #3F7FD1;
+final color BARCHART_COLOUR = 0;
