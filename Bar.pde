@@ -22,8 +22,8 @@ class Bar {
   //draws the bars so as they are rising upwards 
   boolean drawBar() {
     if (iY < barHeight) {
-      y -=5;
-      iY +=5;
+      y -=8;
+      iY +=8;
     }
     fill(BARCHART_COLOUR, 170);
     rect(x, y, 40, iY);

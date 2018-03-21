@@ -2,7 +2,6 @@ import java.util.Collections;
 
 Set<String> businessNames;
 Map<String, ArrayList<Review>> businessReviewMap; 
-//Set<String> reviewerNames;
 Set<String> reviewerIds;
 Map<String, ArrayList<Review>> reviewerReviewMap;
 
@@ -36,7 +35,6 @@ class Search {
 
 
   public ArrayList<Review> mostRecentReview(ArrayList<Review> reviews) {
-    //ArrayList<Review> sortedList = new ArrayList<Review>();
     Collections.sort(reviews, new SortByDate());
     return reviews;
   } 
