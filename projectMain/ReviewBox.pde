@@ -18,6 +18,7 @@ class ReviewBox{
     this.reviewerId = reviewerId;
 
     displayStars = new DisplayStars(stars,20,x+5,y+100,yellowStar,greyStar);
+    displayStars.initDisplayStars();
     businessButton = new Widget(x+5,y+5,40,15,this.businessName,color(200),widgetFont,0,2,2,true);
     seeFullReviewButton = new Widget(x+5,y+150,40,15,"..read full review",color(200),widgetFont,0,2,2,true);
     
@@ -35,6 +36,6 @@ class ReviewBox{
     
     fill(DEFAULT_TEXT_COLOUR);
     text(review,x+5,y+30,width-30,height-60);
-   // displayStars.draw();
+    displayStars.draw();
   }  
 }
