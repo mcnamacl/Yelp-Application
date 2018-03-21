@@ -55,7 +55,7 @@ void setup() {
   leaderboardsScreen= new Screen(backgroundPhotoLeaderBoards, leaderboardsWidgets);
   topStars= new Widget(RADIOBUTTONX, TOPSTARSY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top star rating", color(255), widgetFont, EVENT_BUTTON4, 10, 10 );
   mostReviewed= new Widget(RADIOBUTTONX, MOSTREVIEWEDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most reviewed", color(255), widgetFont, EVENT_BUTTON5, 10, 10 );
-  topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 100 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
+  topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 20 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
   mostUseful= new Widget(RADIOBUTTONX, MOSTUSEFULY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
   funniest= new Widget(RADIOBUTTONX, FUNNIESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Funniest", color(255), widgetFont, EVENT_BUTTON8, 10, 10 );
   coolest= new Widget(RADIOBUTTONX, COOLESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );   
@@ -270,28 +270,43 @@ void mousePressed() {
 
   case EVENT_BUTTON5:
     println("most reviewed");
+    for (Business business : search.mostReviewed()){
+      println(business.getBusinessReviews().size());
+    }
+    displayMostReviewed();
 
     break;
 
   case EVENT_BUTTON6:
-    println("top 100 rated");
-
+    println("top 20 rated");
+    for (Business business : search.getTop20Businesses()){
+      println(business.getBusinessName());
+    }
     break;
 
   case EVENT_BUTTON7:
     println("most useful");
-
+    displayUsefulChart();
+    for (Review review : search.sortByUseful()){
+      println(review.getAuthor() + review.getUseful());
+    }
     break;
 
   case EVENT_BUTTON8:
     println("funniest");
-
+    displayFunniestChart();
+    for (Review review : search.sortByFunny()){
+      println(review.getAuthor() + review.getFunny());
+    }
     break;
 
 
   case EVENT_BUTTON9:
     println("coolest");
-
+    displayCoolChart();
+    for (Review review : search.sortByCool()){
+      println(review.getAuthor() + review.getCool());
+    }
     break;
 
   default:
@@ -326,7 +341,35 @@ void displayTopRatedChart() {
   drawGraph = true;
   goToGraph = true;
   Business[] topRatedBusinesses = search.getTopTenBusinesses();
-  barchart = new BusinessBarChart(900, 700, topRatedBusinesses);
+  barchart = new BusinessBarChart(900, 700, topRatedBusinesses, "topBusinesses");
+}
+
+void displayFunniestChart(){
+   drawGraph = true;
+  goToGraph = true;
+  Review[] funniest = search.sortByFunny();
+  barchart = new BusinessBarChart(900, 700, funniest, "funny");
+}
+
+void displayUsefulChart(){
+   drawGraph = true;
+  goToGraph = true;
+  Review[] useful = search.sortByUseful();
+  barchart = new BusinessBarChart(900, 700, useful, "useful");
+}
+
+void displayCoolChart(){
+   drawGraph = true;
+  goToGraph = true;
+  Review[] cool = search.sortByCool();
+  barchart = new BusinessBarChart(900, 700, cool, "cool");
+}
+
+void displayMostReviewed(){
+  drawGraph = true;
+  goToGraph = true;
+  Business[] mostReviewed = search.mostReviewed();
+  barchart = new BusinessBarChart(900, 700, mostReviewed, "mostReviewed");
 }
 
 //initialises the business searched star chart
