@@ -49,4 +49,13 @@ class Screen {
       }
      return EVENT_NULL;
   }
+  
+  boolean hover(int mouseX, int mouseY){
+      for(int i=0; i<homescreenWidgets.size();i++){
+       if(mouseX>homescreenWidgets.get(i).x && mouseX < homescreenWidgets.get(i).x+homescreenWidgets.get(i).width && mouseY >homescreenWidgets.get(i).y && mouseY <homescreenWidgets.get(i).y+homescreenWidgets.get(i).height){
+         return homescreenWidgets.get(i).hover;
+     }
+      }
+     return false;
+  }
 }

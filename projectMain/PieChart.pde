@@ -3,21 +3,43 @@ class PieChart {
   int x,y;
   float diameter;
   int[] data;
+  color[] colours = new color[3];
+  String[] types = new String[3];
+
 
   PieChart(int x, int y, int[] data) {
     this.x = x;
     this.y = y;
     this.data = data;
+    colours[0] = #6195A2;
+    colours[1] = #616AA0;
+    colours[2] = #61A063;
+    
+    types[0] = "Funny";
+    types[1] = "Useful";
+    types[2] = "Cool";
   }
 
   //calculates the slice of the pie chart a particular value requires
   void pieChart(float diameter, int[] data) {
+    noStroke();
+    fill(0,127);
+    rect(x-55,y-85,175, 170);
+    
     float lastAngle = 0;
+    float total = 0;
+    for (int i : data){
+      total= i + total;
+    }
+    int tmpY = y - 25;
     for (int i = 0; i < data.length; i++) {
-      float gray = map(i, 0, data.length, 0, 255);
-      fill(gray);
-      arc(width/2, height/2, diameter, diameter, lastAngle, lastAngle+radians(data[i]));
-      lastAngle += radians(data[i]);
+      fill(colours[i]);
+      float angle = (map(data[i], 0, total, 0, 360)) * PI/180;
+      arc(x, y, diameter, diameter, lastAngle, lastAngle+angle);
+      lastAngle += angle;
+      
+      text(types[i], x + 60, tmpY);
+      tmpY += 20;
     }
   }
 }
