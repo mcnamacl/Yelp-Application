@@ -2,7 +2,8 @@ import java.util.Collections;
 
 Set<String> businessNames;
 Map<String, ArrayList<Review>> businessReviewMap; 
-Set<String> reviewerNames;
+//Set<String> reviewerNames;
+Set<String> reviewerIds;
 Map<String, ArrayList<Review>> reviewerReviewMap;
 
 class Search {
@@ -112,16 +113,17 @@ class Search {
   // Can be used to determine if reviewer is harsh or easliy pleased
   void createReviewerMap() {
     for (Review review : reviews) {
-      reviewerNames.add(review.getAuthor().toLowerCase());
+     // reviewerNames.add(review.getAuthor().toLowerCase());
+     reviewerIds.add(review.getAuthorId());
     }
-    for (String name : reviewerNames) {
+    for (String id : reviewerIds) {
       ArrayList<Review> reviewerReviews = new ArrayList<Review>();
       for (Review review : reviews) {
-        if (review.getAuthor().toLowerCase().equals(name)) {
+        if (review.getAuthorId().equals(id)) {
           reviewerReviews.add(review);
         }
       }
-      reviewerReviewMap.put(name, reviewerReviews);
+      reviewerReviewMap.put(id, reviewerReviews);
     }
   }
 
