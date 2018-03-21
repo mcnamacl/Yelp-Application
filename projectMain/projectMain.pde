@@ -5,7 +5,8 @@ import java.util.Map;
 import java.util.Arrays;
 
 ArrayList<ReviewBox> recentReviews;
-boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false;;
+boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false;
+
 PFont stdFont;
 PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards;
 Widget searchbox, searchButton, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
@@ -30,7 +31,7 @@ BusinessBarChart barchart;
 PieChart pieChart;
 
 
-//Author author;
+Author author;
 
 void settings() {
   size(SCREENX, SCREENY, P3D);
@@ -47,7 +48,7 @@ void setup() {
   greyStar=loadImage("greyStar.png");
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
   searchbox=new Widget(SEARCHBOXX, SEARCHBOXY, SEARCHBOXWIDTH, SEARCHBOXHEIGHT, myText, color(255), widgetFont, EVENT_BUTTON1, 5, 5);
-  searchButton=new Widget(SEARCHBUTTONX, SEARCHBUTTONY, 75, SEARCHBOXHEIGHT,searchImage, EVENT_BUTTON10);
+  searchButton=new Widget(SEARCHBUTTONX, SEARCHBUTTONY, 75, SEARCHBOXHEIGHT, searchImage, EVENT_BUTTON10);
   leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(150), widgetFont, EVENT_BUTTON3, 20, 20);
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
   homeScreen=new Screen(backgroundPhoto, homescreenWidgets);
@@ -82,9 +83,9 @@ void setup() {
   println(businessReviewMap.keySet());
 
   homeScreen.addWidget(searchbox);
- // homeScreen.addWidget(searchButton);
+  // homeScreen.addWidget(searchButton);
   homeScreen.addWidget(leaderboardsButton);
- // leaderboardsScreen.addWidget(searchButton);
+  // leaderboardsScreen.addWidget(searchButton);
   leaderboardsScreen.addWidget(searchbox);
   leaderboardsScreen.addWidget(topStars);
   leaderboardsScreen.addWidget(mostReviewed);
@@ -124,10 +125,10 @@ void draw() {
   homeButton.drawImage();
   searchButton.drawImage();
   //leaderboardsButton.draw();
-  
-  //if (drawPieChart){
-  //  pieChart.pieChart(100, author.type);
-  //}
+
+  if (drawPieChart){
+    pieChart.pieChart(100, author.type);
+  }
 
   if (currentScreen == homeScreen) {
     noStroke();
@@ -152,19 +153,15 @@ void draw() {
 void mouseMoved() {
   searchbox.setStroke(mouseX, mouseY);
   leaderboardsButton.setStroke(mouseX, mouseY);
-    if (homeScreen.hover(mouseX, mouseY)){
+  if (homeScreen.hover(mouseX, mouseY)) {
     for (int i = 0; i < list.size(); i++) {
       if (list.get(i).authorPieChart.getEvent(mouseX, mouseY) != EVENT_NULL) {
-<<<<<<< .mine        author = new Author(list.get(i).reviewerId);
+        author = new Author(list.get(i).reviewerId);
         pieChart = new PieChart(int(list.get(i).authorPieChart.x+150), int(list.get(i).authorPieChart.y+50), author.type());
         drawPieChart = true;
-=======      //  author = new Author(list.get(i).authorPieChart.myText);
-        //pieChart = new PieChart(int(list.get(i).authorPieChart.x+150), int(list.get(i).authorPieChart.y+50), author.type);
-        //drawPieChart = true;
->>>>>>> .theirs      }
+      }
     }
-  }
-  else {
+  } else {
     drawPieChart = false;
   }
 }
@@ -229,24 +226,24 @@ void mousePressed() {
   switch(event) {
   case EVENT_BUTTON10:
     searchbox.returnString();
-        canType=false;
+    canType=false;
 
-        currentScreen=leaderboardsScreen;
+    currentScreen=leaderboardsScreen;
 
-        ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-        println(searchbox.myText);
+    ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
+    println(searchbox.myText);
 
-        drawGraph = true;
-        //draws the amount of the stars the business searched has if business is in data base
-        displayBusinessStarsChart(searchedBusinesses);
-    
+    drawGraph = true;
+    //draws the amount of the stars the business searched has if business is in data base
+    displayBusinessStarsChart(searchedBusinesses);
+
     break;
   default:
-     canType=false;
+    canType=false;
     if (searchbox.myText=="") {
       searchbox.myText="Search...";
     }
-  break;
+    break;
   }
 
 
