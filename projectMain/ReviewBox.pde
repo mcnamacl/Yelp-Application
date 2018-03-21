@@ -2,11 +2,11 @@ class ReviewBox{
   
   int x,y,width,height;
   Widget businessButton,seeFullReviewButton, authorPieChart;
-  String reviewer,businessName,review;
+  String reviewer,businessName,review, reviewerId;
   int stars;
   DisplayStars displayStars;
   
-  ReviewBox(int x,int y,int width,int height, String reviewer,String businessName,String review, int stars){
+  ReviewBox(int x,int y,int width,int height, String reviewer, String reviewerId, String businessName,String review, int stars){
     this.x=x;
     this.y=y;
     this.width=width;
@@ -15,6 +15,7 @@ class ReviewBox{
     this.businessName=businessName;
     this.review=review;
     this.stars=stars;
+    this.reviewerId = reviewerId;
 
     displayStars = new DisplayStars(stars,20,x+5,y+100,yellowStar,greyStar);
     businessButton = new Widget(x+5,y+5,40,15,this.businessName,color(200),widgetFont,0,2,2,true);

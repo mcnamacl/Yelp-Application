@@ -5,6 +5,7 @@ import java.text.ParseException;
 class Review {
 
   private String author;
+  private String authorId;
   private String business;
   private int stars;
   private String text;
@@ -15,7 +16,7 @@ class Review {
   private String businessId;
   private Date date;
 
-  Review (String author, String business, String businessId, int stars, String text, String dateString, int useful, int funny, int cool) {
+  Review (String author, String authorId, String business, String businessId, int stars, String text, String dateString, int useful, int funny, int cool) {
     this.author = author;
     this.business = business;
     this.businessId = businessId;
@@ -32,6 +33,7 @@ class Review {
     this.useful = useful;
     this.funny = funny;
     this.cool = cool;
+    this.authorId = authorId;
   }
 
 
@@ -39,11 +41,15 @@ class Review {
     return author;
   }
 
+  String getAuthorId() {
+    return authorId;
+  }
+
   String getBusiness() {
     return business;
   }
-  
-  String getBusinessId(){
+
+  String getBusinessId() {
     return businessId;
   }
   int getStars() {
@@ -57,15 +63,15 @@ class Review {
   Date getDate() {
     return date;
   }
-  
+
   int getFunny() {
     return this.funny;
   }
-  
+
   int getUseful() {
     return this.useful;
   }
-  
+
   int getCool() {
     return this.cool;
   }

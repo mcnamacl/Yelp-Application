@@ -69,7 +69,8 @@ void setup() {
   businessNames = new HashSet<String>();
   businessReviewMap = new TreeMap<String, ArrayList<Review>>();
   reviewerReviewMap = new TreeMap<String, ArrayList<Review>>();
-  reviewerNames = new HashSet<String>();
+  //reviewerNames = new HashSet<String>();
+  reviewerIds = new HashSet<String>();
   loadData();
   loadReviewBusiness();
   search = new Search();
@@ -154,10 +155,13 @@ void mouseMoved() {
     if (homeScreen.hover(mouseX, mouseY)){
     for (int i = 0; i < list.size(); i++) {
       if (list.get(i).authorPieChart.getEvent(mouseX, mouseY) != EVENT_NULL) {
-      //  author = new Author(list.get(i).authorPieChart.myText);
+<<<<<<< .mine        author = new Author(list.get(i).reviewerId);
+        pieChart = new PieChart(int(list.get(i).authorPieChart.x+150), int(list.get(i).authorPieChart.y+50), author.type());
+        drawPieChart = true;
+=======      //  author = new Author(list.get(i).authorPieChart.myText);
         //pieChart = new PieChart(int(list.get(i).authorPieChart.x+150), int(list.get(i).authorPieChart.y+50), author.type);
         //drawPieChart = true;
-      }
+>>>>>>> .theirs      }
     }
   }
   else {
@@ -314,7 +318,7 @@ void loadData() {
 
 void loadReviewBusiness() {
   for (DataPoint dp : dataPoints) {
-    reviews.add(new Review(dp.getUserName(), dp.getBusinessName(), dp.getBusinessId(), dp.getStars(), dp.getText(), dp.getDate(), dp.getUseful(), dp.getFunny(), dp.getCool()));
+    reviews.add(new Review(dp.getUserName(), dp.getUserId(), dp.getBusinessName(), dp.getBusinessId(), dp.getStars(), dp.getText(), dp.getDate(), dp.getUseful(), dp.getFunny(), dp.getCool()));
     businesses.add(new Business(dp.getBusinessName(), dp.getBusinessId()));
   }
 }
@@ -349,7 +353,7 @@ ArrayList<ReviewBox> initRecentReviewBoxes() {
   int y=140;
   for (int i=0; i<=2; i++) {
     Review review = mostRecentReviews.get(i);
-    ReviewBox rb = new ReviewBox(x, y, 380, 180, review.getAuthor(), review.getBusiness(), review.getText(), review.getStars());
+    ReviewBox rb = new ReviewBox(x, y, 380, 180, review.getAuthor(), review.getAuthorId(), review.getBusiness(), review.getText(), review.getStars());
     y+=186;
     list.add(rb);
   }
