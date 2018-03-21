@@ -9,7 +9,7 @@ ArrayList<ReviewBox> recentReviews;
 boolean canType=false, drawGraph = false, goToGraph = false;
 PFont stdFont;
 PImage logoImage, yellowStar, greyStar, backgroundPhoto;
-Widget searchbox, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred;
+Widget searchbox, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful;
 String myText = "Search...";  
 String searchText;
 Screen currentScreen, homeScreen, leaderboardsScreen;
@@ -44,7 +44,13 @@ void setup() {
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
   homeScreen=new Screen(backgroundPhoto, homescreenWidgets);
   leaderboardsScreen= new Screen(color(HOMESCREEN_BACKGROUND), leaderboardsWidgets);
-  mostReviewed= new Widget(RADIOBUTTONX, RADIOBUTTONY, 160, 50, "Top star rating", color(150), widgetFont, EVENT_BUTTON4, 20, 20 );
+  topStars= new Widget(RADIOBUTTONX, TOPSTARSY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top star rating", color(255), widgetFont, EVENT_BUTTON4, 10, 10 );
+  mostReviewed= new Widget(RADIOBUTTONX, MOSTREVIEWEDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most reviewed", color(255), widgetFont, EVENT_BUTTON5, 10, 10 );
+  topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 100 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
+  mostUseful= new Widget(RADIOBUTTONX, MOSTUSEFULY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
+  funniest= new Widget(RADIOBUTTONX, FUNNIESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Funniest", color(255), widgetFont, EVENT_BUTTON8, 10, 10 );
+  coolest= new Widget(RADIOBUTTONX, COOLESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );
+ // font = loadFont("Cambria-20.vlw");
   font = loadFont("Calibri-BoldItalic-48.vlw");
   dataPoints = new ArrayList<DataPoint>();
   table = loadTable("reviews.csv", "header");
@@ -64,8 +70,13 @@ void setup() {
   homeScreen.addWidget(searchbox);
   //homeScreen.addWidget(homeButton);
   homeScreen.addWidget(leaderboardsButton);
+  leaderboardsScreen.addWidget(topStars);
   leaderboardsScreen.addWidget(mostReviewed);
   leaderboardsScreen.addWidget(searchbox);
+  leaderboardsScreen.addWidget(topHundred);
+  leaderboardsScreen.addWidget(mostUseful);
+  leaderboardsScreen.addWidget(funniest);
+  leaderboardsScreen.addWidget(coolest);
   currentScreen=homeScreen;
   recentReviews = initRecentReviewBoxes();
   //rb = new ReviewBox(100,100,150,300,"James","green spuds","asd as d s s ss s s s sas  dawd i ams a aso yeroas a sldkjahlw asoidja audkaka asd",4);
@@ -76,7 +87,11 @@ void draw() {
   background(255);
 
   currentScreen.draw();
-
+  if(currentScreen==leaderboardsScreen){
+    fill(0);
+    noStroke();
+   rect(275,150,1,550);
+  }
   fill(0);
   blendMode(BLEND);
   stroke(30);
@@ -196,6 +211,33 @@ void mousePressed() {
     drawGraph = true;
     break;
 
+ case EVENT_BUTTON5:
+     println("button 5");
+   
+    break;
+   
+ case EVENT_BUTTON6:
+     println("button 6");
+    
+    break;
+   
+ case EVENT_BUTTON7:
+     println("ibutton 7");
+    
+    break;
+    
+ case EVENT_BUTTON8:
+    println("button 8");
+    
+    break;
+ 
+     
+ case EVENT_BUTTON9:
+    println("button 9");
+    
+    break;
+    
+    
   default:
     canType=false;
     if (searchbox.myText=="") {
