@@ -1,15 +1,14 @@
- //<>//
-import java.util.Set;
+import java.util.Set; //<>//
 import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.Map;
 import java.util.Arrays;
 
 ArrayList<ReviewBox> recentReviews;
-boolean canType=false, drawGraph = false, goToGraph = false;
+boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false;;
 PFont stdFont;
 PImage logoImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards;
-Widget searchbox, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful;
+Widget searchbox, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
 String myText = "Search...";  
 String searchText;
 Screen currentScreen, homeScreen, leaderboardsScreen;
@@ -20,12 +19,18 @@ ArrayList<Screen> screens = new ArrayList<Screen>();
 ArrayList<Widget> homescreenWidgets = new ArrayList<Widget>();
 ArrayList<Widget> leaderboardsWidgets = new ArrayList<Widget>();
 
+ArrayList<ReviewBox> list;
+
 Table table;
 PFont font, widgetFont, barFont, businessFont;
 Search search;
 
 //charts
 BusinessBarChart barchart;
+PieChart pieChart;
+
+
+Author author;
 
 void settings() {
   size(SCREENX, SCREENY, P3D);
@@ -50,8 +55,10 @@ void setup() {
   topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 100 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
   mostUseful= new Widget(RADIOBUTTONX, MOSTUSEFULY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
   funniest= new Widget(RADIOBUTTONX, FUNNIESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Funniest", color(255), widgetFont, EVENT_BUTTON8, 10, 10 );
-  coolest= new Widget(RADIOBUTTONX, COOLESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );
- // font = loadFont("Cambria-20.vlw");
+  coolest= new Widget(RADIOBUTTONX, COOLESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );   
+
+
+  // font = loadFont("Cambria-20.vlw");
   font = loadFont("Calibri-BoldItalic-48.vlw");
   dataPoints = new ArrayList<DataPoint>();
   table = loadTable("reviews.csv", "header");
@@ -66,8 +73,11 @@ void setup() {
   search = new Search();
   search.createBusinessAZMap();
   search.createReviewerMap();
+  println(reviewerReviewMap.keySet());
+
   search.mostRecentReview(reviews);
   println(businessReviewMap.keySet());
+
   homeScreen.addWidget(searchbox);
   //homeScreen.addWidget(homeButton);
   homeScreen.addWidget(leaderboardsButton);
@@ -88,10 +98,10 @@ void draw() {
   background(255);
 
   currentScreen.draw();
-  if(currentScreen==leaderboardsScreen){
+  if (currentScreen==leaderboardsScreen) {
     fill(0);
     noStroke();
-   rect(275,150,1,550);
+    rect(275, 150, 1, 550);
   }
   fill(0);
   blendMode(BLEND);
@@ -102,16 +112,19 @@ void draw() {
   stroke(100);
   strokeWeight(5);
   rect(0, 0, SCREENX, 70);
-  
-  
+
+
   searchbox.draw();
   homeButton.drawImage();
   //leaderboardsButton.draw();
-
+  
+  if (drawPieChart){
+    pieChart.pieChart(100, author.type);
+  }
 
   if (currentScreen == homeScreen) {
     noStroke();
-    drawRecentReviewBoxes(recentReviews);
+    drawRecentReviewBoxes();
   }
 
   //draws the relevant bar chart
@@ -132,6 +145,18 @@ void draw() {
 void mouseMoved() {
   searchbox.setStroke(mouseX, mouseY);
   leaderboardsButton.setStroke(mouseX, mouseY);
+    if (homeScreen.hover(mouseX, mouseY)){
+    for (int i = 0; i < list.size(); i++) {
+      if (list.get(i).authorPieChart.getEvent(mouseX, mouseY) != EVENT_NULL) {
+        author = new Author(list.get(i).authorPieChart.myText);
+        pieChart = new PieChart(int(list.get(i).authorPieChart.x+150), int(list.get(i).authorPieChart.y+50), author.type);
+        drawPieChart = true;
+      }
+    }
+  }
+  else {
+    drawPieChart = false;
+  }
 }
 
 
@@ -153,7 +178,7 @@ void keyPressed() {
       } else if (key == ENTER) {
         searchbox.returnString();
         canType=false;
-        
+
         currentScreen=leaderboardsScreen;
 
         ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
@@ -212,33 +237,32 @@ void mousePressed() {
     drawGraph = true;
     break;
 
- case EVENT_BUTTON5:
-     println("button 5");
-   
+  case EVENT_BUTTON5:
+    println("button 5");
+
     break;
-   
- case EVENT_BUTTON6:
-     println("button 6");
-    
+
+  case EVENT_BUTTON6:
+    println("button 6");
+
     break;
-   
- case EVENT_BUTTON7:
-     println("ibutton 7");
-    
+
+  case EVENT_BUTTON7:
+    println("ibutton 7");
+
     break;
-    
- case EVENT_BUTTON8:
+
+  case EVENT_BUTTON8:
     println("button 8");
-    
+
     break;
- 
-     
- case EVENT_BUTTON9:
+
+
+  case EVENT_BUTTON9:
     println("button 9");
-    
+
     break;
-    
-    
+
   default:
     canType=false;
     if (searchbox.myText=="") {
@@ -290,7 +314,7 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
 // this method creates an arraylist of reviewBox containing the most recent reviews
 ArrayList<ReviewBox> initRecentReviewBoxes() {
   ArrayList<Review> mostRecentReviews = search.mostRecentReview(reviews);
-  ArrayList<ReviewBox> list = new ArrayList<ReviewBox>();
+  list = new ArrayList<ReviewBox>();
   int x=50;
   int y=140;
   for (int i=0; i<=2; i++) {
@@ -303,7 +327,7 @@ ArrayList<ReviewBox> initRecentReviewBoxes() {
 }
 
 // this method draws the arrayList that was created above
-void drawRecentReviewBoxes(ArrayList<ReviewBox> list) {
+void drawRecentReviewBoxes() {
   for (int i=0; i<list.size(); i++) {
     list.get(i).draw();
   }
