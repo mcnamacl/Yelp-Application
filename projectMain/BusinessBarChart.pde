@@ -125,12 +125,14 @@ class BusinessBarChart {
       noStroke();
     } else if (type.equals("ratings")) {
       drawRatings();
+      if (label!=null){
       if (label.equals("funny")) {
         drawFunnyScores();
       } else if (label.equals("useful")) {
         drawUsefulScores();
       } else if (label.equals("cool")) {
         drawCoolScores();
+      }
       }
       noStroke();
     }
@@ -156,13 +158,15 @@ class BusinessBarChart {
     fill(255);
     int tmpY = y;
     int max = 0;
+    if (label !=null){
     if (label.equals("funny")) {
       max = typeReviews[0].getFunny();
     } else if (label.equals("useful")) {
       max = typeReviews[0].getUseful();
     } else if (label.equals("cool")) {
       max = typeReviews[0].getCool();
-    } else {
+    }
+    }else {
       max = starRatingsList.get(4);
     }    
     for (int i = 0; i <= max; i++) {
