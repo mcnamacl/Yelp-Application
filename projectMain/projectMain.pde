@@ -7,8 +7,8 @@ import java.util.Arrays;
 ArrayList<ReviewBox> recentReviews;
 boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false;;
 PFont stdFont;
-PImage logoImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards;
-Widget searchbox, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
+PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards;
+Widget searchbox, searchButton, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
 String myText = "Search...";  
 String searchText;
 Screen currentScreen, homeScreen, leaderboardsScreen;
@@ -30,7 +30,7 @@ BusinessBarChart barchart;
 PieChart pieChart;
 
 
-Author author;
+//Author author;
 
 void settings() {
   size(SCREENX, SCREENY, P3D);
@@ -42,10 +42,12 @@ void setup() {
   backgroundPhoto = loadImage("background photo.jpg");
   backgroundPhotoLeaderBoards = loadImage("leaderboards photo.jpg");
   logoImage=loadImage("logo.png");
+  searchImage=loadImage("search.png");
   yellowStar=loadImage("yellowStar.png");
   greyStar=loadImage("greyStar.png");
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
-  searchbox=new Widget(SEARCHBOXX, SEARHBOXY, 345, 25, myText, color(255), widgetFont, EVENT_BUTTON1, 5, 5);
+  searchbox=new Widget(SEARCHBOXX, SEARCHBOXY, SEARCHBOXWIDTH, SEARCHBOXHEIGHT, myText, color(255), widgetFont, EVENT_BUTTON1, 5, 5);
+  searchButton=new Widget(SEARCHBUTTONX, SEARCHBUTTONY, 75, SEARCHBOXHEIGHT,searchImage, EVENT_BUTTON10);
   leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(150), widgetFont, EVENT_BUTTON3, 20, 20);
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
   homeScreen=new Screen(backgroundPhoto, homescreenWidgets);
@@ -79,11 +81,12 @@ void setup() {
   println(businessReviewMap.keySet());
 
   homeScreen.addWidget(searchbox);
-  //homeScreen.addWidget(homeButton);
+ // homeScreen.addWidget(searchButton);
   homeScreen.addWidget(leaderboardsButton);
+ // leaderboardsScreen.addWidget(searchButton);
+  leaderboardsScreen.addWidget(searchbox);
   leaderboardsScreen.addWidget(topStars);
   leaderboardsScreen.addWidget(mostReviewed);
-  leaderboardsScreen.addWidget(searchbox);
   leaderboardsScreen.addWidget(topHundred);
   leaderboardsScreen.addWidget(mostUseful);
   leaderboardsScreen.addWidget(funniest);
@@ -96,6 +99,8 @@ void setup() {
 
 void draw() {
   background(255);
+  fill(#0004B4);
+  noStroke();
 
   currentScreen.draw();
   if (currentScreen==leaderboardsScreen) {
@@ -116,11 +121,12 @@ void draw() {
 
   searchbox.draw();
   homeButton.drawImage();
+  searchButton.drawImage();
   //leaderboardsButton.draw();
   
-  if (drawPieChart){
-    pieChart.pieChart(100, author.type);
-  }
+  //if (drawPieChart){
+  //  pieChart.pieChart(100, author.type);
+  //}
 
   if (currentScreen == homeScreen) {
     noStroke();
@@ -148,9 +154,9 @@ void mouseMoved() {
     if (homeScreen.hover(mouseX, mouseY)){
     for (int i = 0; i < list.size(); i++) {
       if (list.get(i).authorPieChart.getEvent(mouseX, mouseY) != EVENT_NULL) {
-        author = new Author(list.get(i).authorPieChart.myText);
-        pieChart = new PieChart(int(list.get(i).authorPieChart.x+150), int(list.get(i).authorPieChart.y+50), author.type);
-        drawPieChart = true;
+      //  author = new Author(list.get(i).authorPieChart.myText);
+        //pieChart = new PieChart(int(list.get(i).authorPieChart.x+150), int(list.get(i).authorPieChart.y+50), author.type);
+        //drawPieChart = true;
       }
     }
   }
@@ -205,7 +211,7 @@ void mousePressed() {
     goToGraph=false;
     drawGraph = false;
     currentScreen=homeScreen;
-    break;
+    break; 
 
   default:
     canType=false;
@@ -213,6 +219,30 @@ void mousePressed() {
       searchbox.myText="Search...";
     }
     break;
+  }
+
+  event = searchButton.getEvent(mouseX, mouseY);
+  switch(event) {
+  case EVENT_BUTTON10:
+    searchbox.returnString();
+        canType=false;
+
+        currentScreen=leaderboardsScreen;
+
+        ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
+        println(searchbox.myText);
+
+        drawGraph = true;
+        //draws the amount of the stars the business searched has if business is in data base
+        displayBusinessStarsChart(searchedBusinesses);
+    
+    break;
+  default:
+     canType=false;
+    if (searchbox.myText=="") {
+      searchbox.myText="Search...";
+    }
+  break;
   }
 
 
@@ -238,28 +268,28 @@ void mousePressed() {
     break;
 
   case EVENT_BUTTON5:
-    println("button 5");
+    println("most reviewed");
 
     break;
 
   case EVENT_BUTTON6:
-    println("button 6");
+    println("top 100 rated");
 
     break;
 
   case EVENT_BUTTON7:
-    println("ibutton 7");
+    println("most useful");
 
     break;
 
   case EVENT_BUTTON8:
-    println("button 8");
+    println("funniest");
 
     break;
 
 
   case EVENT_BUTTON9:
-    println("button 9");
+    println("coolest");
 
     break;
 

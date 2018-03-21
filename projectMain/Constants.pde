@@ -10,7 +10,11 @@ final int FOUR_STARS = 3;
 final int FIVE_STARS = 4;
 
 final int SEARCHBOXX=90;
-final int SEARHBOXY=15;
+final int SEARCHBOXY=15;
+final int SEARCHBOXWIDTH=345;
+final int SEARCHBOXHEIGHT=25;
+final int SEARCHBUTTONX=438;
+final int SEARCHBUTTONY=15;
 final int HOMEX=8;
 final int HOMEY=1;
 final int EVENT_NULL=0;
