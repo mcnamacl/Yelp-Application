@@ -55,16 +55,16 @@ void setup() {
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
   searchbox=new Widget(SEARCHBOXX, SEARCHBOXY, SEARCHBOXWIDTH, SEARCHBOXHEIGHT, myText, color(190), widgetFont, EVENT_BUTTON1, 5, 5);
   searchButton=new Widget(SEARCHBUTTONX, SEARCHBUTTONY, SEARCHBUTTONWIDTH, SEARCHBOXHEIGHT, "", color(0), widgetFont, EVENT_BUTTON10, 0, 0);
-  leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(190), widgetFont, EVENT_BUTTON3, 20, 20);
+  leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(190, 180), widgetFont, EVENT_BUTTON3, 20, 20);
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
   homeScreen=new Screen(backgroundPhoto, homescreenWidgets);
   leaderboardsScreen= new Screen(backgroundPhotoLeaderBoards, leaderboardsWidgets);
-  topStars= new Widget(RADIOBUTTONX, TOPSTARSY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top star rating", color(255), widgetFont, EVENT_BUTTON4, 10, 10 );
-  mostReviewed= new Widget(RADIOBUTTONX, MOSTREVIEWEDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most reviewed", color(255), widgetFont, EVENT_BUTTON5, 10, 10 );
-  topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 20 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
-  mostUseful= new Widget(RADIOBUTTONX, MOSTUSEFULY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
-  funniest= new Widget(RADIOBUTTONX, FUNNIESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Funniest", color(255), widgetFont, EVENT_BUTTON8, 10, 10 );
-  coolest= new Widget(RADIOBUTTONX, COOLESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );   
+  topStars= new Widget(RADIOBUTTONX, TOPSTARSY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top star rating", color(255, 180), widgetFont, EVENT_BUTTON4, 10, 10 );
+  mostReviewed= new Widget(RADIOBUTTONX, MOSTREVIEWEDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most reviewed", color(255, 180), widgetFont, EVENT_BUTTON5, 10, 10 );
+  topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 20 rated", color(255, 180), widgetFont, EVENT_BUTTON6, 10, 10 );
+  mostUseful= new Widget(RADIOBUTTONX, MOSTUSEFULY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most useful", color(255, 180), widgetFont, EVENT_BUTTON7, 10, 10 );
+  funniest= new Widget(RADIOBUTTONX, FUNNIESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Funniest", color(255, 180), widgetFont, EVENT_BUTTON8, 10, 10 );
+  coolest= new Widget(RADIOBUTTONX, COOLESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Coolest", color(255, 180), widgetFont, EVENT_BUTTON9, 10, 10 );   
 
   // font = loadFont("Cambria-20.vlw");
   font = loadFont("Calibri-BoldItalic-48.vlw");
@@ -102,6 +102,7 @@ void setup() {
   currentScreen=homeScreen;
   recentReviews = initRecentReviewBoxes();
   //rb = new ReviewBox(100,100,150,300,"James","green spuds","asd as d s s ss s s s sas  dawd i ams a aso yeroas a sldkjahlw asoidja audkaka asd",4);
+  
 
   cp5 = new ControlP5(this);
   cp5.addScrollableList("Top 20 businesses")
@@ -292,9 +293,6 @@ void mousePressed() {
 
   case EVENT_BUTTON5:
     println("most reviewed");
-    for (Business business : search.mostReviewed()) {
-      println(business.getBusinessReviews().size());
-    }
     displayMostReviewed();
     listReviews=false;
     break;
@@ -435,7 +433,7 @@ ArrayList<ReviewBox> initRecentReviewBoxes() {
   list = new ArrayList<ReviewBox>();
   int x=100;
   int y=270;
-  recentReviewsHeader = new TitleBox(x,y-100,380,60,25,25,color(255,0,0,127),DEFAULT_TEXT_COLOUR,DEFAULT_TEXT_COLOUR,font,"Most Recent Reviews");
+  recentReviewsHeader = new TitleBox(x,y-100,380,60,25,25,color(HIGHLIGHT,127),DEFAULT_TEXT_COLOUR,color(255),font,"Most Recent Reviews");
   for (int i=0; i<=2; i++) {
     Review review = mostRecentReviews.get(i);
     ReviewBox rb = new ReviewBox(x, y, 380, 180, review.getAuthor(), review.getAuthorId(), review.getBusiness(), review.getText(), review.getStars());
