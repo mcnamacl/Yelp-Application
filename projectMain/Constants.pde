@@ -13,6 +13,7 @@ final int SEARCHBOXX=90;
 final int SEARCHBOXY=15;
 final int SEARCHBOXWIDTH=345;
 final int SEARCHBOXHEIGHT=25;
+final int SEARCHBUTTONWIDTH=50;
 final int SEARCHBUTTONX=438;
 final int SEARCHBUTTONY=15;
 final int HOMEX=8;

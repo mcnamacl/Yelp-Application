@@ -89,4 +89,8 @@ class Widget {
   String returnString() {
     return searchbox.myText;
   } 
+  
+  void setSearchboxColor(color x){
+    searchbox.widgetColor=x;
+  }
 }
