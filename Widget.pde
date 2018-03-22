@@ -49,6 +49,32 @@ class Widget {
     this.isClickableText=isClickableText;
     myTextColor= color(0);
   }
+  
+  //constuctor for a leaderboard rung
+   Widget(int x, int y, int width, int height, String myText, color widgetColor,color strokeColor, PFont widgetFont, int event, int xTextDistance, int yTextDistance) {
+    this.x=x; 
+    this.y=y; 
+    this.width = width; 
+    this.height= height;
+    this.myText=myText; 
+    this.event=event; 
+    this.widgetColor=widgetColor; 
+    this.widgetFont=widgetFont;
+    this.xTextDistance=xTextDistance;
+    this.yTextDistance=yTextDistance;
+    this.strokeColor=strokeColor;
+  }
+
+  void drawLeaderboardRung(){
+    fill(widgetColor);
+    stroke(strokeColor);
+    rect(x,y,width,height);
+    setTextColor(mouseX,mouseY);
+    fill(myTextColor);
+    textSize(20);
+    text(myText,x+xTextDistance,y+yTextDistance);
+    
+  }
 
   void draw() {
     setStroke(mouseX, mouseY);
@@ -77,6 +103,16 @@ class Widget {
       return strokeColor;
     }
     return strokeColor;
+  }
+  
+  int setTextColor(int mouseX, int mouseY) {
+    myTextColor = DEFAULT_TEXT_COLOUR;
+    if (mouseX>x && mouseX < x+width && mouseY >y && mouseY <y+height) {
+      myTextColor=(HIGHLIGHT);
+      hover = true;
+      return myTextColor;
+    }
+    return myTextColor;
   }
 
   int getEvent(int mouseX, int mouseY) {

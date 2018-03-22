@@ -1,10 +1,12 @@
 class DisplayStars{
-  int stars,x,y,starWidth;
+  int x,y,starWidth;
+  double stars;
   PImage yellowStar;
   PImage greyStar;
+  PImage halfstar;
   Star[] starPictures = new Star[5];
   
-  DisplayStars(int stars, int starWidth, int x, int y,PImage yellowStar,PImage greyStar){
+  DisplayStars(double stars, int starWidth, int x, int y,PImage yellowStar,PImage greyStar,PImage halfStar){
     this.stars=stars;
     this.starWidth=starWidth;
     this.x=x;
@@ -13,13 +15,42 @@ class DisplayStars{
     this.greyStar=greyStar;
   }
   
+  //used to create an array of star images given a discrete number of stars
   void initDisplayStars(){ //<>//
-    int starsCopy = stars;
+    double starsCopy = stars;
     for (int i = 0; i<starPictures.length; i++){
       if (starsCopy>=0){
         Star ystar = new Star(x,y,yellowStar);
         starPictures[i] = ystar;
         starsCopy--;
+      }
+      else{
+        Star gstar = new Star(x,y,greyStar);
+        starPictures[i] = gstar;
+      }
+      x+=starWidth;
+    }
+  }
+  
+  //used to create array of star images given a continous number of stars
+  void initContinuousDisplayStars(){
+     double starsCopy = stars;
+    for (int i = 0; i<starPictures.length; i++){
+      if (starsCopy>=0){
+        Star ystar = new Star(x,y,yellowStar);
+        starPictures[i] = ystar;
+        starsCopy--;
+      }
+      else if (starsCopy<0 && starsCopy>0.75){
+        Star ystar = new Star(x,y,yellowStar);
+        starPictures[i] = ystar;
+        starsCopy--;
+      }
+      else if (starsCopy<=0.75 && starsCopy>0.25){
+        Star hstar = new Star(x,y,halfStar);
+        starPictures[i] = hstar;
+        starsCopy--;
+        
       }
       else{
         Star gstar = new Star(x,y,greyStar);
