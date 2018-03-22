@@ -10,6 +10,7 @@ boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = fals
 PFont stdFont;
 PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards;
 Widget searchbox, searchButton, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
+TitleBox recentReviewsHeader;
 String myText = "Search...";  
 String searchText;
 Screen currentScreen, homeScreen, leaderboardsScreen;
@@ -44,8 +45,8 @@ void setup() {
   backgroundPhotoLeaderBoards = loadImage("leaderboards photo.jpg");
   logoImage=loadImage("logo.png");
   searchImage=loadImage("search.png");
-  yellowStar=loadImage("yellowStar.png");
-  greyStar=loadImage("greyStar.png");
+  yellowStar=loadImage("yellowStar1small.png");
+  greyStar=loadImage("greyStar1small.png");
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
   searchbox=new Widget(SEARCHBOXX, SEARCHBOXY, SEARCHBOXWIDTH, SEARCHBOXHEIGHT, myText, color(255), widgetFont, EVENT_BUTTON1, 5, 5);
   searchButton=new Widget(SEARCHBUTTONX, SEARCHBUTTONY, 75, SEARCHBOXHEIGHT, searchImage, EVENT_BUTTON10);
@@ -59,7 +60,6 @@ void setup() {
   mostUseful= new Widget(RADIOBUTTONX, MOSTUSEFULY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
   funniest= new Widget(RADIOBUTTONX, FUNNIESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Funniest", color(255), widgetFont, EVENT_BUTTON8, 10, 10 );
   coolest= new Widget(RADIOBUTTONX, COOLESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );   
-
 
   // font = loadFont("Cambria-20.vlw");
   font = loadFont("Calibri-BoldItalic-48.vlw");
@@ -389,8 +389,9 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
 ArrayList<ReviewBox> initRecentReviewBoxes() {
   ArrayList<Review> mostRecentReviews = search.mostRecentReview(reviews);
   list = new ArrayList<ReviewBox>();
-  int x=50;
-  int y=140;
+  int x=100;
+  int y=270;
+  recentReviewsHeader = new TitleBox(x,y-100,380,60,25,25,color(255,0,0,127),DEFAULT_TEXT_COLOUR,DEFAULT_TEXT_COLOUR,font,"Most Recent Reviews");
   for (int i=0; i<=2; i++) {
     Review review = mostRecentReviews.get(i);
     ReviewBox rb = new ReviewBox(x, y, 380, 180, review.getAuthor(), review.getAuthorId(), review.getBusiness(), review.getText(), review.getStars());
@@ -402,6 +403,7 @@ ArrayList<ReviewBox> initRecentReviewBoxes() {
 
 // this method draws the arrayList that was created above
 void drawRecentReviewBoxes() {
+  recentReviewsHeader.draw();
   for (int i=0; i<list.size(); i++) {
     list.get(i).draw();
   }
