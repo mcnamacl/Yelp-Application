@@ -4,6 +4,7 @@ class Business {
   private String businessId;
   private ArrayList<Review> businessReviews;
   private int[] stars = new int[5];
+  private int amountOfReviews;
 
   public Business(String businessName, String businessId) {
     this.businessName = businessName;
@@ -12,10 +13,20 @@ class Business {
     for (int i = 0; i < stars.length; i++) {
       stars[i] = 0;
     }
+    getReviews();
+  }
+
+  public Business(String businessName, int amountOfReviews) {
+    this.amountOfReviews = amountOfReviews;
+    this.businessName = businessName;
   }
 
   int[] returnStars() {
     return stars;
+  }
+  
+  public int returnAmountOfReviews(){
+    return amountOfReviews;
   }
 
   public String getBusinessName() {
@@ -39,7 +50,7 @@ class Business {
     }
     return businessReviews;
   }
-  
+
   //prints all the stars a business has in the relevent categories
   public void displayStarCategories() {
     int counter = 0;
@@ -63,9 +74,8 @@ class Business {
     }
     return Double.parseDouble(String.format("%.2f", total/count));
   }
-  
-  int amountOfReviews(){
-    getReviews();
+
+  int amountOfReviews() {
     return businessReviews.size();
   }
 

@@ -4,6 +4,7 @@ Set<String> businessNames;
 Map<String, ArrayList<Review>> businessReviewMap; 
 Set<String> reviewerIds;
 Map<String, ArrayList<Review>> reviewerReviewMap;
+Map<String, Business> amountOfReviews;
 
 class Search {
 
@@ -96,7 +97,6 @@ class Search {
         starsForBusinesses[i] = tmpN;
       }
     }
-    println(starsForBusinesses);
     return starsForBusinesses;
   }
 
@@ -196,19 +196,22 @@ class Search {
   }
 
   Business[] mostReviewed() {
-    Collections.sort(businesses, new Comparator<Business>() {
-      @Override
-        public int compare(Business b1, Business b2) {
-          Integer size1 = ((Business) b1).amountOfReviews();
-          Integer size2 = ((Business) b2).amountOfReviews();
-        return size1.compareTo(size2);
+    ArrayList<Business> amountOfReviewsPerBusiness = new ArrayList<Business>();
+    Set<String> keys = businessReviewMap.keySet();
+    for (String key : keys) { 
+      int counter = 0;
+      for (Review review : reviews) {
+        if (review.getBusiness().equals(key)) {
+          counter++;
+        }
       }
-    }
-    );
-    
+      Business business = new Business(key, counter);
+      amountOfReviewsPerBusiness.add(business);
+    }   
+    Collections.sort(amountOfReviewsPerBusiness, new SortByAmountOfReviews());
     Business[] mostReviewed = new Business[10];
     for (int i  = 0; i < mostReviewed.length; i++) {
-      mostReviewed[i] = businesses.get(businesses.size()-(i+1));
+      mostReviewed[i] = amountOfReviewsPerBusiness.get(amountOfReviewsPerBusiness.size()-(i+1));
     }
     return mostReviewed;
   }
