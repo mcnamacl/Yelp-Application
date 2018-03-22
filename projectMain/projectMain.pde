@@ -24,7 +24,7 @@ ArrayList<Business> businesses = new ArrayList<Business>();
 ArrayList<Screen> screens = new ArrayList<Screen>();
 ArrayList<Widget> homescreenWidgets = new ArrayList<Widget>();
 ArrayList<Widget> leaderboardsWidgets = new ArrayList<Widget>();
-ArrayList<String> reviewsString;
+ArrayList<String> reviewsString, topBusinesses;
 ArrayList<ReviewBox> list;
 
 Table table;
@@ -104,19 +104,17 @@ void setup() {
   //rb = new ReviewBox(100,100,150,300,"James","green spuds","asd as d s s ss s s s sas  dawd i ams a aso yeroas a sldkjahlw asoidja audkaka asd",4);
 
   cp5 = new ControlP5(this);
-  cp5.addScrollableList("List of reviews")
-    .setPosition(400, 100)
-    .setSize(900, 800)             //size of full thing
-    .setBarHeight(40)              //size of bar at the top
-    .setItemHeight(100)            //size of each box
-    .addItems(reviewsString)
+  cp5.addScrollableList("Top 20 businesses")
+    .setPosition(400, 80)
+    .setSize(900, 750)             //size of full thing
+    .setBarVisible(true)
+    .setBarHeight(40)
+    .setItemHeight(50)            //size of each box
+   // .addItems(reviewsString)     add full reviews
+    .addItems(search.getTop20Businesses())
     .setFont(widgetFont)
-    .setBarVisible(true)            //bar at the top ("List of reviews")
     .setScrollSensitivity(100.0)
-    .setColorValue(color(190))      // text colour??
-    .setColorForeground(color(255))  // highlight colour (mouse over)??
-    .setBackgroundColor(HIGHLIGHT)  // colour of line seperating each box??
-    .setColorBackground(240) ;   // box colour??
+    .setColorBackground(REVIEWLISTCOLOR);
 }
 
 
@@ -140,6 +138,7 @@ void draw() {
   stroke(100);
   strokeWeight(5);
   rect(0, 0, SCREENX, 70);
+  //below is making the search button image thing, rather than actually importing an image
   fill(255);
   noStroke();
   ellipse((SEARCHBUTTONX+SEARCHBUTTONWIDTH/2)-5, (SEARCHBUTTONY+SEARCHBOXHEIGHT/2), 20, 20);
@@ -161,6 +160,7 @@ void draw() {
   if (currentScreen == homeScreen) {
     noStroke();
     drawRecentReviewBoxes();
+    listReviews=false;
   }
 
   //draws the relevant bar chart
@@ -182,6 +182,9 @@ void draw() {
   }
   if(!listReviews){
     cp5.hide();
+  }
+  else if(listReviews){
+    cp5.show();
   }
   if(canType){
     searchbox.setSearchboxColor(255);
@@ -210,7 +213,10 @@ void mouseMoved() {
 //DELETE=keyCode 46
 void keyPressed() {
   if (canType) {
-    if (key == BACKSPACE) {
+    if (key == DELETE) {
+        searchbox.myText = "";
+      } 
+    else if (key == BACKSPACE) {
       if (searchbox.myText.length()-1 <= 0) {
         searchbox.myText = "";
       } else if (myText.length() > 0) {
@@ -218,10 +224,7 @@ void keyPressed() {
       }
     } 
     if (searchbox.myText.length() <=36) {
-      if (keyCode == DELETE) {
-        searchbox.myText = "";
-      } 
-      else if (key != ENTER && keyCode>=32 && keyCode<=223) {
+       if (key != ENTER && keyCode>=32 && keyCode<=223) {
         searchbox.myText =searchbox.myText + key;
       } if (key == ENTER) {
         searchbox.returnString();
@@ -256,6 +259,7 @@ void mousePressed() {
 
   default:
     canType=false;
+    listReviews=false;
     if (searchbox.myText=="") {
       searchbox.myText="Search...";
     }
@@ -275,7 +279,7 @@ void mousePressed() {
   case EVENT_BUTTON3:
     // println("im working");
     currentScreen=leaderboardsScreen;
-    listReviews=false;
+    listReviews=true;
     break;
 
   case EVENT_BUTTON4:
@@ -297,12 +301,9 @@ void mousePressed() {
 
   case EVENT_BUTTON6:
     println("top 20 rated");
-    //for (Business business : search.getTop20Businesses()){
-    //  println(business.getBusinessName());
-    //}
-     drawGraph=false;
-     listReviews=true;
-     cp5.show();
+    listReviews=true;
+    //cp5.show();
+    drawGraph=false;
     break;
 
   case EVENT_BUTTON7:
@@ -350,7 +351,7 @@ void mousePressed() {
       break;
     }
   default:
-    listReviews=false;
+    listReviews=true;
     canType=false;
     if (searchbox.myText=="") {
       searchbox.myText="Search...";

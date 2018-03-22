@@ -155,15 +155,15 @@ class Search {
     return topTenBusinesses;
   }
 
-  public Business[] getTop20Businesses() {
-    Business[] top20Businesses = new Business[20];
+  public String[] getTop20Businesses() {
+    String[] top20Businesses = new String[20];
     sortBusinesses();
     int counter = 0;
     ArrayList<String> gotStarsFor = new ArrayList<String>();
     for (int i  = businesses.size(); counter < 20; i--) {
       if (!gotStarsFor.contains(businesses.get(i-1).getBusinessName())) {
         gotStarsFor.add(businesses.get(i-1).getBusinessName());
-        top20Businesses[counter] = businesses.get(i-1);
+        top20Businesses[counter] = (businesses.get(i-1).getBusinessName()+"  ("+businesses.get(i-1).getAverageStarsOfBusiness()+"*)");
         counter++;
       }
     }
