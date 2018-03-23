@@ -34,6 +34,7 @@ Table table;
 PFont font, widgetFont, barFont, businessFont;
 Search search;
 ControlP5 cp5;
+AutoComplete autoComplete;
 
 PeasyCam cam;
 
@@ -86,6 +87,7 @@ void setup() {
   businessNames = new HashSet<String>();
   businessReviewMap = new TreeMap<String, ArrayList<Review>>();
   reviewerReviewMap = new TreeMap<String, ArrayList<Review>>();
+  //businessAmountOfReviews = new <String, Integer>();
   //reviewerNames = new HashSet<String>();
   reviewerIds = new HashSet<String>();
   reviewsString = new ArrayList<String>();
@@ -95,6 +97,8 @@ void setup() {
   search.createBusinessAZMap();
   search.createReviewerMap();
   println(reviewerReviewMap.keySet());
+  
+  autoComplete = new AutoComplete(businessReviewMap.keySet());
 
   search.mostRecentReview(reviews);
   println(businessReviewMap.keySet());
@@ -125,7 +129,7 @@ void setup() {
     // .addItems(reviewsString)     add full reviews
     .open()
     .addItems(search.getTop20Businesses())
-    .setFont(widgetFont)
+    //.setFont(widgetFont)
     .setScrollSensitivity(100.0)
     .setCaptionLabel("Top 20 rated businesses")
     .setColorCaptionLabel(HIGHLIGHT)
@@ -241,13 +245,19 @@ void keyPressed() {
         searchbox.myText = "";
       } else if (myText.length() > 0) {
         searchbox.myText = searchbox.myText.substring(0, searchbox.myText.length()-1);
+        
       }
     } 
     if (searchbox.myText.length() <=36) {
       if (key != ENTER && keyCode>=32 && keyCode<=223) {
         searchbox.myText =searchbox.myText + key;
       } 
-      if (key == ENTER) {
+        searchbox.myText =searchbox.myText + key;
+		println(autoComplete.getMatches(searchbox.myText));
+      else if (key != ENTER && keyCode>=32 && keyCode<=223) {
+        searchbox.myText =searchbox.myText + key;
+        println(autoComplete.getMatches(searchbox.myText));
+      } if (key == ENTER) {
         searchbox.returnString();
         canType=false;
 
