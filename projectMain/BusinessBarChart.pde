@@ -5,7 +5,7 @@ class BusinessBarChart {
   String type, label;
   ArrayList<Integer> starRatingsList;
   String businessName;
-  float interval, lineY1, lineX1, lineY2, lineX2;
+  float interval, lineY1, lineX1, lineY2, lineX2, z;
   Bar[] bars;
   Review[] typeReviews;
 
@@ -15,34 +15,32 @@ class BusinessBarChart {
     this.y = y;
     this.businessChart = businessChart;
     this.label = label;
+    z=50;
     type = "average";
+    lineY2 = y+2;
     if (label.equals("topBusinesses")) {
       interval = (float)(y-businessChart[0].getAverageStarsOfBusiness()*80)/(float)businessChart[0].getAverageStarsOfBusiness();
     } else if (label.equals("mostReviewed")) {
       interval = (float)(y-businessChart[0].returnAmountOfReviews()/2)/(float)businessChart[0].returnAmountOfReviews();
     }
     bars = new Bar[businessChart.length];
-    int tmpX = x;
+    int tmpX = x+25;
     int tmpY = y;
     if (label.equals("topBusinesses")) {
+      lineY1 = y-interval*5;
       for (int i = 0; i < businessChart.length; i++) {
-        bars[i] = new Bar(businessChart[i].getAverageStarsOfBusiness()*interval, tmpX, tmpY, businessChart[i].getBusinessName());
-        tmpX+=50;
+        bars[i] = new Bar(businessChart[i].getAverageStarsOfBusiness()*interval, tmpX, tmpY, businessChart[i].getBusinessName(), lineY2, z);
+        tmpX+=60;
       }
     } else if (label.equals("mostReviewed")) {
+      lineY1 = y - businessChart[0].returnAmountOfReviews()*interval;
       for (int i = 0; i < businessChart.length; i++) {
-        bars[i] = new Bar(businessChart[i].returnAmountOfReviews()*interval, tmpX, tmpY, businessChart[i].getBusinessName());
-        tmpX+=50;
+        bars[i] = new Bar(businessChart[i].returnAmountOfReviews()*interval, tmpX, tmpY, businessChart[i].getBusinessName(), lineY2, z);
+        tmpX+=60;
       }
     }
     lineX1 = x-5;
-    if (label.equals("mostReviewed")) {
-      lineY1 = y - businessChart[0].returnAmountOfReviews()*interval;
-    } else {
-      lineY1 = y-interval*5;
-    }
-    lineX2 = x+5+businessChart.length*50;
-    lineY2 = y+2;
+    lineX2 = x+5+businessChart.length*60;
   }
 
   //sets up the bar chart for the star ratings of a particular business
@@ -51,6 +49,8 @@ class BusinessBarChart {
     this.y = y;
     this.starRatings = starRatings;
     this.businessName = businessName;
+    z = 50;
+    lineY2 = y+2;
     type = "ratings";
     starRatingsList = new ArrayList<Integer>();
     for (int i : starRatings) {
@@ -59,17 +59,16 @@ class BusinessBarChart {
     Collections.sort(starRatingsList);
     interval = (float)(SCREENY-300)/starRatingsList.get(4);
     bars = new Bar[starRatings.length];
-    int tmpX = x;
+    int tmpX = x+25;
     int tmpY = y;
     for (int i = 0; i < starRatings.length; i++) {
-      bars[i] = new Bar(starRatings[i]*interval, tmpX, tmpY);
-      tmpX+=50;
+      bars[i] = new Bar(starRatings[i]*interval, tmpX, tmpY, lineY2, z);
+      tmpX+=60;
     }
     lineX1 = x-5;
     lineY1 = y-starRatingsList.get(4)*interval;
 
-    lineX2 = x+5+5*50;
-    lineY2 = y+2;
+    lineX2 = x+5+5*60;
   }
 
   BusinessBarChart(int x, int y, Review[] typeReviews, String label) {
@@ -78,6 +77,7 @@ class BusinessBarChart {
     this.typeReviews = typeReviews;
     this.label = label;
     type = "ratings";
+    z=50;
     if (label.equals("funny")) {
       interval = (float)(y-typeReviews[0].getFunny()*10)/(float)typeReviews[0].getFunny();
     } else if (label.equals("useful")) {
@@ -86,33 +86,36 @@ class BusinessBarChart {
       interval = (float)(y-typeReviews[0].getCool()*10)/(float)typeReviews[0].getCool();
     }
     bars = new Bar[typeReviews.length];
-    int tmpX = x;
+    int tmpX = x+25;
     int tmpY = y;
     int max = 0;
+    lineY2 = y+2;
+    z = 50;
     if (label.equals("funny")) {
       max = typeReviews[0].getFunny();
+      lineY1 = y-max*interval;
       for (int i = 0; i < typeReviews.length; i++) {
-        bars[i] = new Bar(typeReviews[i].getFunny()*interval, tmpX, tmpY, typeReviews[i].getAuthor());
-        tmpX+=50;
+        bars[i] = new Bar(typeReviews[i].getFunny()*interval, tmpX, tmpY, typeReviews[i].getAuthor(), lineY2, z);
+        tmpX+=60;
       }
     } else if (label.equals("useful")) {
       max = typeReviews[0].getUseful();
+      lineY1 = y-max*interval;
       for (int i = 0; i < typeReviews.length; i++) {
-        bars[i] = new Bar(typeReviews[i].getUseful()*interval, tmpX, tmpY, typeReviews[i].getAuthor());
-        tmpX+=50;
+        bars[i] = new Bar(typeReviews[i].getUseful()*interval, tmpX, tmpY, typeReviews[i].getAuthor(), lineY2, z);
+        tmpX+=60;
       }
     } else if (label.equals("cool")) {
       max = typeReviews[0].getCool();
+      lineY1 = y-max*interval;
       for (int i = 0; i < typeReviews.length; i++) {
-        bars[i] = new Bar(typeReviews[i].getCool()*interval, tmpX, tmpY, typeReviews[i].getAuthor());
-        tmpX+=50;
+        bars[i] = new Bar(typeReviews[i].getCool()*interval, tmpX, tmpY, typeReviews[i].getAuthor(), lineY2, z);
+        tmpX+=60;
       }
     }
     lineX1 = x-5;
-    lineY1 = y-max*interval;
 
-    lineX2 = x+5+typeReviews.length*50;
-    lineY2 = y+2;
+    lineX2 = x+5+typeReviews.length*60;
   }
 
 
@@ -123,7 +126,7 @@ class BusinessBarChart {
     if (type.equals("average")&& !label.equals("mostReviewed")) {
       drawTopRatedBusiness();
       drawScores();
-    } else if (type.equals("mostReviewed")) {
+    } else if (label.equals("mostReviewed")) {
       drawMostReviewedBusinesses();
       drawMostReviewedScores();
     } else if (type.equals("ratings")) {
@@ -201,7 +204,7 @@ class BusinessBarChart {
     for (i = 1; i < 6; i++) {
       textSize(20);
       text(i, (float) tmpX, (float)y+20);
-      tmpX = tmpX + 50;
+      tmpX = tmpX + 60;
     }
     textSize(20);
     if (businessName!=null) {
@@ -214,32 +217,31 @@ class BusinessBarChart {
   //prints the average stars of the business underneath the bars in the 10 top rated businesses chart
   void drawScores() {
     fill(255);
-    int tmpX = x;
+    int tmpX = x+2;
     for (int i = 0; i < 10; i++) {
       textSize(18);
       text((float)businessChart[i].getAverageStarsOfBusiness(), (float)tmpX, (float)y+20);
-      tmpX = tmpX + 50;
+      tmpX = tmpX + 60;
     }
   }
 
   void drawMostReviewedScores() {
     fill(255);
-    int tmpX = x;
+    int tmpX = x+2;
     for (int i = 0; i < 10; i++) {
       textSize(18);
-      println(businessChart[i].returnAmountOfReviews());
       text((float)businessChart[i].returnAmountOfReviews(), (float)tmpX, (float)y+20);
-      tmpX = tmpX + 50;
+      tmpX = tmpX + 60;
     }
   }
 
   void drawFunnyScores() {
     fill(255);
-    int tmpX = x;
+    int tmpX = x+2;
     for (int i = 0; i < 10; i++) {
       textSize(18);
       text((float)typeReviews[i].getFunny(), (float)tmpX, (float)y+20);
-      tmpX = tmpX + 50;
+      tmpX = tmpX + 60;
     }
   }
 
