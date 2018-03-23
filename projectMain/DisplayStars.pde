@@ -3,7 +3,7 @@ class DisplayStars{
   double stars;
   PImage yellowStar;
   PImage greyStar;
-  PImage halfstar;
+  PImage halfStar;
   Star[] starPictures = new Star[5];
   
   DisplayStars(double stars, int starWidth, int x, int y,PImage yellowStar,PImage greyStar,PImage halfStar){

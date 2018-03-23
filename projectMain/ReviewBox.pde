@@ -17,8 +17,8 @@ class ReviewBox{
     this.stars=stars;
     this.reviewerId = reviewerId;
 
-    displayStars = new DisplayStars(stars,20,x+10,y+22,yellowStar,greyStar,halfStar);
-    displayStars.initDisplayStars();
+    displayStars = new DisplayStars(stars,20,x+10,y+22,yellowStar,greyStar,halfStar);                                                      
+    displayStars.initDisplayStars();                                                                                                        
     businessButton = new Widget(x+5,y+5,210,15,this.businessName,color(255,0),widgetFont,0,2,2,true);
     seeFullReviewButton = new Widget(x+5,y+162,165,15,"..read full review",color(255,0),widgetFont,0,2,2,true);
     
@@ -38,7 +38,7 @@ class ReviewBox{
     fill(DEFAULT_TEXT_COLOUR);
     text(review,x+5,y+50,width-30,height-65);
     text("by.",x+289,y+17);
-    displayStars.draw();
+    displayStars.draw();                                                                                                                      
     
   }  
 }
