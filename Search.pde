@@ -22,6 +22,13 @@ class Search {
     }
     return foundBusinesses;
   }
+  
+  /*public void initAmountOfReviews() {
+    for (String business : businessReviewMap.keySet()) {
+      int numberOfReviews = businessReviewMap.get(business).size();
+      businessAmountOfReviews.put(business, numberOfReviews);
+    }
+  }*/
 
   public void printBusinesses() {
     String businesses = ""; 
@@ -214,6 +221,12 @@ class Search {
       mostReviewed[i] = amountOfReviewsPerBusiness.get(amountOfReviewsPerBusiness.size()-(i+1));
     }
     return mostReviewed;
+    /*Collections.sort(businesses, new SortByMostReviews());
+    println("\n\n\n\n\n");
+    for (Business business : businesses) {
+      println(business + " " + business.businessReviews.size());
+    }
+    return null;*/
   }
 
 
