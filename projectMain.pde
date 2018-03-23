@@ -1,5 +1,7 @@
 import controlP5.*; //<>//
 
+import peasy.PeasyCam;
+
 import java.util.Set;
 import java.util.HashSet;
 import java.util.TreeMap;
@@ -11,8 +13,9 @@ import java.util.*;
 ArrayList<ReviewBox> recentReviews;
 boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false, listReviews=false, showTopStars=false, showMostReviewed=false, showUseful=false, showFunny=false, showCool=false;
 
+
 PFont stdFont;
-PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards;
+PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, halfStar;
 Widget searchbox, searchButton, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
 TitleBox recentReviewsHeader;
 String myText = "Search...";  
@@ -32,10 +35,13 @@ PFont font, widgetFont, barFont, businessFont;
 Search search;
 ControlP5 cp5;
 
+PeasyCam cam;
+
 //charts
 BusinessBarChart barchart;
 PieChart pieChart;
 
+PApplet mainClass = this;
 
 Author author;
 
@@ -43,9 +49,14 @@ void settings() {
   size(SCREENX, SCREENY, P3D);
 }
 
-void setup() {
+void setup() {  
   textSize(30);
   fill(0);
+
+  cam = new PeasyCam(mainClass, SCREENX/2, SCREENY/2, 0, 780);
+  cam.setActive(false);
+
+  halfStar = loadImage("halfStar1small.png");
   backgroundPhoto = loadImage("background photo.jpg");
   backgroundPhotoLeaderBoards = loadImage("leaderboards photo.jpg");
   logoImage=loadImage("logo.png");
@@ -102,7 +113,7 @@ void setup() {
   currentScreen=homeScreen;
   recentReviews = initRecentReviewBoxes();
   //rb = new ReviewBox(100,100,150,300,"James","green spuds","asd as d s s ss s s s sas  dawd i ams a aso yeroas a sldkjahlw asoidja audkaka asd",4);
-  
+
 
   cp5 = new ControlP5(this);
   cp5.addScrollableList("TopTwenty")
@@ -111,7 +122,7 @@ void setup() {
     .setBarVisible(true)
     .setBarHeight(40)
     .setItemHeight(50)            //size of each box
-   // .addItems(reviewsString)     add full reviews
+    // .addItems(reviewsString)     add full reviews
     .open()
     .addItems(search.getTop20Businesses())
     .setFont(widgetFont)
@@ -124,7 +135,7 @@ void setup() {
 
 void draw() {
   background(255);
-  
+
   fill(#0004B4);
   noStroke();
   currentScreen.draw();
@@ -164,6 +175,7 @@ void draw() {
   if (currentScreen == homeScreen) {
     noStroke();
     drawRecentReviewBoxes();
+    cam.setActive(false);
     listReviews=false;
   }
 
@@ -178,22 +190,20 @@ void draw() {
       stroke(#C62800);
       strokeWeight(5);
       fill(255);
-      rect(410,(SCREENY/2)-80,850,200);
+      rect(410, (SCREENY/2)-80, 850, 200);
       fill(0);
       textSize(40);
       text("Sorry there are no ratings for this business.\nPlease try again.", 430, SCREENY/2);
     }
   }
-  if(!listReviews){
+  if (!listReviews) {
     cp5.hide();
+  } else if (listReviews) {
+    // cp5.show();
   }
-  else if(listReviews){
-    cp5.show();
-  }
-  if(canType){
+  if (canType) {
     searchbox.setSearchboxColor(255);
-  }
-  else if(!canType){
+  } else if (!canType) {
     searchbox.setSearchboxColor(190);
   }
 
@@ -225,9 +235,8 @@ void mouseMoved() {
 void keyPressed() {
   if (canType) {
     if (key == DELETE) {
-        searchbox.myText = "";
-      } 
-    else if (key == BACKSPACE) {
+      searchbox.myText = "";
+    } else if (key == BACKSPACE) {
       if (searchbox.myText.length()-1 <= 0) {
         searchbox.myText = "";
       } else if (myText.length() > 0) {
@@ -235,9 +244,10 @@ void keyPressed() {
       }
     } 
     if (searchbox.myText.length() <=36) {
-       if (key != ENTER && keyCode>=32 && keyCode<=223) {
+      if (key != ENTER && keyCode>=32 && keyCode<=223) {
         searchbox.myText =searchbox.myText + key;
-      } if (key == ENTER) {
+      } 
+      if (key == ENTER) {
         searchbox.returnString();
         canType=false;
 
@@ -312,7 +322,9 @@ void mousePressed() {
     cp5.get(ScrollableList.class,"TopTwenty").open();
     cp5.get(ScrollableList.class,"TopTwenty").setCaptionLabel("Top 20 rated businesses");
     listReviews=true;
-    drawGraph=false;
+    cam.setActive(false);
+    cp5.show();
+   drawGraph=false;
     break;
 
   case EVENT_BUTTON7:
@@ -396,6 +408,7 @@ void loadReviewBusiness() {
 
 //initialises the 10 top rated businesses bar chart
 void displayTopRatedChart() {
+  cam.setActive(true);
   drawGraph = true;
   goToGraph = true;
   Business[] topRatedBusinesses = search.getTopTenBusinesses();
@@ -403,6 +416,7 @@ void displayTopRatedChart() {
 }
 
 void displayFunniestChart() {
+  cam.setActive(true);
   drawGraph = true;
   goToGraph = true;
   Review[] funniest = search.sortByFunny();
@@ -410,6 +424,7 @@ void displayFunniestChart() {
 }
 
 void displayUsefulChart() {
+  cam.setActive(true);
   drawGraph = true;
   goToGraph = true;
   Review[] useful = search.sortByUseful();
@@ -417,6 +432,7 @@ void displayUsefulChart() {
 }
 
 void displayCoolChart() {
+  cam.setActive(true);
   drawGraph = true;
   goToGraph = true;
   Review[] cool = search.sortByCool();
@@ -424,6 +440,7 @@ void displayCoolChart() {
 }
 
 void displayMostReviewed() {
+  cam.setActive(true);
   drawGraph = true;
   goToGraph = true;
   Business[] mostReviewed = search.mostReviewed();
@@ -437,6 +454,7 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   }
   if (goToGraph) {
     drawGraph = true;
+    cam.setActive(true);
     String name = businessStarsList.get(0).getBusinessName();
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
     barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, stars, name);
@@ -449,7 +467,7 @@ ArrayList<ReviewBox> initRecentReviewBoxes() {
   list = new ArrayList<ReviewBox>();
   int x=100;
   int y=270;
-  recentReviewsHeader = new TitleBox(x,y-100,380,60,25,25,color(HIGHLIGHT,127),DEFAULT_TEXT_COLOUR,color(255),font,"Most Recent Reviews");
+  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(HIGHLIGHT, 127), DEFAULT_TEXT_COLOUR, color(255), font, "Most Recent Reviews");
   for (int i=0; i<=2; i++) {
     Review review = mostRecentReviews.get(i);
     ReviewBox rb = new ReviewBox(x, y, 380, 180, review.getAuthor(), review.getAuthorId(), review.getBusiness(), review.getText(), review.getStars());
