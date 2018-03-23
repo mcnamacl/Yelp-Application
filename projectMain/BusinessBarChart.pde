@@ -123,7 +123,7 @@ class BusinessBarChart {
     if (type.equals("average")&& !label.equals("mostReviewed")) {
       drawTopRatedBusiness();
       drawScores();
-    } else if (label.equals("mostReviewed")) {
+    } else if (type.equals("mostReviewed")) {
       drawMostReviewedBusinesses();
       drawMostReviewedScores();
     } else if (type.equals("ratings")) {
