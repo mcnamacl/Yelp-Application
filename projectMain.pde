@@ -16,7 +16,7 @@ PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, background
 Widget searchbox, searchButton, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
 TitleBox recentReviewsHeader;
 String myText = "Search...";  
-String searchText;
+String searchText, selected;
 Screen currentScreen, homeScreen, leaderboardsScreen;
 ArrayList<DataPoint> dataPoints;
 ArrayList<Review> reviews;
@@ -105,16 +105,19 @@ void setup() {
   
 
   cp5 = new ControlP5(this);
-  cp5.addScrollableList("Top 20 businesses")
+  cp5.addScrollableList("TopTwenty")
     .setPosition(400, 80)
     .setSize(900, 750)             //size of full thing
     .setBarVisible(true)
     .setBarHeight(40)
     .setItemHeight(50)            //size of each box
    // .addItems(reviewsString)     add full reviews
+    .open()
     .addItems(search.getTop20Businesses())
     .setFont(widgetFont)
     .setScrollSensitivity(100.0)
+    .setCaptionLabel("Top 20 rated businesses")
+    .setColorCaptionLabel(HIGHLIGHT)
     .setColorBackground(REVIEWLISTCOLOR);
 }
 
@@ -193,6 +196,14 @@ void draw() {
   else if(!canType){
     searchbox.setSearchboxColor(190);
   }
+
+  if(selected!= null) {
+    println("You have selected: " + selected);
+  }
+}
+
+void TopTwenty(int index) {
+  selected = cp5.get(ScrollableList.class, "TopTwenty").getItem(index).get("name").toString();
 }
 
 void mouseMoved() {
@@ -211,7 +222,6 @@ void mouseMoved() {
   }
 }
 
-//DELETE=keyCode 46
 void keyPressed() {
   if (canType) {
     if (key == DELETE) {
@@ -299,8 +309,9 @@ void mousePressed() {
 
   case EVENT_BUTTON6:
     println("top 20 rated");
+    cp5.get(ScrollableList.class,"TopTwenty").open();
+    cp5.get(ScrollableList.class,"TopTwenty").setCaptionLabel("Top 20 rated businesses");
     listReviews=true;
-    //cp5.show();
     drawGraph=false;
     break;
 
@@ -349,8 +360,13 @@ void mousePressed() {
       break;
     }
   default:
+  if(drawGraph){
+    listReviews=false;
+  }
+  else{  
     listReviews=true;
-    canType=false;
+  }
+  canType=false;
     if (searchbox.myText=="") {
       searchbox.myText="Search...";
     }
@@ -383,35 +399,35 @@ void displayTopRatedChart() {
   drawGraph = true;
   goToGraph = true;
   Business[] topRatedBusinesses = search.getTopTenBusinesses();
-  barchart = new BusinessBarChart(900, 700, topRatedBusinesses, "topBusinesses");
+  barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, topRatedBusinesses, "topBusinesses");
 }
 
 void displayFunniestChart() {
   drawGraph = true;
   goToGraph = true;
   Review[] funniest = search.sortByFunny();
-  barchart = new BusinessBarChart(900, 700, funniest, "funny");
+  barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, funniest, "funny");
 }
 
 void displayUsefulChart() {
   drawGraph = true;
   goToGraph = true;
   Review[] useful = search.sortByUseful();
-  barchart = new BusinessBarChart(900, 700, useful, "useful");
+  barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, useful, "useful");
 }
 
 void displayCoolChart() {
   drawGraph = true;
   goToGraph = true;
   Review[] cool = search.sortByCool();
-  barchart = new BusinessBarChart(900, 700, cool, "cool");
+  barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, cool, "cool");
 }
 
 void displayMostReviewed() {
   drawGraph = true;
   goToGraph = true;
   Business[] mostReviewed = search.mostReviewed();
-  barchart = new BusinessBarChart(900, 700, mostReviewed, "mostReviewed");
+  barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, mostReviewed, "mostReviewed");
 }
 
 //initialises the business searched star chart
@@ -423,7 +439,7 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
     drawGraph = true;
     String name = businessStarsList.get(0).getBusinessName();
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
-    barchart = new BusinessBarChart(900, 700, stars, name);
+    barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, stars, name);
   }
 }
 

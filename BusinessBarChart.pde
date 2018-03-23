@@ -118,7 +118,7 @@ class BusinessBarChart {
 
   //draws the relevent barchart
   void draw() {
-    fill(HIGHLIGHT, 60);
+    fill(HIGHLIGHT, 90);
     rect(x-30, y, (lineX2 - lineX1)+30, (lineY1 - lineY2) - 10);
     if (type.equals("average")&& !label.equals("mostReviewed")) {
       drawTopRatedBusiness();
