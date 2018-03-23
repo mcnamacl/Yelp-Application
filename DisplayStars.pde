@@ -47,8 +47,8 @@ class DisplayStars{
         starsCopy--;
       }
       else if (starsCopy<=0.75 && starsCopy>0.25){
-        Star hstar = new Star(x,y,halfStar);
-        starPictures[i] = hstar;
+        //Star hstar = new Star(x,y,halfStar);
+        //starPictures[i] = hstar;
         starsCopy--;
         
       }
