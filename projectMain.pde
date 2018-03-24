@@ -36,11 +36,10 @@ Search search;
 ControlP5 cp5;
 AutoComplete autoComplete;
 
-PeasyCam cam;
-
-//charts
+//charts/3D viewing - Claire
 BusinessBarChart barchart;
 PieChart pieChart;
+PeasyCam cam;
 
 PApplet mainClass = this;
 
@@ -97,7 +96,7 @@ void setup() {
   search.createBusinessAZMap();
   search.createReviewerMap();
   println(reviewerReviewMap.keySet());
-  
+
   autoComplete = new AutoComplete(businessReviewMap.keySet());
 
   search.mostRecentReview(reviews);
@@ -172,6 +171,7 @@ void draw() {
   searchbox.draw();
   homeButton.drawImage();
 
+  //draws the pie chart for a user - Claire
   if (drawPieChart) {
     pieChart.pieChart(100, author.type);
   }
@@ -183,7 +183,7 @@ void draw() {
     listReviews=false;
   }
 
-  //draws the relevant bar chart
+  //draws the relevant bar chart - Claire
   if (drawGraph) {
     noStroke();
     if (goToGraph) {
@@ -203,7 +203,7 @@ void draw() {
   if (!listReviews) {
     cp5.hide();
   } else if (listReviews) {
-    // cp5.show();
+    cp5.show();
   }
   if (canType) {
     searchbox.setSearchboxColor(255);
@@ -211,7 +211,7 @@ void draw() {
     searchbox.setSearchboxColor(190);
   }
 
-  if(selected!= null) {
+  if (selected!= null) {
     println("You have selected: " + selected);
   }
 }
@@ -223,6 +223,8 @@ void TopTwenty(int index) {
 void mouseMoved() {
   searchbox.setStroke(mouseX, mouseY);
   leaderboardsButton.setStroke(mouseX, mouseY);
+
+  //gets the piechart for a reviewer if the mouse is hovered over their name - Claire
   if (homeScreen.hover(mouseX, mouseY)) {
     for (int i = 0; i < list.size(); i++) {
       if (list.get(i).authorPieChart.getEvent(mouseX, mouseY) != EVENT_NULL) {
@@ -245,19 +247,17 @@ void keyPressed() {
         searchbox.myText = "";
       } else if (myText.length() > 0) {
         searchbox.myText = searchbox.myText.substring(0, searchbox.myText.length()-1);
-        
       }
     } 
     if (searchbox.myText.length() <=36) {
       if (key != ENTER && keyCode>=32 && keyCode<=223) {
         searchbox.myText =searchbox.myText + key;
-      } 
-        searchbox.myText =searchbox.myText + key;
-		println(autoComplete.getMatches(searchbox.myText));
-      else if (key != ENTER && keyCode>=32 && keyCode<=223) {
+        println(autoComplete.getMatches(searchbox.myText));
+      } else if (key != ENTER && keyCode>=32 && keyCode<=223) {
         searchbox.myText =searchbox.myText + key;
         println(autoComplete.getMatches(searchbox.myText));
-      } if (key == ENTER) {
+      } 
+      if (key == ENTER) {
         searchbox.returnString();
         canType=false;
 
@@ -267,7 +267,7 @@ void keyPressed() {
         println(searchbox.myText);
 
         drawGraph = true;
-        //draws the amount of the stars the business searched has if business is in data base
+        //draws the amount of the stars the business searched has if business is in data base - Claire
         displayBusinessStarsChart(searchedBusinesses);
       }
     }
@@ -308,7 +308,6 @@ void mousePressed() {
     break;
 
   case EVENT_BUTTON3:
-    // println("im working");
     currentScreen=leaderboardsScreen;
     listReviews=true;
     break;
@@ -329,12 +328,12 @@ void mousePressed() {
 
   case EVENT_BUTTON6:
     println("top 20 rated");
-    cp5.get(ScrollableList.class,"TopTwenty").open();
-    cp5.get(ScrollableList.class,"TopTwenty").setCaptionLabel("Top 20 rated businesses");
+    cp5.get(ScrollableList.class, "TopTwenty").open();
+    cp5.get(ScrollableList.class, "TopTwenty").setCaptionLabel("Top 20 rated businesses");
     listReviews=true;
     cam.setActive(false);
-    cp5.show();
-   drawGraph=false;
+    listReviews= true;
+    drawGraph=false;
     break;
 
   case EVENT_BUTTON7:
@@ -377,18 +376,17 @@ void mousePressed() {
       println(searchbox.myText);
 
       drawGraph = true;
-      //draws the amount of the stars the business searched has if business is in data base
+      //draws the amount of the stars the business searched has if business is in data base - Claire
       displayBusinessStarsChart(searchedBusinesses);
       break;
     }
   default:
-  if(drawGraph){
-    listReviews=false;
-  }
-  else{  
-    listReviews=true;
-  }
-  canType=false;
+    if (drawGraph) {
+      listReviews=false;
+    } else {  
+      listReviews=true;
+    }
+    canType=false;
     if (searchbox.myText=="") {
       searchbox.myText="Search...";
     }
@@ -416,7 +414,7 @@ void loadReviewBusiness() {
 }
 
 
-//initialises the 10 top rated businesses bar chart
+//initialises the 10 top rated businesses bar chart and sets the screen into 3D viewing mode - Claire
 void displayTopRatedChart() {
   cam.setActive(true);
   drawGraph = true;
@@ -425,6 +423,7 @@ void displayTopRatedChart() {
   barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, topRatedBusinesses, "topBusinesses");
 }
 
+//initialises the funniest review bar chart and sets the screen into 3D viewing mode - Claire
 void displayFunniestChart() {
   cam.setActive(true);
   drawGraph = true;
@@ -433,6 +432,7 @@ void displayFunniestChart() {
   barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, funniest, "funny");
 }
 
+//initialises the most useful review bar chart and sets the screen into 3D viewing mode - Claire
 void displayUsefulChart() {
   cam.setActive(true);
   drawGraph = true;
@@ -441,6 +441,7 @@ void displayUsefulChart() {
   barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, useful, "useful");
 }
 
+//initialises the coolest review bar chart and sets the screen into 3D viewing mode - Claire
 void displayCoolChart() {
   cam.setActive(true);
   drawGraph = true;
@@ -449,6 +450,7 @@ void displayCoolChart() {
   barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, cool, "cool");
 }
 
+//initialises the most reviewed bar chart and sets the screen into 3D viewing mode - Claire
 void displayMostReviewed() {
   cam.setActive(true);
   drawGraph = true;
@@ -457,7 +459,7 @@ void displayMostReviewed() {
   barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, mostReviewed, "mostReviewed");
 }
 
-//initialises the business searched star chart
+//initialises the business searched star chart and sets the screen into 3D viewing mode - Claire
 void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   if (!businessStarsList.isEmpty()) {
     goToGraph = true;

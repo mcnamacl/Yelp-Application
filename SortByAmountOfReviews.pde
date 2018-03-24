@@ -1,4 +1,4 @@
-
+//Class that sorts businesses by amount of reviews - Claire
 import java.util.Comparator;
 
 class SortByAmountOfReviews implements Comparator<Business> {
