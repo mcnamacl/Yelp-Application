@@ -47,13 +47,12 @@ class Search {
     return reviews;
   } 
 
-
   public ArrayList<Review> sortBusinessByName(ArrayList<Review> reviews) {
     Collections.sort(reviews, new SortByName());
     return reviews;
   }
 
-  //get top 10 coolest reviews
+//get top 10 coolest reviews - Claire
   public Review[] sortByCool() {
     Review[] coolReviews = new Review[10];
     Collections.sort(reviews, new SortByCool());
@@ -63,7 +62,7 @@ class Search {
     return coolReviews;
   }
 
-  //get top 10 most useful reviews
+//get top 10 most useful reviews - Claire
   public Review[] sortByUseful() {
     Review[] usefulReviews = new Review[10];
     Collections.sort(reviews, new SortByUseful());
@@ -73,7 +72,7 @@ class Search {
     return usefulReviews;
   }
 
-  //get top 10 funniest reviews
+//get top 10 funniest reviews - Claire
   public Review[] sortByFunny() {
     Review[] funnyReviews = new Review[10];
     Collections.sort(reviews, new SortByFunny());
@@ -83,16 +82,7 @@ class Search {
     return funnyReviews;
   }
 
-  public ArrayList<Review> searchReviewByBusinessName(ArrayList<Review> reviews, String businessName) {
-    ArrayList<Review> foundReviews = new ArrayList<Review>();
-    for (Review review : reviews) {
-      if (review.getBusiness().equals(businessName)) {
-        foundReviews.add(review);
-      }
-    }
-    return foundReviews;
-  }
-
+//gets the amount of stars for all branches of a particular business - Claire
   int[] getStarsForCollectionOfBusinesses(ArrayList<Business> searchedBusinesses) {
     int[] starsForBusinesses = new int[5];
     int[] tmpStarsForBusinesses = new int[5];
@@ -107,13 +97,14 @@ class Search {
     return starsForBusinesses;
   }
 
+//gets the stars for one branch of a business - Claire
   void getStarsForOneBusiness(Business business) {
     for (Review review : business.getReviews()) {
       business.returnStars()[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
     }
   }
 
-  // Initialises map of business and that business's reviews
+  // Initialises map of business and that business's reviews 
   void createBusinessAZMap() {
     for (Business business : businesses) {
       businessNames.add(business.getBusinessName());
@@ -147,6 +138,7 @@ class Search {
     }
   }
 
+//gets the top 20 rated businesses - Claire
   public Business[] getTopTenBusinesses() {
     Business[] topTenBusinesses = new Business[10];
     sortBusinesses();
@@ -162,6 +154,7 @@ class Search {
     return topTenBusinesses;
   }
 
+//gets the top 20 rated businesses - Claire
   public String[] getTop20Businesses() {
     String[] top20Businesses = new String[20];
     sortBusinesses();
@@ -177,6 +170,7 @@ class Search {
     return top20Businesses;
   }
 
+//sorts the business in terms of average stars - Claire
   void sortBusinesses() {
     Collections.sort(businesses, new Comparator<Business>() {
       @Override
@@ -189,6 +183,7 @@ class Search {
     );
   }
 
+//gets the average stars of a business - Claire
   double getAverageStarsOfBusiness(String businessName) {
     ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
     double total = 0;
@@ -202,6 +197,7 @@ class Search {
     return Double.parseDouble(String.format("%.2f", total/count));
   }
 
+//sorts the business reviews in order of amount of reviews - Claire
   Business[] mostReviewed() {
     ArrayList<Business> amountOfReviewsPerBusiness = new ArrayList<Business>();
     Set<String> keys = businessReviewMap.keySet();

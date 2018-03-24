@@ -5,17 +5,21 @@ class Business {
   private ArrayList<Review> businessReviews;
   private int[] stars = new int[5];
   private int amountOfReviews;
-
+  
+ // constructor for a particular branch of a business - Claire/Tom
   public Business(String businessName, String businessId) {
     this.businessName = businessName;
     this.businessId = businessId;
-    this.businessReviews = new ArrayList<Review>();     
+    this.businessReviews = new ArrayList<Review>(); 
+    
+    //gets the amount of stars in the relevant category for the business - Claire
     for (int i = 0; i < stars.length; i++) {
       stars[i] = 0;
     }
     getReviews();
   }
 
+// constructor for all branchs of a business - Claire
   public Business(String businessName, int amountOfReviews) {
     this.amountOfReviews = amountOfReviews;
     this.businessName = businessName;
@@ -41,7 +45,7 @@ class Business {
     return businessReviews;
   }
 
-  //gets all the reviews for a particular business
+  //gets all the reviews for a particular business - Claire
   public ArrayList<Review> getReviews() {
     for (Review review : reviews) {
       if (review.getBusiness().equals(businessName) && review.getBusinessId().equals(businessId)) {
@@ -62,6 +66,7 @@ class Business {
     }
   }
 
+//get the average stars of the business - Claire/Tom
   double getAverageStarsOfBusiness() {
     ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
     double total = 0;
@@ -75,6 +80,7 @@ class Business {
     return Double.parseDouble(String.format("%.2f", total/count));
   }
 
+//returns amount of reviews a business has - Claire
   int amountOfReviews() {
     return businessReviews.size();
   }

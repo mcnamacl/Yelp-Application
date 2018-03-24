@@ -1,3 +1,4 @@
+//Class that deals with the bar chart for a particular author - Claire
 class PieChart {
 
   int x,y;

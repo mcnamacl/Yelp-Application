@@ -1,3 +1,4 @@
+//Class that deals with each individual bar of a bar chart - Claire
 class Bar {
 
   int x, y, iY, tmpY;
@@ -26,9 +27,8 @@ class Bar {
     this.z = z;
   }
 
-  //draws the bars so as they are rising upwards 
+  //draws the bars in an animated way in 3D 
   boolean drawBar() {
-    // TMPY = startPoint;
     if (iY < barHeight) {
       y -=8;
       iY +=8;
@@ -38,6 +38,8 @@ class Bar {
     translate(x, constantY, 20);
     box(20, iY, 40);
     popMatrix();
+    
+    //if there is a string, draw said string rotated clockwise 90 degrees upwards
     if (businessName != null) {
       int tmpX=x;
       tmpY=y;

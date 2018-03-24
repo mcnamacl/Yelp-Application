@@ -1,15 +1,16 @@
+//Class that deals with all bar charts - Claire
 class BusinessBarChart {
   int x, y;
   Business[] businessChart;
   int[] starRatings;
-  String type, label;
+  String type = " ", label = " ";
   ArrayList<Integer> starRatingsList;
   String businessName;
   float interval, lineY1, lineX1, lineY2, lineX2, z;
   Bar[] bars;
   Review[] typeReviews;
 
-  //sets up the bar chart for the star ratings of the top 10 businesses
+  //sets up the bar chart for the star ratings of the top 10 businesses/ most reviewed businesses
   BusinessBarChart(int x, int y, Business[] businessChart, String label) {
     this.x = x;
     this.y = y;
@@ -71,6 +72,7 @@ class BusinessBarChart {
     lineX2 = x+5+5*60;
   }
 
+//sets up bar chart for funny/useful/cool
   BusinessBarChart(int x, int y, Review[] typeReviews, String label) {
     this.x = x;
     this.y = y;
@@ -123,7 +125,7 @@ class BusinessBarChart {
   void draw() {
     fill(HIGHLIGHT, 90);
     rect(x-30, y, (lineX2 - lineX1)+30, (lineY1 - lineY2) - 10);
-    if (type.equals("average")&& !label.equals("mostReviewed")) {
+    if (type.equals("average") && !label.equals("mostReviewed")) {
       drawTopRatedBusiness();
       drawScores();
     } else if (label.equals("mostReviewed")) {
@@ -158,6 +160,7 @@ class BusinessBarChart {
     line((float)x-5, (float)y+2, lineX2, lineY2);
   }
 
+//sets up graph for the most reviewed businesses
   void drawMostReviewedBusinesses() {
     fill(255);
     float tmpY = y;
@@ -178,7 +181,7 @@ class BusinessBarChart {
     fill(255);
     int tmpY = y;
     int max = 0;
-    if (label !=null) {
+    if (label !=" ") {
       if (label.equals("funny")) {
         max = typeReviews[0].getFunny();
       } else if (label.equals("useful")) {
@@ -191,9 +194,9 @@ class BusinessBarChart {
     }    
     int i = 0;
     while (i <= max) {
-      i++;
       text(i, float(x-30), tmpY-15);
       tmpY = tmpY - (int)interval;
+      i++;
     }
     stroke(255);
     line((float)x-5, (float)y, lineX1, lineY1);
@@ -225,6 +228,7 @@ class BusinessBarChart {
     }
   }
 
+//prints the amount of reviews for the top 10 reviewed businesses
   void drawMostReviewedScores() {
     fill(255);
     int tmpX = x+2;
@@ -235,6 +239,7 @@ class BusinessBarChart {
     }
   }
 
+//draw the amount of funny ratings
   void drawFunnyScores() {
     fill(255);
     int tmpX = x+2;
@@ -245,23 +250,25 @@ class BusinessBarChart {
     }
   }
 
+//draw the amount of useful ratings
   void drawUsefulScores() {
     fill(255);
     int tmpX = x;
     for (int i = 0; i < 10; i++) {
       textSize(18);
       text((float)typeReviews[i].getUseful(), (float)tmpX, (float)y+20);
-      tmpX = tmpX + 50;
+      tmpX = tmpX + 60;
     }
   }
 
+//draw the amount of cool ratings
   void drawCoolScores() {
     fill(255);
     int tmpX = x;
     for (int i = 0; i < 10; i++) {
       textSize(18);
       text((float)typeReviews[i].getCool(), (float)tmpX, (float)y+20);
-      tmpX = tmpX + 50;
+      tmpX = tmpX + 60;
     }
   }
 }

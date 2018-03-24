@@ -1,3 +1,4 @@
+//Class that deals with a particular reviewer - Claire
 class Author {
 
   String name, id;
@@ -36,7 +37,7 @@ class Author {
     return type;
   }
 
-
+//draws the piechart for the funny/cool/useful
   void drawPieChart() {
     PieChart pieChart = new PieChart(100, 100, type);
     pieChart.pieChart(300, type);
