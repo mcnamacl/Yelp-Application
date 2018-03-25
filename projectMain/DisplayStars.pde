@@ -50,7 +50,7 @@ class DisplayStars{
         //Star hstar = new Star(x,y,halfStar);
         //starPictures[i] = hstar;
         starsCopy--;
-        
+       
       }
       else{
         Star gstar = new Star(x,y,greyStar);
