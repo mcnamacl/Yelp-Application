@@ -2,6 +2,7 @@ class Business {
 
   private String businessName;
   private String businessId;
+  int month ;
   private ArrayList<Review> businessReviews;
   private int[] stars = new int[5];
   private int amountOfReviews;
@@ -24,9 +25,19 @@ class Business {
     this.amountOfReviews = amountOfReviews;
     this.businessName = businessName;
   }
+  
+  public Business(String businessName, int amountOfReviews, int month){
+    this.amountOfReviews = amountOfReviews;
+    this.businessName = businessName;
+    this.month = month;
+  }
 
   int[] returnStars() {
     return stars;
+  }
+  
+  int getMonth() {
+    return month;
   }
   
   public int returnAmountOfReviews(){

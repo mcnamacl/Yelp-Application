@@ -47,4 +47,6 @@ final color HIGHLIGHT = #86C232;
 final color DEFAULT_TEXT_COLOUR = #61892F;
 final color REVIEWLISTCOLOR=#4D4C4D;
 
+final color PURPLE = #3E26DE;
+
 final color BARCHART_COLOUR = 0;

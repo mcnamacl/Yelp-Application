@@ -38,7 +38,7 @@ class Bar {
     translate(x, constantY, 20);
     box(20, iY, 40);
     popMatrix();
-    
+
     //if there is a string, draw said string rotated clockwise 90 degrees upwards
     if (businessName != null) {
       int tmpX=x;
@@ -52,7 +52,6 @@ class Bar {
       text(businessName, tmpX+20, tmpY);
       popMatrix();
     }
-
     return (iY < barHeight);
   }
 }

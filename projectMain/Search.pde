@@ -6,6 +6,7 @@ Set<String> reviewerIds;
 Map<String, ArrayList<Review>> reviewerReviewMap;
 Map<String, Business> amountOfReviews;
 
+
 class Search {
 
   ArrayList<Business> searchBusinessList(String userSearch) {
@@ -22,13 +23,13 @@ class Search {
     }
     return foundBusinesses;
   }
-  
+
   /*public void initAmountOfReviews() {
-    for (String business : businessReviewMap.keySet()) {
-      int numberOfReviews = businessReviewMap.get(business).size();
-      businessAmountOfReviews.put(business, numberOfReviews);
-    }
-  }*/
+   for (String business : businessReviewMap.keySet()) {
+   int numberOfReviews = businessReviewMap.get(business).size();
+   businessAmountOfReviews.put(business, numberOfReviews);
+   }
+   }*/
 
   public void printBusinesses() {
     String businesses = ""; 
@@ -52,7 +53,7 @@ class Search {
     return reviews;
   }
 
-//get top 10 coolest reviews - Claire
+  //get top 10 coolest reviews - Claire
   public Review[] sortByCool() {
     Review[] coolReviews = new Review[10];
     Collections.sort(reviews, new SortByCool());
@@ -62,7 +63,7 @@ class Search {
     return coolReviews;
   }
 
-//get top 10 most useful reviews - Claire
+  //get top 10 most useful reviews - Claire
   public Review[] sortByUseful() {
     Review[] usefulReviews = new Review[10];
     Collections.sort(reviews, new SortByUseful());
@@ -72,7 +73,7 @@ class Search {
     return usefulReviews;
   }
 
-//get top 10 funniest reviews - Claire
+  //get top 10 funniest reviews - Claire
   public Review[] sortByFunny() {
     Review[] funnyReviews = new Review[10];
     Collections.sort(reviews, new SortByFunny());
@@ -82,7 +83,7 @@ class Search {
     return funnyReviews;
   }
 
-//gets the amount of stars for all branches of a particular business - Claire
+  //gets the amount of stars for all branches of a particular business - Claire
   int[] getStarsForCollectionOfBusinesses(ArrayList<Business> searchedBusinesses) {
     int[] starsForBusinesses = new int[5];
     int[] tmpStarsForBusinesses = new int[5];
@@ -97,7 +98,7 @@ class Search {
     return starsForBusinesses;
   }
 
-//gets the stars for one branch of a business - Claire
+  //gets the stars for one branch of a business - Claire
   void getStarsForOneBusiness(Business business) {
     for (Review review : business.getReviews()) {
       business.returnStars()[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
@@ -138,7 +139,7 @@ class Search {
     }
   }
 
-//gets the top 20 rated businesses - Claire
+  //gets the top 20 rated businesses - Claire
   public Business[] getTopTenBusinesses() {
     Business[] topTenBusinesses = new Business[10];
     sortBusinesses();
@@ -154,7 +155,7 @@ class Search {
     return topTenBusinesses;
   }
 
-//gets the top 20 rated businesses - Claire
+  //gets the top 20 rated businesses - Claire
   public String[] getTop20Businesses() {
     String[] top20Businesses = new String[20];
     sortBusinesses();
@@ -170,7 +171,7 @@ class Search {
     return top20Businesses;
   }
 
-//sorts the business in terms of average stars - Claire
+  //sorts the business in terms of average stars - Claire
   void sortBusinesses() {
     Collections.sort(businesses, new Comparator<Business>() {
       @Override
@@ -183,7 +184,7 @@ class Search {
     );
   }
 
-//gets the average stars of a business - Claire
+  //gets the average stars of a business - Claire/Tom
   double getAverageStarsOfBusiness(String businessName) {
     ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
     double total = 0;
@@ -197,7 +198,7 @@ class Search {
     return Double.parseDouble(String.format("%.2f", total/count));
   }
 
-//sorts the business reviews in order of amount of reviews - Claire
+  //sorts the business reviews in order of amount of reviews - Claire
   Business[] mostReviewed() {
     ArrayList<Business> amountOfReviewsPerBusiness = new ArrayList<Business>();
     Set<String> keys = businessReviewMap.keySet();
@@ -218,40 +219,117 @@ class Search {
     }
     return mostReviewed;
     /*Collections.sort(businesses, new SortByMostReviews());
-    println("\n\n\n\n\n");
-    for (Business business : businesses) {
-      println(business + " " + business.businessReviews.size());
-    }
-    return null;*/
+     println("\n\n\n\n\n");
+     for (Business business : businesses) {
+     println(business + " " + business.businessReviews.size());
+     }
+     return null;*/
   }
 
 
-  /*public Term[] autoComplete(String searchQuery) {
-   
-   take in hashmap <weights and queries> (<business name string, number of reviews>)
-   construct terms into array
-   get k amount of queries to show
-   prefix = user types in (after two chars entered)
-   
-   //weightedMap
-   Term[] terms = new Term[businessReviewMap.size()];
-   int i = 0;
-   for (Map.Entry<String, ArrayList<Review>> entry : businessReviewMap.entrySet()) {
-   int weight = entry.getValue().size();
-   String query = entry.getKey();
-   
-   terms[i] = new Term(query, weight);
-   i++;
-   }
-   println(Arrays.toString(terms));
-   AutoComplete autoComplete = new AutoComplete(terms);
-   String prefix = searchQuery;
-   
-   Term[] results = autoComplete.allMatches(prefix);
-   if (results.length > 0) {
-   return results;
-   }
-   println("wut");
-   return null;
-   }*/
+  ArrayList<Business> sortReviewsByMonth(Business business, int year) {
+    String name = business.getBusinessName();
+    int[] months = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+    Collections.sort(reviews, new SortByDate());
+    ArrayList<Business> reviewsPerMonth = new ArrayList<Business>();
+    ArrayList<Review> reviewsYear = new ArrayList<Review>();
+    ArrayList<Review> sortReviewsMonth = new ArrayList<Review>();
+    int month;
+    for (Review review : reviews) {
+      String tmpYear = df.format(review.getDate());
+      int checkYear = Integer.parseInt(tmpYear.substring(6, 10));
+      if (checkYear == year) {
+        reviewsYear.add(review);
+      }
+    }
+    for (int intMonth : months) {
+      for (Review reviewMonth : reviewsYear) {
+        String checkMonthTmp = df.format(reviewMonth.getDate());
+        month = Integer.parseInt(checkMonthTmp.substring(3, 5));
+        if (month == intMonth) {
+          sortReviewsMonth.add(reviewMonth);
+        }
+      }
+      int counter = 0;
+      for (Review sortBusiness : sortReviewsMonth) {
+        if (sortBusiness.getBusiness().equals(name)) {
+          counter++;
+        }
+      } 
+      Business tmpBusiness = new Business(name, counter, intMonth);
+      reviewsPerMonth.add(tmpBusiness);
+      sortReviewsMonth.clear();
+    }
+    return reviewsPerMonth;
+  }
 }
+
+
+//Class that sorts businesses by amount of reviews - Claire
+import java.util.Comparator;
+
+class SortByName implements Comparator<Review> {
+  public int compare(Review review1, Review review2) {
+    return review1.getBusiness().compareToIgnoreCase(review2.getBusiness());
+  }
+}
+
+class SortByAmountOfReviews implements Comparator<Business> {
+  public int compare(Business b1, Business b2) {
+    return b1.returnAmountOfReviews() - b2.returnAmountOfReviews();
+  }
+}
+
+class SortByCool implements Comparator<Review> {
+  public int compare(Review review1, Review review2) {
+    return review2.getCool() - review1.getCool();
+  }
+}
+
+class SortByUseful implements Comparator<Review> {
+  public int compare(Review review1, Review review2) {
+    return review2.getUseful() - review1.getUseful();
+  }
+}
+
+class SortByFunny implements Comparator<Review> {
+  public int compare(Review review1, Review review2) {
+    return review2.getFunny() - review1.getFunny();
+  }
+}
+
+class SortByDate implements Comparator<Review> {
+  public int compare(Review review1, Review review2) {
+    return review2.getDate().compareTo(review1.getDate());
+  } 
+}
+
+/*public Term[] autoComplete(String searchQuery) {
+ 
+ take in hashmap <weights and queries> (<business name string, number of reviews>)
+ construct terms into array
+ get k amount of queries to show
+ prefix = user types in (after two chars entered)
+ 
+ //weightedMap
+ Term[] terms = new Term[businessReviewMap.size()];
+ int i = 0;
+ for (Map.Entry<String, ArrayList<Review>> entry : businessReviewMap.entrySet()) {
+ int weight = entry.getValue().size();
+ String query = entry.getKey();
+ 
+ terms[i] = new Term(query, weight);
+ i++;
+ }
+ println(Arrays.toString(terms));
+ AutoComplete autoComplete = new AutoComplete(terms);
+ String prefix = searchQuery;
+ 
+ Term[] results = autoComplete.allMatches(prefix);
+ if (results.length > 0) {
+ return results;
+ }
+ println("wut");
+ return null;
+ }*/
