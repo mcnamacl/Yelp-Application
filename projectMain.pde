@@ -1,4 +1,4 @@
-import controlP5.*; //<>//
+import controlP5.*; //<>// //<>// //<>//
 
 import peasy.PeasyCam;
 
@@ -14,20 +14,23 @@ ArrayList<ReviewBox> recentReviews;
 boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false, drawLineChart = false, listReviews=false, showTopStars=false, showMostReviewed=false, showUseful=false, showFunny=false, showCool=false;
 
 PFont stdFont;
-PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, halfStar;
+PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, backgroundPhotoBusiness, halfStar;
 Widget searchbox, searchButton, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
 TitleBox recentReviewsHeader;
 String myText = "Search...";  
-String searchText, selected;
-Screen currentScreen, homeScreen, leaderboardsScreen;
+String searchText, selected, rating, reviewAmount;
+Screen currentScreen, homeScreen, leaderboardsScreen, businessScreen;
 ArrayList<DataPoint> dataPoints;
 ArrayList<Review> reviews;
 ArrayList<Business> businesses = new ArrayList<Business>();
 ArrayList<Screen> screens = new ArrayList<Screen>();
 ArrayList<Widget> homescreenWidgets = new ArrayList<Widget>();
 ArrayList<Widget> leaderboardsWidgets = new ArrayList<Widget>();
+ArrayList<Widget> businessWidgets = new ArrayList<Widget>();
 ArrayList<String> reviewsString, topBusinesses;
 ArrayList<ReviewBox> list;
+ArrayList<Business> searchedBusinesses;
+ArrayList<Business> reviewsPerMonth;
 
 Table table;
 PFont font, widgetFont, barFont, businessFont;
@@ -60,7 +63,9 @@ void setup() {
 
   halfStar = loadImage("halfStar1small.png");
   backgroundPhoto = loadImage("background photo.jpg");
-  backgroundPhotoLeaderBoards = loadImage("leaderboards photo.jpg");
+  //backgroundPhotoLeaderBoards = loadImage("leaderboards photo.jpg");
+  backgroundPhotoLeaderBoards = loadImage("buildingblur.png");
+  backgroundPhotoBusiness= loadImage("businessscreen.png");
   logoImage=loadImage("logo.png");
   searchImage=loadImage("search.png");
   yellowStar=loadImage("yellowStar1small.png");
@@ -68,17 +73,18 @@ void setup() {
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
   searchbox=new Widget(SEARCHBOXX, SEARCHBOXY, SEARCHBOXWIDTH, SEARCHBOXHEIGHT, myText, color(190), widgetFont, EVENT_BUTTON1, 5, 5);
   searchButton=new Widget(SEARCHBUTTONX, SEARCHBUTTONY, SEARCHBUTTONWIDTH, SEARCHBOXHEIGHT, "", color(0), widgetFont, EVENT_BUTTON10, 0, 0);
-  leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(190, 180), widgetFont, EVENT_BUTTON3, 20, 20);
+  leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(190), widgetFont, EVENT_BUTTON3, 20, 20);
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
   homeScreen=new Screen(backgroundPhoto, homescreenWidgets);
   leaderboardsScreen= new Screen(backgroundPhotoLeaderBoards, leaderboardsWidgets);
-  topStars= new Widget(RADIOBUTTONX, TOPSTARSY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top star rating", color(255, 180), widgetFont, EVENT_BUTTON4, 10, 10 );
-  mostReviewed= new Widget(RADIOBUTTONX, MOSTREVIEWEDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most reviewed", color(255, 180), widgetFont, EVENT_BUTTON5, 10, 10 );
-  topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 20 rated", color(255, 180), widgetFont, EVENT_BUTTON6, 10, 10 );
-  mostUseful= new Widget(RADIOBUTTONX, MOSTUSEFULY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most useful", color(255, 180), widgetFont, EVENT_BUTTON7, 10, 10 );
-  funniest= new Widget(RADIOBUTTONX, FUNNIESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Funniest", color(255, 180), widgetFont, EVENT_BUTTON8, 10, 10 );
-  coolest= new Widget(RADIOBUTTONX, COOLESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Coolest", color(255, 180), widgetFont, EVENT_BUTTON9, 10, 10 );   
-
+  businessScreen=new Screen(backgroundPhotoBusiness, businessWidgets);
+  topStars= new Widget(RADIOBUTTONX, TOPSTARSY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top star rating", color(255), widgetFont, EVENT_BUTTON4, 10, 10 );
+  mostReviewed= new Widget(RADIOBUTTONX, MOSTREVIEWEDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most reviewed", color(255), widgetFont, EVENT_BUTTON5, 10, 10 );
+  topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 20 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
+  mostUseful= new Widget(RADIOBUTTONX, MOSTUSEFULY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
+  funniest= new Widget(RADIOBUTTONX, FUNNIESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Funniest", color(255), widgetFont, EVENT_BUTTON8, 10, 10 );
+  coolest= new Widget(RADIOBUTTONX, COOLESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );   
+  selected=null;
   // font = loadFont("Cambria-20.vlw");
   font = loadFont("Calibri-BoldItalic-48.vlw");
   dataPoints = new ArrayList<DataPoint>();
@@ -92,6 +98,9 @@ void setup() {
   //reviewerNames = new HashSet<String>();
   reviewerIds = new HashSet<String>();
   reviewsString = new ArrayList<String>();
+  searchedBusinesses  = new ArrayList<Business>();
+  reviewsPerMonth = new ArrayList<Business>();
+
   loadData();
   loadReviewBusiness();
   search = new Search();
@@ -115,10 +124,11 @@ void setup() {
   leaderboardsScreen.addWidget(mostUseful);
   leaderboardsScreen.addWidget(funniest);
   leaderboardsScreen.addWidget(coolest);
+  businessScreen.addWidget(searchbox);
+  businessScreen.addWidget(searchButton);
   currentScreen=homeScreen;
   recentReviews = initRecentReviewBoxes();
   //rb = new ReviewBox(100,100,150,300,"James","green spuds","asd as d s s ss s s s sas  dawd i ams a aso yeroas a sldkjahlw asoidja audkaka asd",4);
-
 
   cp5 = new ControlP5(this);
   cp5.addScrollableList("TopTwenty")
@@ -130,7 +140,7 @@ void setup() {
     // .addItems(reviewsString)     add full reviews
     .open()
     .addItems(search.getTop20Businesses())
-    //.setFont(widgetFont)
+    .setFont(widgetFont)
     .setScrollSensitivity(100.0)
     .setCaptionLabel("Top 20 rated businesses")
     .setColorCaptionLabel(HIGHLIGHT)
@@ -217,8 +227,17 @@ void draw() {
   }
 
   if (selected!= null) {
-    println("You have selected: " + selected);
+    displayBusinessScreen();
   }
+  if (currentScreen==businessScreen) {
+    fill(HIGHLIGHT);
+    rect(BUSINESSNAMEX-50,BUSINESSNAMEY+10,900,1);
+    fill(255);
+    textFont(font);
+    text(searchbox.myText+"  "+rating, BUSINESSNAMEX, BUSINESSNAMEY);
+    text(reviewAmount,BUSINESSNAMEX,BUSINESSNAMEY+90);
+  }
+  selected=null;
 }
 
 void TopTwenty(int index) {
@@ -250,7 +269,7 @@ void keyPressed() {
     } else if (key == BACKSPACE) {
       if (searchbox.myText.length()-1 <= 0) {
         searchbox.myText = "";
-      } else if (myText.length() > 0) {
+      } else if (searchbox.myText.length() > 0) {
         searchbox.myText = searchbox.myText.substring(0, searchbox.myText.length()-1);
       }
     } 
@@ -263,24 +282,7 @@ void keyPressed() {
         println(autoComplete.getMatches(searchbox.myText));
       } 
       if (key == ENTER) {
-        searchbox.returnString();
-        canType=false;
-
-        currentScreen=leaderboardsScreen;
-
-        ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-        println(searchbox.myText);
-
-
-        drawGraph = true;
-
-        if (searchedBusinesses!=null) {
-          year = 2016;
-          ArrayList<Business> reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
-          displayBusinessLineGraph(reviewsPerMonth, year);
-        }
-        //draws the amount of the stars the business searched has if business is in data base - Claire
-        displayBusinessStarsChart(searchedBusinesses);
+        displayBusinessScreen();
       }
     }
   }
@@ -298,6 +300,7 @@ void mousePressed() {
     drawGraph = false;
     currentScreen=homeScreen;
     listReviews=false;
+    selected=null;
     break; 
 
   default:
@@ -322,6 +325,8 @@ void mousePressed() {
   case EVENT_BUTTON3:
     currentScreen=leaderboardsScreen;
     listReviews=true;
+    cp5.get(ScrollableList.class, "TopTwenty").open();
+    cp5.get(ScrollableList.class, "TopTwenty").setCaptionLabel("Top 20 rated businesses");
     break;
 
   case EVENT_BUTTON4:
@@ -335,6 +340,9 @@ void mousePressed() {
 
   case EVENT_BUTTON5:
     println("most reviewed");
+    //for (Business business : search.mostReviewed()) {
+    //  println(business.getBusinessReviews().size());
+    //}
     displayMostReviewed();
     listReviews=false;    
     drawLineChart = false;
@@ -357,7 +365,7 @@ void mousePressed() {
       println(review.getAuthor() + review.getUseful());
     }
     listReviews=false;
-        drawLineChart = false;
+    drawLineChart = false;
 
     break;
 
@@ -368,7 +376,7 @@ void mousePressed() {
       println(review.getAuthor() + review.getFunny());
     }
     listReviews=false;
-        drawLineChart = false;
+    drawLineChart = false;
 
     break;
 
@@ -380,32 +388,19 @@ void mousePressed() {
       println(review.getAuthor() + review.getCool());
     }
     listReviews=false;
-        drawLineChart = false;
+    drawLineChart = false;
 
     break;
 
   case EVENT_BUTTON10:
     listReviews=false;
-        drawLineChart = false;
+    drawLineChart = false;
 
     canType=false;
     if (searchbox.myText=="Search..." ) {
       break;
     } else {
-      currentScreen=leaderboardsScreen;
-
-      ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
-      println(searchbox.myText);
-
-      drawGraph = true;
-
-      if (searchedBusinesses!=null) {
-        year = 2016;
-        ArrayList<Business> reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
-        displayBusinessLineGraph(reviewsPerMonth, year);
-      }
-      //draws the amount of the stars the business searched has if business is in data base - Claire
-      displayBusinessStarsChart(searchedBusinesses);
+      displayBusinessScreen();
       break;
     }
   default:
@@ -498,13 +493,13 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
     cam.setActive(true);
     String name = businessStarsList.get(0).getBusinessName();
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
-    barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, stars, name);
+    barchart = new BusinessBarChart(LEADERBOARDSGRAPHX-30, LEADERBOARDSGRAPHY+100, stars, name);
   }
 }
 
 
 void displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {
-  lineGraph = new LineGraph(750, 700, reviewsPerMonth, year);
+  lineGraph = new LineGraph(LEADERBOARDSGRAPHX+320, LEADERBOARDSGRAPHY+100, reviewsPerMonth, year);
 }
 
 // this method creates an arraylist of reviewBox containing the most recent reviews
@@ -513,6 +508,7 @@ ArrayList<ReviewBox> initRecentReviewBoxes() {
   list = new ArrayList<ReviewBox>();
   int x=100;
   int y=270;
+  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(255, 0, 0, 127), DEFAULT_TEXT_COLOUR, DEFAULT_TEXT_COLOUR, font, "Most Recent Reviews");
   recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(HIGHLIGHT, 127), DEFAULT_TEXT_COLOUR, color(255), font, "Most Recent Reviews");
   for (int i=0; i<=2; i++) {
     Review review = mostRecentReviews.get(i);
@@ -529,4 +525,29 @@ void drawRecentReviewBoxes() {
   for (int i=0; i<list.size(); i++) {
     list.get(i).draw();
   }
+}
+
+
+
+void displayBusinessScreen() {
+  currentScreen=businessScreen;
+  if (selected!=null) {
+    println("You have selected: " + selected);
+    listReviews=false;
+    String[]businessDetails = selected.split("  ", -1);
+    searchbox.myText=businessDetails[1];
+    rating=businessDetails[2];
+    reviewAmount=businessDetails[3];
+  }
+  searchedBusinesses = search.searchBusinessList(searchbox.myText);
+  drawGraph = true;
+  println(searchbox.myText);
+  if (searchedBusinesses!=null) {
+    year = 2016;
+    reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
+    displayBusinessLineGraph(reviewsPerMonth, year);
+  }
+  //draws the amount of the stars the business searched has if business is in data base - Claire
+  displayBusinessStarsChart(searchedBusinesses);
+  println(searchbox.myText);
 }

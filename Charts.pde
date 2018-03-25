@@ -1,8 +1,8 @@
-class Chart {
+class Charts {
 
   int x, y;
 
-  Chart(int x, int y) {
+  Charts(int x, int y) {
     this.x = x;
     this.y = y;
   }

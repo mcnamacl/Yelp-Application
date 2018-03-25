@@ -139,7 +139,7 @@ class Search {
     }
   }
 
-  //gets the top 20 rated businesses - Claire
+  //gets the top 10 rated businesses - Claire
   public Business[] getTopTenBusinesses() {
     Business[] topTenBusinesses = new Business[10];
     sortBusinesses();
@@ -164,7 +164,7 @@ class Search {
     for (int i  = businesses.size(); counter < 20; i--) {
       if (!gotStarsFor.contains(businesses.get(i-1).getBusinessName())) {
         gotStarsFor.add(businesses.get(i-1).getBusinessName());
-        top20Businesses[counter] = ((counter+1)+")  "+businesses.get(i-1).getBusinessName()+"  ("+businesses.get(i-1).getAverageStarsOfBusiness()+"*)");
+        top20Businesses[counter] = ((counter+1)+")  "+businesses.get(i-1).getBusinessName()+"  ("+businesses.get(i-1).getAverageStarsOfBusiness()+"*)  "+businesses.get(i-1).amountOfReviews()+"-Review(s)");
         counter++;
       }
     }
