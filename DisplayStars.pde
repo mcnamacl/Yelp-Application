@@ -16,7 +16,7 @@ class DisplayStars{
   }
   
   //used to create an array of star images given a discrete number of stars
-  void initDisplayStars(){ //<>//
+  void initDisplayStars(){ //<>// //<>//
     double starsCopy = stars;
     for (int i = 0; i<starPictures.length; i++){
       if (starsCopy>=0){

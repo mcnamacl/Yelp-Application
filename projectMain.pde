@@ -11,8 +11,7 @@ import controlP5.*;
 import java.util.*;
 
 ArrayList<ReviewBox> recentReviews;
-boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false, listReviews=false, showTopStars=false, showMostReviewed=false, showUseful=false, showFunny=false, showCool=false;
-
+boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false, drawLineChart = false, listReviews=false, showTopStars=false, showMostReviewed=false, showUseful=false, showFunny=false, showCool=false;
 
 PFont stdFont;
 PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, halfStar;
@@ -38,8 +37,11 @@ AutoComplete autoComplete;
 
 //charts/3D viewing - Claire
 BusinessBarChart barchart;
+LineGraph lineGraph;
 PieChart pieChart;
 PeasyCam cam;
+
+int year;
 
 PApplet mainClass = this;
 
@@ -188,6 +190,9 @@ void draw() {
     noStroke();
     if (goToGraph) {
       barchart.draw();
+      if (drawLineChart) {
+        lineGraph.drawLineGraph();
+      }
       for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++) {
       }
     } else {
@@ -266,7 +271,14 @@ void keyPressed() {
         ArrayList<Business> searchedBusinesses = search.searchBusinessList(searchbox.returnString());
         println(searchbox.myText);
 
+
         drawGraph = true;
+
+        if (searchedBusinesses!=null) {
+          year = 2016;
+          ArrayList<Business> reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
+          displayBusinessLineGraph(reviewsPerMonth, year);
+        }
         //draws the amount of the stars the business searched has if business is in data base - Claire
         displayBusinessStarsChart(searchedBusinesses);
       }
@@ -317,13 +329,15 @@ void mousePressed() {
     displayTopRatedChart();
     goToGraph = true;
     drawGraph = true;
+    drawLineChart = false;
     listReviews=false;
     break;
 
   case EVENT_BUTTON5:
     println("most reviewed");
     displayMostReviewed();
-    listReviews=false;
+    listReviews=false;    
+    drawLineChart = false;
     break;
 
   case EVENT_BUTTON6:
@@ -343,6 +357,8 @@ void mousePressed() {
       println(review.getAuthor() + review.getUseful());
     }
     listReviews=false;
+        drawLineChart = false;
+
     break;
 
   case EVENT_BUTTON8:
@@ -352,6 +368,8 @@ void mousePressed() {
       println(review.getAuthor() + review.getFunny());
     }
     listReviews=false;
+        drawLineChart = false;
+
     break;
 
 
@@ -362,10 +380,14 @@ void mousePressed() {
       println(review.getAuthor() + review.getCool());
     }
     listReviews=false;
+        drawLineChart = false;
+
     break;
 
   case EVENT_BUTTON10:
     listReviews=false;
+        drawLineChart = false;
+
     canType=false;
     if (searchbox.myText=="Search..." ) {
       break;
@@ -376,6 +398,12 @@ void mousePressed() {
       println(searchbox.myText);
 
       drawGraph = true;
+
+      if (searchedBusinesses!=null) {
+        year = 2016;
+        ArrayList<Business> reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
+        displayBusinessLineGraph(reviewsPerMonth, year);
+      }
       //draws the amount of the stars the business searched has if business is in data base - Claire
       displayBusinessStarsChart(searchedBusinesses);
       break;
@@ -466,11 +494,17 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   }
   if (goToGraph) {
     drawGraph = true;
+    drawLineChart = true;
     cam.setActive(true);
     String name = businessStarsList.get(0).getBusinessName();
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
     barchart = new BusinessBarChart(LEADERBOARDSGRAPHX, LEADERBOARDSGRAPHY, stars, name);
   }
+}
+
+
+void displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {
+  lineGraph = new LineGraph(750, 700, reviewsPerMonth, year);
 }
 
 // this method creates an arraylist of reviewBox containing the most recent reviews
