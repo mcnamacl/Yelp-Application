@@ -155,6 +155,22 @@ class Search {
     }
     return topTenBusinesses;
   }
+  
+    //gets the top 15 rated businesses - Claire (adapted by Ruairi)
+  public Business[] getTop15Businesses() {
+    Business[] top15Businesses = new Business[15];
+    sortBusinesses();
+    int counter = 0;
+    ArrayList<String> gotStarsFor = new ArrayList<String>();
+    for (int i  = businesses.size(); counter < 15; i--) {
+      if (!gotStarsFor.contains(businesses.get(i-1).getBusinessName())) {
+        gotStarsFor.add(businesses.get(i-1).getBusinessName());
+        top15Businesses[counter] = businesses.get(i-1);
+        counter++;
+      }
+    }
+    return top15Businesses;
+  }
 
   //gets the top 20 rated businesses - Claire
   public String[] getTop20Businesses() {
