@@ -1,3 +1,4 @@
+//class that draws the lines beteween two points - Claire
 class Line{
   
   float x, y, prevX, prevY, totalX, totalY, destX, destY;

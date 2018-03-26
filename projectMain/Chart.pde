@@ -1,3 +1,4 @@
+//class that deals with drawing the axis for a graph - Claire
 class Chart{
   
   float topX, topY, x, y, leftX, leftY;

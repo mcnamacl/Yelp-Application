@@ -6,6 +6,8 @@ class Business {
   private ArrayList<Review> businessReviews;
   private int[] stars = new int[5];
   private int amountOfReviews;
+  private double averageStars;
+  
   
  // constructor for a particular branch of a business - Claire/Tom
   public Business(String businessName, String businessId) {
@@ -20,7 +22,7 @@ class Business {
     getReviews();
   }
 
-// constructor for all branchs of a business - Claire
+// constructors for all branchs of a business - Claire
   public Business(String businessName, int amountOfReviews) {
     this.amountOfReviews = amountOfReviews;
     this.businessName = businessName;
@@ -31,7 +33,7 @@ class Business {
     this.businessName = businessName;
     this.month = month;
   }
-
+  
   int[] returnStars() {
     return stars;
   }
