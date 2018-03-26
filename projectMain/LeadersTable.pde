@@ -26,7 +26,7 @@ class LeadersTable{
     displayStars.draw();
   }
 }
-
+/*
 // this method creates an arraylist of leaderboard rungs containing the highest rated businesses
 ArrayList<LeadersTable> initTopBusinesses() {
   String[] topBusinesses = search.getTop20Businesses();
@@ -44,3 +44,4 @@ ArrayList<LeadersTable> initTopBusinesses() {
   }
   return leaderboardRungList;
 }
+*/
