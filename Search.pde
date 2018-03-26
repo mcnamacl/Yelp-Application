@@ -87,23 +87,24 @@ class Search {
   int[] getStarsForCollectionOfBusinesses(ArrayList<Business> searchedBusinesses) {
     int[] starsForBusinesses = new int[5];
     int[] tmpStarsForBusinesses = new int[5];
+    ArrayList<String> businessesWithReviewsGotten = new ArrayList<String>();
     for (Business business : searchedBusinesses) {
-      getStarsForOneBusiness(business);
-      tmpStarsForBusinesses = business.returnStars();
-      for (int i = 0; i < tmpStarsForBusinesses.length; i++) {
-        int tmpN = starsForBusinesses[i] + tmpStarsForBusinesses[i];
-        starsForBusinesses[i] = tmpN;
+    println(business.getBusinessName() + " " + business.getBusinessId());
+      if (!businessesWithReviewsGotten.contains(business.getBusinessId())) {
+        businessesWithReviewsGotten.add(business.getBusinessId());
+        tmpStarsForBusinesses = business.returnStars();
+        //println(tmpStarsForBusinesses);
+        for (int i = 0; i < tmpStarsForBusinesses.length; i++) {
+          int tmpN = starsForBusinesses[i] + tmpStarsForBusinesses[i];
+          //println(starsForBusinesses[i] + " " + tmpStarsForBusinesses[i] + " " + tmpN);
+          starsForBusinesses[i] = tmpN;
+        }
+        println(" ");
       }
     }
     return starsForBusinesses;
   }
 
-  //gets the stars for one branch of a business - Claire
-  void getStarsForOneBusiness(Business business) {
-    for (Review review : business.getReviews()) {
-      business.returnStars()[review.getStars()-1] = business.returnStars()[review.getStars()-1] + 1;
-    }
-  }
 
   // Initialises map of business and that business's reviews 
   void createBusinessAZMap() {

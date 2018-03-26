@@ -19,7 +19,6 @@ class Business {
     for (int i = 0; i < stars.length; i++) {
       stars[i] = 0;
     }
-    getReviews();
   }
 
 // constructors for all branchs of a business - Claire
@@ -32,10 +31,6 @@ class Business {
     this.amountOfReviews = amountOfReviews;
     this.businessName = businessName;
     this.month = month;
-  }
-  
-  int[] returnStars() {
-    return stars;
   }
   
   int getMonth() {
@@ -67,6 +62,18 @@ class Business {
     }
     return businessReviews;
   }
+  
+  //returns arraylist of how many stars in each category a business has 
+  public int[] returnStars(){ 
+    getReviews();
+    println(businessReviews.size());
+    for (Review review : businessReviews){
+      int placeInArray = review.getStars();
+      stars[placeInArray-1]++;
+    }
+    //println(stars);
+    return stars;
+  }
 
   //prints all the stars a business has in the relevent categories
   public void displayStarCategories() {
@@ -95,7 +102,13 @@ class Business {
 
 //returns amount of reviews a business has - Claire
   int amountOfReviews() {
-    return businessReviews.size();
+    ArrayList<Review> allReviews = new ArrayList<Review>();
+    for (Review review : reviews) { 
+      if (review.getBusiness().equals(businessName)){
+        allReviews.add(review);
+      }
+    }
+    return allReviews.size();
   }
 
 
