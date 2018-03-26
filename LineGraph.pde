@@ -1,6 +1,7 @@
+//class that deals with creating a line graph - Claire
 class LineGraph {
 
-  int x, y, year;
+  int x, y, year, amountReviews;
   float max, interval;
   ArrayList<Business> reviewsPerM;
   Chart chart;
@@ -95,10 +96,19 @@ class LineGraph {
   
   void drawSide(){
     int tmpY = y;
-    fill(PURPLE);
+    fill(255);
     for (int i =0; i<= max; i++) {
       text(i, float(x-30), tmpY);
       tmpY = tmpY - (int)interval;
     }
+  }
+  
+  String amountOfReviews(){
+    amountReviews = 0;
+    for (int i = 0; i < reviewsPerM.size(); i++) {
+      amountReviews = amountReviews + reviewsPerM.get(i).returnAmountOfReviews();
+    }
+    String amountOfReviews = Integer.toString(amountReviews);
+    return amountOfReviews;
   }
 }

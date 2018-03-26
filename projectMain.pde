@@ -78,7 +78,7 @@ void setup() {
   homeScreen=new Screen(backgroundPhoto, homescreenWidgets);
   leaderboardsScreen= new Screen(backgroundPhotoLeaderBoards, leaderboardsWidgets);
   businessScreen=new Screen(backgroundPhotoBusiness, businessWidgets);
-  topStars= new Widget(RADIOBUTTONX, TOPSTARSY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top star rating", color(255), widgetFont, EVENT_BUTTON4, 10, 10 );
+  topStars= new Widget(RADIOBUTTONX, TOPSTARSY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top star rated", color(255), widgetFont, EVENT_BUTTON4, 10, 10 );
   mostReviewed= new Widget(RADIOBUTTONX, MOSTREVIEWEDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most reviewed", color(255), widgetFont, EVENT_BUTTON5, 10, 10 );
   topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 20 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
   mostUseful= new Widget(RADIOBUTTONX, MOSTUSEFULY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
@@ -128,7 +128,6 @@ void setup() {
   businessScreen.addWidget(searchButton);
   currentScreen=homeScreen;
   recentReviews = initRecentReviewBoxes();
-  //rb = new ReviewBox(100,100,150,300,"James","green spuds","asd as d s s ss s s s sas  dawd i ams a aso yeroas a sldkjahlw asoidja audkaka asd",4);
 
   cp5 = new ControlP5(this);
   cp5.addScrollableList("TopTwenty")
@@ -339,10 +338,7 @@ void mousePressed() {
     break;
 
   case EVENT_BUTTON5:
-    println("most reviewed");
-    //for (Business business : search.mostReviewed()) {
-    //  println(business.getBusinessReviews().size());
-    //}
+    println("most reviewed");  
     displayMostReviewed();
     listReviews=false;    
     drawLineChart = false;
@@ -354,7 +350,6 @@ void mousePressed() {
     cp5.get(ScrollableList.class, "TopTwenty").setCaptionLabel("Top 20 rated businesses");
     listReviews=true;
     cam.setActive(false);
-    listReviews= true;
     drawGraph=false;
     break;
 
@@ -484,7 +479,7 @@ void displayMostReviewed() {
 
 //initialises the business searched star chart and sets the screen into 3D viewing mode - Claire
 void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
-  if (!businessStarsList.isEmpty()) {
+  if (businessStarsList.size() != 0) {
     goToGraph = true;
   }
   if (goToGraph) {
@@ -497,9 +492,10 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   }
 }
 
-
-void displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {
+//draws the line chart for amount of reviews per month per year for a particular business - Claire
+String displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {
   lineGraph = new LineGraph(LEADERBOARDSGRAPHX+320, LEADERBOARDSGRAPHY+100, reviewsPerMonth, year);
+  return lineGraph.amountOfReviews();
 }
 
 // this method creates an arraylist of reviewBox containing the most recent reviews
@@ -531,22 +527,23 @@ void drawRecentReviewBoxes() {
 
 void displayBusinessScreen() {
   currentScreen=businessScreen;
-  if (selected!=null) {
-    println("You have selected: " + selected);
-    listReviews=false;
-    String[]businessDetails = selected.split("  ", -1);
-    searchbox.myText=businessDetails[1];
-    rating=businessDetails[2];
-    reviewAmount=businessDetails[3];
-  }
   searchedBusinesses = search.searchBusinessList(searchbox.myText);
   drawGraph = true;
   println(searchbox.myText);
-  if (searchedBusinesses!=null) {
+  if (searchedBusinesses.size() != 0) {
     year = 2016;
     reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
-    displayBusinessLineGraph(reviewsPerMonth, year);
-  }
+    reviewAmount = displayBusinessLineGraph(reviewsPerMonth, year);
+    rating = Double.toString(search.getAverageStarsOfBusiness(searchedBusinesses.get(0).getBusinessName()));
+  } 
+  if (selected!=null) {
+    println("You have selected: " + selected);
+    listReviews=false;
+    String[] businessDetails = selected.split("  ", -1);
+    searchbox.myText=businessDetails[1];
+    rating=businessDetails[2];
+    reviewAmount = businessDetails[3];
+  } 
   //draws the amount of the stars the business searched has if business is in data base - Claire
   displayBusinessStarsChart(searchedBusinesses);
   println(searchbox.myText);

@@ -164,7 +164,8 @@ class Search {
     for (int i  = businesses.size(); counter < 20; i--) {
       if (!gotStarsFor.contains(businesses.get(i-1).getBusinessName())) {
         gotStarsFor.add(businesses.get(i-1).getBusinessName());
-        top20Businesses[counter] = ((counter+1)+")  "+businesses.get(i-1).getBusinessName()+"  ("+businesses.get(i-1).getAverageStarsOfBusiness()+"*)  "+businesses.get(i-1).amountOfReviews()+"-Review(s)");
+        int amountOfReviews = amountOfReviews(businesses.get(i-1).getBusinessName());
+        top20Businesses[counter] = ((counter+1)+")  "+businesses.get(i-1).getBusinessName()+"  ("+businesses.get(i-1).getAverageStarsOfBusiness()+"*)  "+amountOfReviews+"-Review(s)");
         counter++;
       }
     }
@@ -184,7 +185,7 @@ class Search {
     );
   }
 
-  //gets the average stars of a business - Claire/Tom
+  //gets the average stars of all branches of a business - Claire/Tom
   double getAverageStarsOfBusiness(String businessName) {
     ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
     double total = 0;
@@ -226,7 +227,19 @@ class Search {
      return null;*/
   }
 
+  //returns the amount of reviews for all branches of a business - Claire
+  int amountOfReviews(String businessName) {
+    int amountOfReviews = 0;
+    for (Review review : reviews) {
+      if (review.getBusiness().equals(businessName)) {
+        amountOfReviews++;
+      }
+    }
+    return amountOfReviews;
+  }
 
+
+  //gets all the reviews for a particular business per month for a specific year - Claire
   ArrayList<Business> sortReviewsByMonth(Business business, int year) {
     String name = business.getBusinessName();
     int[] months = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
@@ -266,7 +279,6 @@ class Search {
 }
 
 
-//Class that sorts businesses by amount of reviews - Claire
 import java.util.Comparator;
 
 class SortByName implements Comparator<Review> {
@@ -275,6 +287,7 @@ class SortByName implements Comparator<Review> {
   }
 }
 
+//Class that sorts businesses by amount of reviews - Claire
 class SortByAmountOfReviews implements Comparator<Business> {
   public int compare(Business b1, Business b2) {
     return b1.returnAmountOfReviews() - b2.returnAmountOfReviews();
@@ -302,7 +315,7 @@ class SortByFunny implements Comparator<Review> {
 class SortByDate implements Comparator<Review> {
   public int compare(Review review1, Review review2) {
     return review2.getDate().compareTo(review1.getDate());
-  } 
+  }
 }
 
 /*public Term[] autoComplete(String searchQuery) {
