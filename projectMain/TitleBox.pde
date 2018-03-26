@@ -1,13 +1,13 @@
 //very similar to widget class but allows more customisation of colours and exclusion of event variable
 class TitleBox {
-  int x, y, width, height;
+  int x, y, width, height, strokeWeight;
   String myText; 
   color widgetColor, textColor;
   PFont widgetFont;
   color strokeColor;
   int xTextDistance, yTextDistance;
   
-  TitleBox(int x,int y, int width, int height, int xTextDistance, int yTextDistance, color widgetColor, color strokeColor, color textColor, PFont widgetFont, String myText){
+  TitleBox(int x,int y, int width, int height, int xTextDistance, int yTextDistance, color widgetColor, color strokeColor, color textColor, PFont widgetFont, String myText,int strokeWeight){
     this.x=x; 
     this.y=y; 
     this.width = width; 
@@ -19,10 +19,12 @@ class TitleBox {
     this.yTextDistance=yTextDistance;
     this.strokeColor=strokeColor;
     this.textColor=textColor;
+    this.strokeWeight=strokeWeight;
   }
   
   void draw(){
     stroke(strokeColor);
+    strokeWeight(strokeWeight);
     fill(widgetColor);
     rect(x, y, width, height);
     fill(textColor);

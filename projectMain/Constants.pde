@@ -8,6 +8,7 @@ final int TWO_STARS = 1;
 final int THREE_STARS = 2;
 final int FOUR_STARS = 3;
 final int FIVE_STARS = 4;
+final int STAR_WIDTH = 20;
 
 final int SEARCHBOXX=90;
 final int SEARCHBOXY=15;

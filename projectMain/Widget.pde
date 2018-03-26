@@ -47,7 +47,6 @@ class Widget {
     this.xTextDistance=xTextDistance;
     this.yTextDistance=yTextDistance;
     this.isClickableText=isClickableText;
-    myTextColor= color(0);
   }
   
   //constuctor for a leaderboard rung
@@ -68,11 +67,12 @@ class Widget {
   void drawLeaderboardRung(){
     fill(widgetColor);
     stroke(strokeColor);
+    strokeWeight(1);
     rect(x,y,width,height);
     setTextColor(mouseX,mouseY);
     fill(myTextColor);
     textSize(20);
-    text(myText,x+xTextDistance,y+yTextDistance);
+    text(myText, x+xTextDistance, y+height-yTextDistance);
     
   }
 
@@ -106,7 +106,7 @@ class Widget {
   }
   
   int setTextColor(int mouseX, int mouseY) {
-    myTextColor = DEFAULT_TEXT_COLOUR;
+    myTextColor = color(255);
     if (mouseX>x && mouseX < x+width && mouseY >y && mouseY <y+height) {
       myTextColor=(HIGHLIGHT);
       hover = true;
