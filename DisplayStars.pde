@@ -13,13 +13,14 @@ class DisplayStars{
     this.y=y;
     this.yellowStar=yellowStar;
     this.greyStar=greyStar;
+    this.halfStar=halfStar;
   }
   
   //used to create an array of star images given a discrete number of stars
   void initDisplayStars(){ //<>// //<>//
     double starsCopy = stars;
     for (int i = 0; i<starPictures.length; i++){
-      if (starsCopy>=0){
+      if (starsCopy>=1){
         Star ystar = new Star(x,y,yellowStar);
         starPictures[i] = ystar;
         starsCopy--;
@@ -32,25 +33,25 @@ class DisplayStars{
     }
   }
   
+ 
   //used to create array of star images given a continous number of stars
   void initContinuousDisplayStars(){
      double starsCopy = stars;
     for (int i = 0; i<starPictures.length; i++){
-      if (starsCopy>=0){
+      if (starsCopy>=1){
         Star ystar = new Star(x,y,yellowStar);
         starPictures[i] = ystar;
         starsCopy--;
       }
-      else if (starsCopy<0 && starsCopy>0.75){
+      else if (starsCopy>=0.66 && starsCopy<1){
         Star ystar = new Star(x,y,yellowStar);
         starPictures[i] = ystar;
         starsCopy--;
       }
-      else if (starsCopy<=0.75 && starsCopy>0.25){
-        //Star hstar = new Star(x,y,halfStar);
-        //starPictures[i] = hstar;
+     else if (starsCopy>=0.33 && starsCopy<0.66){
+        Star hstar = new Star(x,y,halfStar);
+        starPictures[i] = hstar;
         starsCopy--;
-       
       }
       else{
         Star gstar = new Star(x,y,greyStar);

@@ -16,7 +16,7 @@ boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = fals
 PFont stdFont;
 PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, backgroundPhotoBusiness, halfStar;
 Widget searchbox, searchButton, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
-TitleBox recentReviewsHeader;
+TitleBox recentReviewsHeader, topBusinessesHeader;
 String myText = "Search...";  
 String searchText, selected, rating, reviewAmount;
 Screen currentScreen, homeScreen, leaderboardsScreen, businessScreen;
@@ -29,6 +29,7 @@ ArrayList<Widget> leaderboardsWidgets = new ArrayList<Widget>();
 ArrayList<Widget> businessWidgets = new ArrayList<Widget>();
 ArrayList<String> reviewsString, topBusinesses;
 ArrayList<ReviewBox> list;
+ArrayList<LeadersTable> leaderboardRungList;
 ArrayList<Business> searchedBusinesses;
 ArrayList<Business> reviewsPerMonth;
 
@@ -128,6 +129,7 @@ void setup() {
   businessScreen.addWidget(searchButton);
   currentScreen=homeScreen;
   recentReviews = initRecentReviewBoxes();
+  leaderboardRungList = initTopBusinesses();
 
   cp5 = new ControlP5(this);
   cp5.addScrollableList("TopTwenty")
@@ -190,6 +192,7 @@ void draw() {
   if (currentScreen == homeScreen) {
     noStroke();
     drawRecentReviewBoxes();
+    drawTopBusinessTable();
     cam.setActive(false);
     listReviews=false;
   }
