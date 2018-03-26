@@ -1,12 +1,12 @@
-class ReviewBox{
-  
-  int x,y,width,height;
-  Widget businessButton,seeFullReviewButton, authorPieChart;
-  String reviewer,businessName,review, reviewerId;
+class ReviewBox {
+
+  int x, y, width, height;
+  Widget businessButton, seeFullReviewButton, authorPieChart;
+  String reviewer, businessName, review, reviewerId;
   int stars;
   DisplayStars displayStars;
-  
-  ReviewBox(int x,int y,int width,int height, String reviewer, String reviewerId, String businessName,String review, int stars){
+
+  ReviewBox(int x, int y, int width, int height, String reviewer, String reviewerId, String businessName, String review, int stars) {
     this.x=x;
     this.y=y;
     this.width=width;
@@ -16,30 +16,29 @@ class ReviewBox{
     this.review=review;
     this.stars=stars;
     this.reviewerId = reviewerId;
-    
- displayStars = new DisplayStars(stars,20,x+10,y+22,yellowStar,greyStar,halfStar);                                                      
+
+    displayStars = new DisplayStars(stars, 20, x+10, y+22, yellowStar, greyStar, halfStar);                                                      
     displayStars.initDisplayStars();                                                                                                        
-businessButton = new Widget(x+5,y+5,210,15,this.businessName,color(255,0),widgetFont,0,2,2,true);
-    seeFullReviewButton = new Widget(x+5,y+162,165,15,"..read full review",color(255,0),widgetFont,0,2,2,true);
-    
-    authorPieChart = new Widget(width+32, y+5, 60,15, reviewer, color(255,0), widgetFont, EVENT_BUTTON10,2,2,true); 
+    businessButton = new Widget(x+5, y+5, 210, 15, this.businessName, color(255, 0), widgetFont, 0, 2, 2, true);
+    seeFullReviewButton = new Widget(x+5, y+162, 165, 15, "..read full review", color(255, 0), widgetFont, 0, 2, 2, true);
+
+    authorPieChart = new Widget(width+32, y+5, 60, 15, reviewer, color(255, 0), widgetFont, EVENT_BUTTON10, 2, 2, true); 
     homeScreen.addWidget(authorPieChart);
   }
-  
-  void draw(){
+
+  void draw() {
     noStroke();
     fill(0, 200);
-    rect(x,y,width,height);
+    rect(x, y, width, height);
     businessButton.draw();
     seeFullReviewButton.draw();
-    
-    authorPieChart.draw();
-    
-    fill(DEFAULT_TEXT_COLOUR);
-    text(review,x+5,y+50,width-30,height-65);
-    text("by.",x+289,y+17);
 
-   displayStars.draw();                                                                                                                      
-   
-  }  
+    authorPieChart.draw();
+
+    fill(DEFAULT_TEXT_COLOUR);
+    text(review, x+5, y+50, width-30, height-65);
+    text("by.", x+289, y+17);
+
+    displayStars.draw();
+  }
 }

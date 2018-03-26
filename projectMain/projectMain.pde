@@ -1,4 +1,4 @@
-import controlP5.*; //<>// //<>// //<>//
+import controlP5.*;  //<>//
 
 import peasy.PeasyCam;
 
@@ -230,11 +230,14 @@ void draw() {
   }
   if (currentScreen==businessScreen) {
     fill(HIGHLIGHT);
-    rect(BUSINESSNAMEX-50,BUSINESSNAMEY+10,900,1);
+    rect(BUSINESSNAMEX-50, BUSINESSNAMEY+10, 900, 1);
     fill(255);
     textFont(font);
     text(searchbox.myText+"  "+rating, BUSINESSNAMEX, BUSINESSNAMEY);
-    text(reviewAmount,BUSINESSNAMEX,BUSINESSNAMEY+90);
+    textSize(22);
+    int totalReviews = search.amountOfReviews(searchbox.myText);
+    text("Amount of reviews \nof all time" + " = " + totalReviews, BUSINESSNAMEX, BUSINESSNAMEY+90);
+    text("Amount of reviews \nfor " + year + " = " + reviewAmount, BUSINESSNAMEX, BUSINESSNAMEY+150);
   }
   selected=null;
 }
@@ -524,26 +527,30 @@ void drawRecentReviewBoxes() {
 }
 
 
-
 void displayBusinessScreen() {
   currentScreen=businessScreen;
   searchedBusinesses = search.searchBusinessList(searchbox.myText);
   drawGraph = true;
   println(searchbox.myText);
-  if (searchedBusinesses.size() != 0) {
+  if (searchedBusinesses.size() != 0||selected!=null) {
     year = 2016;
-    reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
-    reviewAmount = displayBusinessLineGraph(reviewsPerMonth, year);
-    rating = Double.toString(search.getAverageStarsOfBusiness(searchedBusinesses.get(0).getBusinessName()));
+    listReviews = false;
+    if (selected != null) {
+      String[] businessDetails = selected.split("  ", -1);
+      searchbox.myText=businessDetails[1];
+      rating=businessDetails[2];
+      searchedBusinesses = search.searchBusinessList(searchbox.myText);
+
+      reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
+
+      reviewAmount = displayBusinessLineGraph(reviewsPerMonth, year);
+    } else {
+      reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
+      reviewAmount = displayBusinessLineGraph(reviewsPerMonth, year);
+      rating = Double.toString(search.getAverageStarsOfBusiness(searchedBusinesses.get(0).getBusinessName()));
+    }
   } 
-  if (selected!=null) {
-    println("You have selected: " + selected);
-    listReviews=false;
-    String[] businessDetails = selected.split("  ", -1);
-    searchbox.myText=businessDetails[1];
-    rating=businessDetails[2];
-    reviewAmount = businessDetails[3];
-  } 
+
   //draws the amount of the stars the business searched has if business is in data base - Claire
   displayBusinessStarsChart(searchedBusinesses);
   println(searchbox.myText);

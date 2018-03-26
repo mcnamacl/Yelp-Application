@@ -1,3 +1,4 @@
+//Class that draws information along the bottom of the x axis - Claire
 class Scores {
 
   int x, y;

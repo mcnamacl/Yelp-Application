@@ -168,8 +168,10 @@ class BusinessBarChart {
     float tmpY = y;
     float distance = businessChart[0].returnAmountOfReviews()/(10+interval);
     textSize(20);
-    for (int i = 0; i <= businessChart[0].returnAmountOfReviews(); i=i+10) {    
+    for (int i = 0; i <= businessChart[0].returnAmountOfReviews(); i=i+10) { 
+
       text(i, float(x-40), tmpY+2);
+
       tmpY = tmpY - distance;
     }
     stroke(255);
@@ -195,16 +197,20 @@ class BusinessBarChart {
       max = starRatingsList.get(4);
     }    
     int i = 0;
-    if (max > 100){
-      interval = max/7.5;
-    }
-    while (i <= max) {
-      if (max > 100) {
-        i+=10;
+    float maxHeight = y-(interval*max);
+    while (tmpY >= maxHeight) {
+      if (max > 100) { 
+        if (i%10==0) {
+          text(i, float(x-30), tmpY);
+        }
+      } else if (max > 50) {
+        if (i%5==0) {
+          text(i, float(x-30), tmpY);
+        }
       } else {
-        i++;
+        text(i, float(x-30), tmpY);
       }
-      text(i, float(x-30), tmpY-15);
+      i++;
       tmpY = tmpY - (int)interval;
     }
     stroke(255);
