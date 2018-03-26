@@ -504,8 +504,8 @@ ArrayList<ReviewBox> initRecentReviewBoxes() {
   list = new ArrayList<ReviewBox>();
   int x=100;
   int y=270;
-  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(255, 0, 0, 127), DEFAULT_TEXT_COLOUR, DEFAULT_TEXT_COLOUR, font, "Most Recent Reviews");
-  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(HIGHLIGHT, 127), DEFAULT_TEXT_COLOUR, color(255), font, "Most Recent Reviews");
+  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(255, 0, 0, 127), DEFAULT_TEXT_COLOUR, DEFAULT_TEXT_COLOUR, font, "Most Recent Reviews",5);
+  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(HIGHLIGHT, 127), DEFAULT_TEXT_COLOUR, color(255), font, "Most Recent Reviews",5);
   for (int i=0; i<=2; i++) {
     Review review = mostRecentReviews.get(i);
     ReviewBox rb = new ReviewBox(x, y, 380, 180, review.getAuthor(), review.getAuthorId(), review.getBusiness(), review.getText(), review.getStars());
