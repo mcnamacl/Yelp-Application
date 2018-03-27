@@ -104,11 +104,11 @@ class LineGraph {
   }
   
   String amountOfReviews(){
-    amountReviews = 0;
-    for (int i = 0; i < reviewsPerM.size(); i++) {
-      amountReviews = amountReviews + reviewsPerM.get(i).returnAmountOfReviews();
+    int count = 0;
+    for (Business business : reviewsPerM){
+      count = count + business.returnAmountOfReviews();
     }
-    String amountOfReviews = Integer.toString(amountReviews);
+    String amountOfReviews = Integer.toString(count);
     return amountOfReviews;
   }
 }

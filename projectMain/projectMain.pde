@@ -1,4 +1,4 @@
-import controlP5.*;  //<>//
+import controlP5.*;  //<>// //<>//
 
 import peasy.PeasyCam;
 
@@ -18,7 +18,7 @@ PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, background
 Widget searchbox, searchButton, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
 TitleBox recentReviewsHeader, topBusinessesHeader;
 String myText = "Search...";  
-String searchText, selected, rating, reviewAmount;
+String searchText, selected, rating, reviewAmount, totalReviewsForYear;
 Screen currentScreen, homeScreen, leaderboardsScreen, businessScreen;
 ArrayList<DataPoint> dataPoints;
 ArrayList<Review> reviews;
@@ -238,9 +238,8 @@ void draw() {
     textFont(font);
     text(searchbox.myText+"  "+rating, BUSINESSNAMEX, BUSINESSNAMEY);
     textSize(22);
-    int totalReviews = search.amountOfReviews(searchbox.myText);
-    text("Amount of reviews \nof all time" + " = " + totalReviews, BUSINESSNAMEX, BUSINESSNAMEY+90);
-    text("Amount of reviews \nfor " + year + " = " + reviewAmount, BUSINESSNAMEX, BUSINESSNAMEY+150);
+    text("Amount of reviews \nof all time" + " = " + reviewAmount, BUSINESSNAMEX, BUSINESSNAMEY+90);
+    text("Amount of reviews \nfor " + year + " = " + totalReviewsForYear, BUSINESSNAMEX, BUSINESSNAMEY+150);
   }
   selected=null;
 }
@@ -543,16 +542,20 @@ void displayBusinessScreen() {
       searchbox.myText=businessDetails[1];
       rating=businessDetails[2];
       searchedBusinesses = search.searchBusinessList(searchbox.myText);
-
+      
       reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
-
-      reviewAmount = displayBusinessLineGraph(reviewsPerMonth, year);
+      totalReviewsForYear = displayBusinessLineGraph(reviewsPerMonth, year);
+      reviewAmount = Integer.toString(search.amountOfReviews(searchbox.myText.toLowerCase()));
     } else {
       reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
-      reviewAmount = displayBusinessLineGraph(reviewsPerMonth, year);
+      totalReviewsForYear = displayBusinessLineGraph(reviewsPerMonth, year);
+      reviewAmount = Integer.toString(search.amountOfReviews(searchbox.myText));
       rating = Double.toString(search.getAverageStarsOfBusiness(searchedBusinesses.get(0).getBusinessName()));
     }
   } 
+  
+  
+  //int totalReviews = search.amountOfReviews(searchbox.myText);
 
   //draws the amount of the stars the business searched has if business is in data base - Claire
   displayBusinessStarsChart(searchedBusinesses);
