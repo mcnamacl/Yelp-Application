@@ -19,7 +19,8 @@ class ReviewBox {
 
     displayStars = new DisplayStars(stars, 20, x+10, y+22, yellowStar, greyStar, halfStar);                                                      
     displayStars.initDisplayStars();                                                                                                        
-    businessButton = new Widget(x+5, y+5, 210, 15, this.businessName, color(255, 0), widgetFont, 0, 2, 2, true);
+    businessButton = new Widget(x+5, y+5, 210, 15, businessName, color(255, 0), widgetFont, EVENT_BUTTON11, 2, 2, true);
+    homeScreen.addWidget(businessButton);
     seeFullReviewButton = new Widget(x+5, y+162, 165, 15, "..read full review", color(255, 0), widgetFont, 0, 2, 2, true);
 
     authorPieChart = new Widget(width+32, y+5, 60, 15, reviewer, color(255, 0), widgetFont, EVENT_BUTTON10, 2, 2, true); 
@@ -40,5 +41,13 @@ class ReviewBox {
     text("by.", x+289, y+17);
 
     displayStars.draw();
+  }
+  
+  String getReviewer(){
+    return reviewer;
+  }
+  
+  String getBusinessName(){
+    return businessName;
   }
 }

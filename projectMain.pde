@@ -28,7 +28,7 @@ ArrayList<Widget> homescreenWidgets = new ArrayList<Widget>();
 ArrayList<Widget> leaderboardsWidgets = new ArrayList<Widget>();
 ArrayList<Widget> businessWidgets = new ArrayList<Widget>();
 ArrayList<String> reviewsString, topBusinesses;
-ArrayList<ReviewBox> list;
+ArrayList<ReviewBox> listOfRecentReviews;
 ArrayList<LeadersTable> leaderboardRungList;
 ArrayList<Business> searchedBusinesses;
 ArrayList<Business> reviewsPerMonth;
@@ -254,10 +254,10 @@ void mouseMoved() {
 
   //gets the piechart for a reviewer if the mouse is hovered over their name - Claire
   if (homeScreen.hover(mouseX, mouseY)) {
-    for (int i = 0; i < list.size(); i++) {
-      if (list.get(i).authorPieChart.getEvent(mouseX, mouseY) != EVENT_NULL) {
-        author = new Author(list.get(i).reviewerId);
-        pieChart = new PieChart(int(list.get(i).authorPieChart.x+150), int(list.get(i).authorPieChart.y+50), author.type());
+    for (int i = 0; i < listOfRecentReviews.size(); i++) {
+      if (listOfRecentReviews.get(i).authorPieChart.getEvent(mouseX, mouseY) != EVENT_NULL) {
+        author = new Author(listOfRecentReviews.get(i).reviewerId);
+        pieChart = new PieChart(int(listOfRecentReviews.get(i).authorPieChart.x+150), int(listOfRecentReviews.get(i).authorPieChart.y+50), author.type());
         drawPieChart = true;
       }
     }
@@ -403,6 +403,15 @@ void mousePressed() {
       displayBusinessScreen();
       break;
     }
+    
+   case EVENT_BUTTON11:
+     for (int i = 0; i < listOfRecentReviews.size(); i++) {
+      if (listOfRecentReviews.get(i).businessButton.getEvent(mouseX, mouseY) != EVENT_NULL) {
+        searchbox.myText = listOfRecentReviews.get(i).getBusinessName();
+        displayBusinessScreen();
+      }
+    }
+      
   default:
     if (drawGraph) {
       listReviews=false;
@@ -506,7 +515,7 @@ String displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {
 // this method creates an arraylist of reviewBox containing the most recent reviews
 ArrayList<ReviewBox> initRecentReviewBoxes() {
   ArrayList<Review> mostRecentReviews = search.mostRecentReview(reviews);
-  list = new ArrayList<ReviewBox>();
+  listOfRecentReviews = new ArrayList<ReviewBox>();
   int x=100;
   int y=270;
   recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(255, 0, 0, 127), DEFAULT_TEXT_COLOUR, DEFAULT_TEXT_COLOUR, font, "Most Recent Reviews",5);
@@ -515,16 +524,16 @@ ArrayList<ReviewBox> initRecentReviewBoxes() {
     Review review = mostRecentReviews.get(i);
     ReviewBox rb = new ReviewBox(x, y, 380, 180, review.getAuthor(), review.getAuthorId(), review.getBusiness(), review.getText(), review.getStars());
     y+=186;
-    list.add(rb);
+    listOfRecentReviews.add(rb);
   }
-  return list;
+  return listOfRecentReviews;
 }
 
 // this method draws the arrayList that was created above
 void drawRecentReviewBoxes() {
   recentReviewsHeader.draw();
-  for (int i=0; i<list.size(); i++) {
-    list.get(i).draw();
+  for (int i=0; i<listOfRecentReviews.size(); i++) {
+    listOfRecentReviews.get(i).draw();
   }
 }
 
@@ -549,14 +558,12 @@ void displayBusinessScreen() {
     } else {
       reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
       totalReviewsForYear = displayBusinessLineGraph(reviewsPerMonth, year);
-      reviewAmount = Integer.toString(search.amountOfReviews(searchbox.myText));
+      reviewAmount = Integer.toString(search.amountOfReviews(searchbox.myText.toLowerCase()));
       rating = Double.toString(search.getAverageStarsOfBusiness(searchedBusinesses.get(0).getBusinessName()));
     }
   } 
   
-  
-  //int totalReviews = search.amountOfReviews(searchbox.myText);
-
+ 
   //draws the amount of the stars the business searched has if business is in data base - Claire
   displayBusinessStarsChart(searchedBusinesses);
   println(searchbox.myText);
