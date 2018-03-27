@@ -89,17 +89,13 @@ class Search {
     int[] tmpStarsForBusinesses = new int[5];
     ArrayList<String> businessesWithReviewsGotten = new ArrayList<String>();
     for (Business business : searchedBusinesses) {
-    println(business.getBusinessName() + " " + business.getBusinessId());
       if (!businessesWithReviewsGotten.contains(business.getBusinessId())) {
         businessesWithReviewsGotten.add(business.getBusinessId());
         tmpStarsForBusinesses = business.returnStars();
-        //println(tmpStarsForBusinesses);
         for (int i = 0; i < tmpStarsForBusinesses.length; i++) {
           int tmpN = starsForBusinesses[i] + tmpStarsForBusinesses[i];
-          //println(starsForBusinesses[i] + " " + tmpStarsForBusinesses[i] + " " + tmpN);
           starsForBusinesses[i] = tmpN;
         }
-        println(" ");
       }
     }
     return starsForBusinesses;
@@ -181,7 +177,7 @@ class Search {
     for (int i  = businesses.size(); counter < 20; i--) {
       if (!gotStarsFor.contains(businesses.get(i-1).getBusinessName())) {
         gotStarsFor.add(businesses.get(i-1).getBusinessName());
-        int amountOfReviews = amountOfReviews(businesses.get(i-1).getBusinessName());
+        int amountOfReviews = amountOfReviews(businesses.get(i-1).getBusinessName().toLowerCase());
         top20Businesses[counter] = ((counter+1)+")  "+businesses.get(i-1).getBusinessName()+"  ("+businesses.get(i-1).getAverageStarsOfBusiness()+"*)  "+amountOfReviews+"-Review(s)");
         counter++;
       }
@@ -248,7 +244,7 @@ class Search {
   int amountOfReviews(String businessName) {
     int amountOfReviews = 0;
     for (Review review : reviews) {
-      if (review.getBusiness().equals(businessName)) {
+      if (review.getBusiness().toLowerCase().equals(businessName)) {
         amountOfReviews++;
       }
     }
