@@ -30,6 +30,7 @@ final int EVENT_BUTTON7=7;
 final int EVENT_BUTTON8=8;
 final int EVENT_BUTTON9=9;
 final int EVENT_BUTTON10 = 10;
+final int EVENT_BUTTON11 = 11;
 final int RADIOBUTTONX=50;
 final int TOPSTARSY=200;
 final int MOSTREVIEWEDY=280;
