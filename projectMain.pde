@@ -467,8 +467,18 @@ void mousePressed() {
         displayBusinessScreen();
       }
     }
+    break;
 
-  default:
+  case EVENT_BUTTON12:
+    for (int i = 0; i < leaderboardRungList.size(); i++) {
+      if (leaderboardRungList.get(i).rowInTable.getEvent(mouseX, mouseY) != EVENT_NULL) {
+        searchbox.myText = leaderboardRungList.get(i).getBusinessName();
+        displayBusinessScreen();
+      }
+    }
+    break;
+
+ default:
     if (drawGraph) {
       listReviews=false;
     } else {  
@@ -620,8 +630,39 @@ void displayBusinessScreen() {
     }
   } 
 
-
-  //draws the amount of the stars the business searched has if business is in data base - Claire
+//draws the amount of the stars the business searched has if business is in data base - Claire
   displayBusinessStarsChart(searchedBusinesses);
   println(searchbox.myText);
+}
+
+// this method creates an arraylist of leaderboard rungs containing the highest rated businesses-Ruairi
+ArrayList<LeadersTable> initTopBusinesses() {
+  Business[] topBusinesses = search.getTop15Businesses();
+  leaderboardRungList = new ArrayList<LeadersTable>();
+  int ranking = 1;
+  int x=800;
+  int y=320;
+  topBusinessesHeader = new TitleBox(x, y-70, 450, 40, 20, 20, color(HIGHLIGHT, 127), DEFAULT_TEXT_COLOUR, color(255), font, "Top Rated Businesses", 5);
+  for (int i=0; i<topBusinesses.length; i++) {
+    String currentBusinessName = topBusinesses[i].getBusinessName();
+    //if business name is too long to fit in row, following method will decrease its size
+    if (currentBusinessName.length()>=29) {
+      currentBusinessName = currentBusinessName.substring(0, Math.min(currentBusinessName.length(), 28));
+      currentBusinessName+="..";
+    }
+    LeadersTable rung = new LeadersTable(x, y, ranking, currentBusinessName, topBusinesses[i].getAverageStarsOfBusiness());
+    ranking++;
+    y+=30;
+    leaderboardRungList.add(rung);
+  }
+  return leaderboardRungList;
+}
+
+
+// this method draws the arrayList that was created above-Ruairi
+void drawTopBusinessTable() {
+  topBusinessesHeader.draw();
+  for (int i=0; i<leaderboardRungList.size(); i++) {
+    leaderboardRungList.get(i).draw();
+  }
 }
