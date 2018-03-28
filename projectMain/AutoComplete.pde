@@ -8,13 +8,16 @@ public class AutoComplete {
     this.terms = terms;
   }
 
-  public ArrayList<String> getMatches(String prefix) {
+  public String[] getMatches(String prefix) {
     ArrayList<String> matches = new ArrayList<String>();
     for (String term : terms) {
       if (term.toLowerCase().startsWith(prefix.toLowerCase())) {
         matches.add(term);
       }
     }
-    return matches;
+    println(matches);
+    String[] matchesArray = matches.toArray(new String[matches.size()]);
+    //println(matchesArray[1]);
+    return matchesArray;
   }
 }
