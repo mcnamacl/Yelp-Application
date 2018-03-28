@@ -34,7 +34,7 @@ ArrayList<Business> searchedBusinesses;
 ArrayList<Business> reviewsPerMonth;
 
 Table table;
-PFont font, widgetFont, barFont, businessFont;
+PFont font, widgetFont, barFont, businessFont, autoCompleteFont;
 Search search;
 ControlP5 cp5;
 ControlP5 cp5AutoComplete;
@@ -75,6 +75,7 @@ void setup() {
   yellowStar=loadImage("yellowStar1small.png");
   greyStar=loadImage("greyStar1small.png");
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
+  autoCompleteFont=loadFont("Candara-15.vlw");
   searchbox=new Widget(SEARCHBOXX, SEARCHBOXY, SEARCHBOXWIDTH, SEARCHBOXHEIGHT, myText, color(190), widgetFont, EVENT_BUTTON1, 5, 5);
   searchButton=new Widget(SEARCHBUTTONX, SEARCHBUTTONY, SEARCHBUTTONWIDTH, SEARCHBOXHEIGHT, "", color(0), widgetFont, EVENT_BUTTON10, 0, 0);
   leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(190), widgetFont, EVENT_BUTTON3, 20, 20);
@@ -136,7 +137,7 @@ void setup() {
   recentReviews = initRecentReviewBoxes();
   leaderboardRungList = initTopBusinesses();
 
-  ControlFont font = new ControlFont(widgetFont, 241);
+  //ControlFont font = new ControlFont(widgetFont, 241);
 
   cp5 = new ControlP5(this);
   cp5.addScrollableList("TopTwenty")
@@ -148,7 +149,7 @@ void setup() {
     // .addItems(reviewsString)     add full reviews
     .open()
     .addItems(search.getTop20Businesses())
-    //.setFont(font)
+    .setFont(widgetFont)
     .setScrollSensitivity(100.0)
     .setCaptionLabel("Top 20 rated businesses")
     .setColorCaptionLabel(HIGHLIGHT)
@@ -161,7 +162,7 @@ void setup() {
     .setBarVisible(false)
     .setItemHeight(AUTOCOMPLETE_QUERY_HEIGHT)
     .open()
-    //.setFont(widgetFont)
+    .setFont(autoCompleteFont)
     .setColorCaptionLabel(HIGHLIGHT)
     .setColorBackground(REVIEWLISTCOLOR);
 }
@@ -169,9 +170,7 @@ void setup() {
 
 void draw() {
   background(255);
-
   fill(#0004B4);
-  noStroke();
   currentScreen.draw();
   if (currentScreen==leaderboardsScreen) {
     fill(0);
@@ -187,6 +186,7 @@ void draw() {
    stroke(100);
    strokeWeight(5);*/
   fill(100);
+  noStroke();
   rect(0, 70, SCREENX, 5);
   fill(0);
   rect(0, 0, SCREENX, 70);
@@ -218,6 +218,12 @@ void draw() {
     drawTopBusinessTable();
     cam.setActive(false);
     listReviews=false;
+    fill(HIGHLIGHT, 180);
+    noStroke();
+    rect(797,247,456,46);
+    rect(97,167,386,66);
+    drawRecentReviewBoxes();
+    drawTopBusinessTable();
   }
 
   //draws the relevant bar chart - Claire
@@ -259,7 +265,6 @@ void draw() {
     displayBusinessScreen();
   }
   if (currentScreen==businessScreen) {
-    noStroke();
     fill(HIGHLIGHT);
     rect(BUSINESSNAMEX-50, BUSINESSNAMEY+10, 900, 1);
     fill(255);
@@ -302,6 +307,9 @@ void mouseMoved() {
 
 void keyPressed() {
   if (canType) {
+    if(searchbox.myText!=null){
+      cp5AutoComplete.get(ScrollableList.class, "Autocomplete").show();
+    }
     if (key == DELETE) {
       searchbox.myText = "";
       cp5AutoComplete.get(ScrollableList.class, "Autocomplete").hide();
@@ -351,6 +359,7 @@ void mousePressed() {
     currentScreen=homeScreen;
     listReviews=false;
     selected=null;
+    cp5AutoComplete.get(ScrollableList.class, "Autocomplete").hide();
     break; 
 
   default:
@@ -359,6 +368,7 @@ void mousePressed() {
     if (searchbox.myText=="") {
       searchbox.myText="Search...";
     }
+    cp5AutoComplete.get(ScrollableList.class, "Autocomplete").hide();
     break;
   }
 
@@ -468,6 +478,7 @@ void mousePressed() {
     if (searchbox.myText=="") {
       searchbox.myText="Search...";
     }
+    cp5AutoComplete.get(ScrollableList.class, "Autocomplete").hide();
     break;
   }
 }
