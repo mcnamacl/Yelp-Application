@@ -23,7 +23,8 @@ class TitleBox {
   }
   
   void draw(){
-    stroke(strokeColor);
+    //stroke(strokeColor);
+    noStroke();
     strokeWeight(strokeWeight);
     fill(widgetColor);
     rect(x, y, width, height);
