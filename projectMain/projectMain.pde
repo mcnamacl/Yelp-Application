@@ -220,8 +220,8 @@ void draw() {
     listReviews=false;
     fill(HIGHLIGHT, 180);
     noStroke();
-    rect(797,247,456,46);
-    rect(97,167,386,66);
+    rect(797, 247, 456, 46);
+    rect(97, 167, 386, 66);
     drawRecentReviewBoxes();
     drawTopBusinessTable();
   }
@@ -307,7 +307,7 @@ void mouseMoved() {
 
 void keyPressed() {
   if (canType) {
-    if(searchbox.myText!=null){
+    if (searchbox.myText!=null) {
       cp5AutoComplete.get(ScrollableList.class, "Autocomplete").show();
     }
     if (key == DELETE) {
@@ -478,7 +478,7 @@ void mousePressed() {
     }
     break;
 
- default:
+  default:
     if (drawGraph) {
       listReviews=false;
     } else {  
@@ -607,9 +607,8 @@ void drawRecentReviewBoxes() {
 
 void displayBusinessScreen() {
   currentScreen=businessScreen;
-  searchedBusinesses = search.searchBusinessList(searchbox.myText);
   drawGraph = true;
-  println(searchbox.myText);
+  searchedBusinesses = search.searchBusinessList(searchbox.myText);
   if (searchedBusinesses.size() != 0||selected!=null) {
     year = 2016;
     listReviews = false;
@@ -629,9 +628,13 @@ void displayBusinessScreen() {
       rating = Double.toString(search.getAverageStarsOfBusiness(searchedBusinesses.get(0).getBusinessName()));
     }
   } 
-
-//draws the amount of the stars the business searched has if business is in data base - Claire
+  //draws the amount of the stars the business searched has if business is in data base - Claire
   displayBusinessStarsChart(searchedBusinesses);
+  
+  for (Business business : searchedBusinesses) {
+      println(business.searchedFor);
+      business.searchedFor = true;
+    }
   println(searchbox.myText);
 }
 

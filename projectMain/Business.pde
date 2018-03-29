@@ -5,39 +5,42 @@ class Business {
   int month ;
   private ArrayList<Review> businessReviews;
   private int[] stars = new int[5];
-  private int amountOfReviews;
-  private double averageStars;
-  
-  
- // constructor for a particular branch of a business - Claire/Tom
+  private int amountOfReviews;  
+  boolean searchedFor;
+  ArrayList<Review> allReviews;
+
+  // constructor for a particular branch of a business - Claire/Tom
   public Business(String businessName, String businessId) {
     this.businessName = businessName;
     this.businessId = businessId;
     this.businessReviews = new ArrayList<Review>(); 
-    
+    searchedFor = false;
+
     //gets the amount of stars in the relevant category for the business - Claire
     for (int i = 0; i < stars.length; i++) {
       stars[i] = 0;
     }
   }
 
-// constructors for all branchs of a business - Claire
-  public Business(String businessName, int amountOfReviews) {
+  // constructors for all branchs of a business - Claire
+  public Business(String businessName, int amountOfReviews, boolean searchedFor) {
     this.amountOfReviews = amountOfReviews;
     this.businessName = businessName;
+    this.searchedFor = searchedFor;
   }
-  
-  public Business(String businessName, int amountOfReviews, int month){
+
+  public Business(String businessName, int amountOfReviews, int month, boolean searchedFor) {
     this.amountOfReviews = amountOfReviews;
     this.businessName = businessName;
     this.month = month;
+    this.searchedFor = searchedFor;
   }
-  
+
   int getMonth() {
     return month;
   }
-  
-  public int returnAmountOfReviews(){
+
+  public int returnAmountOfReviews() {
     return amountOfReviews;
   }
 
@@ -62,16 +65,17 @@ class Business {
     }
     return businessReviews;
   }
-  
+
   //returns arraylist of how many stars in each category a business has 
-  public int[] returnStars(){ 
+  public int[] returnStars() { 
     getReviews();
-    println(businessReviews.size());
-    for (Review review : businessReviews){
-      int placeInArray = review.getStars();
-      stars[placeInArray-1]++;
+    println(searchedFor + " YElp");
+    if (!searchedFor) {
+      for (Review review : businessReviews) {
+        int placeInArray = review.getStars();
+        stars[placeInArray-1]++;
+      }
     }
-    //println(stars);
     return stars;
   }
 
@@ -86,7 +90,7 @@ class Business {
     }
   }
 
-//get the average stars of the business - Claire/Tom
+  //get the average stars of the business - Claire/Tom
   double getAverageStarsOfBusiness() {
     ArrayList<Review> businessReviews = businessReviewMap.get(businessName);
     double total = 0;
@@ -100,11 +104,11 @@ class Business {
     return Double.parseDouble(String.format("%.2f", total/count));
   }
 
-//returns amount of reviews a business has - Claire
+  //returns amount of reviews a business has - Claire
   int amountOfReviews() {
-    ArrayList<Review> allReviews = new ArrayList<Review>();
+    allReviews = new ArrayList<Review>();
     for (Review review : reviews) { 
-      if (review.getBusiness().equals(businessName)){
+      if (review.getBusiness().equals(businessName)) {
         allReviews.add(review);
       }
     }
