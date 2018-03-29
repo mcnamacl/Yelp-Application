@@ -35,12 +35,12 @@ class Search {
     println(businesses);
   }
 
-
+  // sorts by most recent reviews - Tom
   public ArrayList<Review> mostRecentReview(ArrayList<Review> reviews) {
     Collections.sort(reviews, new SortByDate());
     return reviews;
   } 
-
+  // sorts by name - Tom
   public ArrayList<Review> sortBusinessByName(ArrayList<Review> reviews) {
     Collections.sort(reviews, new SortByName());
     return reviews;
@@ -95,7 +95,7 @@ class Search {
   }
 
 
-  // Initialises map of business and that business's reviews 
+  // Initialises map of business and that business's reviews -Tom
   void createBusinessAZMap() {
     for (Business business : businesses) {
       businessNames.add(business.getBusinessName());
