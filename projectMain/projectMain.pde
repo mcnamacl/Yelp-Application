@@ -149,12 +149,13 @@ void setup() {
     // .addItems(reviewsString)     add full reviews
     .open()
     .addItems(search.getTop20Businesses())
-    .setFont(widgetFont)
+    //.setFont(widgetFont)
     .setScrollSensitivity(100.0)
     .setCaptionLabel("Top 20 rated businesses")
     .setColorCaptionLabel(HIGHLIGHT)
     .setColorBackground(REVIEWLISTCOLOR);
-
+    
+// controlP5 object for AutoComplete feature - Tom
   cp5AutoComplete = new ControlP5(this);
   cp5AutoComplete.addScrollableList("Autocomplete")
     .setPosition(AUTOCOMPLETE_X, AUTOCOMPLETE_Y)
@@ -162,7 +163,7 @@ void setup() {
     .setBarVisible(false)
     .setItemHeight(AUTOCOMPLETE_QUERY_HEIGHT)
     .open()
-    .setFont(autoCompleteFont)
+    //.setFont(autoCompleteFont)
     .setColorCaptionLabel(HIGHLIGHT)
     .setColorBackground(REVIEWLISTCOLOR);
 }
@@ -204,8 +205,6 @@ void draw() {
 
   searchbox.draw();
   homeButton.drawImage();
-
-  autoCompleteOpen = false;
 
   //draws the pie chart for a user - Claire
   if (drawPieChart) {
@@ -282,6 +281,7 @@ void TopTwenty(int index) {
   selected = cp5.get(ScrollableList.class, "TopTwenty").getItem(index).get("name").toString();
 }
 
+// gets selected AutoComplete business name and enters it into search bar
 void Autocomplete(int index) {
   selectedAC = cp5AutoComplete.get(ScrollableList.class, "Autocomplete").getItem(index).get("name").toString();
   canType = true;
@@ -497,7 +497,7 @@ void mousePressed() {
 void loadData() {
   for (TableRow row : table.rows()) {
     DataPoint dp = new DataPoint(row.getString(0), row.getString(1), row.getString(2), row.getString(3), 
-      row.getInt(4), row.getString(5), row.getString(6), row.getInt(7), row.getInt(8), row.getInt(9));
+      row.getInt(4), row.getString(5), row.getString(6), row.getInt(7), row.getInt(8), row.getInt(9), row.getDouble(10), row.getDouble(11));
     dataPoints.add(dp);
   }
 }
@@ -508,7 +508,7 @@ void loadReviewBusiness() {
     String review=(dp.getUserName()+" "+dp.getUserId()+" "+dp.getBusinessName()+" "+dp.getBusinessId()+" "+dp.getStars()+"\n "+dp.getText()+"\n "+dp.getDate()+" "+dp.getUseful()+" "+dp.getFunny()+" "+dp.getCool());
     reviews.add(new Review(dp.getUserName(), dp.getUserId(), dp.getBusinessName(), dp.getBusinessId(), dp.getStars(), dp.getText(), dp.getDate(), dp.getUseful(), dp.getFunny(), dp.getCool()));
     reviewsString.add(review);
-    businesses.add(new Business(dp.getBusinessName(), dp.getBusinessId()));
+    businesses.add(new Business(dp.getBusinessName(), dp.getBusinessId(), dp.getLongitude(), dp.getLatitude()));
   }
 }
 

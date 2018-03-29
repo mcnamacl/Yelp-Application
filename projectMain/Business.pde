@@ -5,14 +5,18 @@ class Business {
   int month ;
   private ArrayList<Review> businessReviews;
   private int[] stars = new int[5];
-  private int amountOfReviews;  
-  boolean searchedFor;
-  ArrayList<Review> allReviews;
-
-  // constructor for a particular branch of a business - Claire/Tom
-  public Business(String businessName, String businessId) {
+boolean searchedFor;
+  ArrayList<Review> allReviews;private double averageStars;
+  private double longitude;
+  private double latitude;
+  private int amountOfReviews;
+  
+ // constructor for a particular branch of a business - Claire/Tom
+  public Business(String businessName, String businessId, double longitude, double latitude) {
     this.businessName = businessName;
     this.businessId = businessId;
+    this.longitude = longitude;
+    this.latitude = latitude;
     this.businessReviews = new ArrayList<Review>(); 
     searchedFor = false;
 

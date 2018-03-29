@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 
+// Takes set of terms to autocomplete and sees if a given prefix matches any - Tom
 public class AutoComplete {
 
   Set<String> terms;
@@ -17,7 +18,6 @@ public class AutoComplete {
     }
     println(matches);
     String[] matchesArray = matches.toArray(new String[matches.size()]);
-    //println(matchesArray[1]);
     return matchesArray;
   }
 }
