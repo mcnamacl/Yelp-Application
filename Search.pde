@@ -24,13 +24,6 @@ class Search {
     return foundBusinesses;
   }
 
-  /*public void initAmountOfReviews() {
-   for (String business : businessReviewMap.keySet()) {
-   int numberOfReviews = businessReviewMap.get(business).size();
-   businessAmountOfReviews.put(business, numberOfReviews);
-   }
-   }*/
-
   public void printBusinesses() {
     String businesses = ""; 
     Set<String> keys = businessReviewMap.keySet(); 
@@ -88,15 +81,15 @@ class Search {
     int[] starsForBusinesses = new int[5];
     int[] tmpStarsForBusinesses = new int[5];
     ArrayList<String> businessesWithReviewsGotten = new ArrayList<String>();
-    for (Business business : searchedBusinesses) {
-      if (!businessesWithReviewsGotten.contains(business.getBusinessId())) {
-        businessesWithReviewsGotten.add(business.getBusinessId());
-        tmpStarsForBusinesses = business.returnStars();
-        for (int i = 0; i < tmpStarsForBusinesses.length; i++) {
-          int tmpN = starsForBusinesses[i] + tmpStarsForBusinesses[i];
-          starsForBusinesses[i] = tmpN;
+      for (Business business : searchedBusinesses) {
+        if (!businessesWithReviewsGotten.contains(business.getBusinessId())) {
+          businessesWithReviewsGotten.add(business.getBusinessId());
+          tmpStarsForBusinesses = business.returnStars();
+          for (int i = 0; i < tmpStarsForBusinesses.length; i++) {
+            int tmpN = starsForBusinesses[i] + tmpStarsForBusinesses[i];
+            starsForBusinesses[i] = tmpN;
+          }
         }
-      }
     }
     return starsForBusinesses;
   }
@@ -151,8 +144,8 @@ class Search {
     }
     return topTenBusinesses;
   }
-  
-    //gets the top 15 rated businesses - Claire (adapted by Ruairi)
+
+  //gets the top 15 rated businesses - Claire (adapted by Ruairi)
   public Business[] getTop15Businesses() {
     Business[] top15Businesses = new Business[15];
     sortBusinesses();
@@ -223,7 +216,7 @@ class Search {
           counter++;
         }
       }
-      Business business = new Business(key, counter);
+      Business business = new Business(key, counter, false);
       amountOfReviewsPerBusiness.add(business);
     }   
     Collections.sort(amountOfReviewsPerBusiness, new SortByAmountOfReviews());
@@ -241,7 +234,7 @@ class Search {
   }
 
   //returns the amount of reviews for all branches of a business - Claire
-  int amountOfReviews(String businessName) {
+  int amountOfReviews(String businessName) {   
     int amountOfReviews = 0;
     for (Review review : reviews) {
       if (review.getBusiness().toLowerCase().equals(businessName)) {
@@ -283,11 +276,22 @@ class Search {
           counter++;
         }
       } 
-      Business tmpBusiness = new Business(name, counter, intMonth);
+      Business tmpBusiness = new Business(name, counter, intMonth, false);
       reviewsPerMonth.add(tmpBusiness);
       sortReviewsMonth.clear();
     }
     return reviewsPerMonth;
+  }
+
+  ArrayList<Review> getReviewsForBusiness(String businessName) {
+    businessName = businessName.toLowerCase();
+    ArrayList<Review> reviewsForBusiness = new ArrayList<Review>();
+    for (Review review : reviews) {
+      if (review.getBusiness().toLowerCase().equals(businessName)) {
+        reviewsForBusiness.add(review);
+      }
+    }
+    return reviewsForBusiness;
   }
 }
 
