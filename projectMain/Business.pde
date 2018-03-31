@@ -5,14 +5,15 @@ class Business {
   int month ;
   private ArrayList<Review> businessReviews;
   private int[] stars = new int[5];
-boolean searchedFor;
-  ArrayList<Review> allReviews;private double averageStars;
-  private double longitude;
-  private double latitude;
+  boolean searchedFor;
+  ArrayList<Review> allReviews;
+  private double averageStars;
+  private float longitude;
+  private float latitude;
   private int amountOfReviews;
-  
- // constructor for a particular branch of a business - Claire/Tom
-  public Business(String businessName, String businessId, double longitude, double latitude) {
+
+  // constructor for a particular branch of a business - Claire/Tom
+  public Business(String businessName, String businessId, float longitude, float latitude) {
     this.businessName = businessName;
     this.businessId = businessId;
     this.longitude = longitude;
@@ -58,6 +59,14 @@ boolean searchedFor;
 
   public ArrayList<Review>getBusinessReviews() {
     return businessReviews;
+  }
+  
+  public float getLongitude() {
+    return this.longitude;
+  }
+  
+  public float getLatitude() {
+    return this.latitude;
   }
 
   //gets all the reviews for a particular business - Claire

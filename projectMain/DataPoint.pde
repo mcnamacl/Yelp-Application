@@ -10,10 +10,10 @@ class DataPoint {
   private int useful;
   private int funny;
   private int cool;
-  private double longitude;
-  private double latitude;
+  private float longitude;
+  private float latitude;
 
-  public DataPoint(String userId, String userName, String businessId, String businessName, int stars, String date, String text, int useful, int funny, int cool, double longitude, double latitude) {
+  public DataPoint(String userId, String userName, String businessId, String businessName, int stars, String date, String text, int useful, int funny, int cool, float longitude, float latitude) {
     this.userId = userId;
     this.userName = userName;
     this.businessId = businessId;
@@ -68,11 +68,11 @@ class DataPoint {
     return cool;
   }
   
-  public double getLongitude() {
+  public float getLongitude() {
     return this.longitude;
   }
   
-  public double getLatitude() {
+  public float getLatitude() {
     return this.latitude;
   }
   

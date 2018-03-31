@@ -21,6 +21,11 @@ final int AUTOCOMPLETE_WIDTH = SEARCHBOXWIDTH;
 final int AUTOCOMPLETE_QUERY_HEIGHT = 50;
 final int AUTOCOMPLETE_NUM_QUERIES = 5;
 
+final int MAP_HEIGHT = 600;
+final int MAP_WIDTH = 1200;
+final int MAP_X = 600;
+final int MAP_Y = 0;
+
 final int SEARCHBUTTONWIDTH=50;
 final int SEARCHBUTTONX=438;
 final int SEARCHBUTTONY=15;
