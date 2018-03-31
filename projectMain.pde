@@ -11,7 +11,8 @@ import controlP5.*;
 import java.util.*;
 
 ArrayList<ReviewBox> recentReviews;
-boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false, drawLineChart = false, listReviews=false, showTopStars=false, showMostReviewed=false, showUseful=false, showFunny=false, showCool=false;
+boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false, drawLineChart = false, listReviews=false, showTopStars=false, showMostReviewed=false, showUseful=false, showFunny=false, showCool=false,
+          drawMap = false; // <==== to draw map onto home screen change to true 
 
 PFont stdFont;
 PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, backgroundPhotoBusiness, halfStar;
@@ -41,6 +42,8 @@ ControlP5 cp5AutoComplete;
 AutoComplete autoComplete;
 String[] autoCompleteResults;
 boolean autoCompleteOpen;
+
+WorldMap map;
 
 //charts/3D viewing - Claire
 BusinessBarChart barchart;
@@ -154,8 +157,8 @@ void setup() {
     .setCaptionLabel("Top 20 rated businesses")
     .setColorCaptionLabel(HIGHLIGHT)
     .setColorBackground(REVIEWLISTCOLOR);
-    
-// controlP5 object for AutoComplete feature - Tom
+
+  // controlP5 object for AutoComplete feature - Tom
   cp5AutoComplete = new ControlP5(this);
   cp5AutoComplete.addScrollableList("Autocomplete")
     .setPosition(AUTOCOMPLETE_X, AUTOCOMPLETE_Y)
@@ -166,6 +169,8 @@ void setup() {
     //.setFont(autoCompleteFont)
     .setColorCaptionLabel(HIGHLIGHT)
     .setColorBackground(REVIEWLISTCOLOR);
+
+  map = new WorldMap();
 }
 
 
@@ -275,6 +280,9 @@ void draw() {
   }
   selected = null;
   selectedAC = null;
+  if (drawMap) {
+    map.drawMap();
+  }
 }
 
 void TopTwenty(int index) {
@@ -497,7 +505,7 @@ void mousePressed() {
 void loadData() {
   for (TableRow row : table.rows()) {
     DataPoint dp = new DataPoint(row.getString(0), row.getString(1), row.getString(2), row.getString(3), 
-      row.getInt(4), row.getString(5), row.getString(6), row.getInt(7), row.getInt(8), row.getInt(9), row.getDouble(10), row.getDouble(11));
+      row.getInt(4), row.getString(5), row.getString(6), row.getInt(7), row.getInt(8), row.getInt(9), row.getFloat(10), row.getFloat(11));
     dataPoints.add(dp);
   }
 }
@@ -630,11 +638,11 @@ void displayBusinessScreen() {
   } 
   //draws the amount of the stars the business searched has if business is in data base - Claire
   displayBusinessStarsChart(searchedBusinesses);
-  
+
   for (Business business : searchedBusinesses) {
-      println(business.searchedFor);
-      business.searchedFor = true;
-    }
+    println(business.searchedFor);
+    business.searchedFor = true;
+  }
   println(searchbox.myText);
 }
 

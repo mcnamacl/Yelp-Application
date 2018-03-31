@@ -34,6 +34,22 @@ class Search {
     businesses += "."; 
     println(businesses);
   }
+  
+  public ArrayList<Float> getLatitudes() {
+    ArrayList<Float> latitudes = new ArrayList<Float>();
+    for (Business business : businesses) {
+      latitudes.add(business.getLatitude());
+    }
+    return latitudes;
+  }
+  
+  public ArrayList<Float> getLongitudes() {
+    ArrayList<Float> longitudes = new ArrayList<Float>();
+    for (Business business : businesses) {
+      longitudes.add(business.getLongitude());
+    }
+    return longitudes;
+  }
 
   // sorts by most recent reviews - Tom
   public ArrayList<Review> mostRecentReview(ArrayList<Review> reviews) {
