@@ -1,6 +1,7 @@
+// A base class for the screen - Kamil
 class Screen {
   color backgroundColor;
-  ArrayList <Widget> homescreenWidgets;
+  ArrayList <Widget> screenWidgets;
   int event;
   PImage backgroundImage;
   String type;
@@ -8,14 +9,14 @@ class Screen {
   Screen(color backgroundColor, ArrayList widgetList) {
     type = "colour";
     this.backgroundColor=backgroundColor;
-    this.homescreenWidgets=widgetList;
+    this.screenWidgets=widgetList;
   }
   
    Screen(PImage backgroundImage, ArrayList widgetList) {
     type = "image";
     this.backgroundImage=backgroundImage;
     backgroundImage.resize(SCREENX, SCREENY);
-    this.homescreenWidgets=widgetList;
+    this.screenWidgets=widgetList;
   }
   
   
@@ -26,34 +27,35 @@ class Screen {
     else {
       background(backgroundImage);
     }
-    for (int i = 0; i<homescreenWidgets.size(); i++) {
-      Widget aWidget = (Widget)homescreenWidgets.get(i);
+    for (int i = 0; i<screenWidgets.size(); i++) {
+      Widget aWidget = (Widget)screenWidgets.get(i);
       aWidget.draw();
     }
   }
   
   void addWidget(Widget w){
-    homescreenWidgets.add(w);
+    screenWidgets.add(w);
   }
   
   
   Widget getWidget(int index){
-    return homescreenWidgets.get(index);
+    return screenWidgets.get(index);
   }
   
-   int getEvent(int mouseX, int mouseY){
-      for(int i=0; i<homescreenWidgets.size();i++){
-       if(mouseX>homescreenWidgets.get(i).x && mouseX < homescreenWidgets.get(i).x+homescreenWidgets.get(i).width && mouseY >homescreenWidgets.get(i).y && mouseY <homescreenWidgets.get(i).y+homescreenWidgets.get(i).height){
-         return homescreenWidgets.get(i).event;
+  int getEvent(int mouseX, int mouseY){
+      for(int i=0; i<screenWidgets.size();i++){
+       if(mouseX>screenWidgets.get(i).x && mouseX < screenWidgets.get(i).x+screenWidgets.get(i).width && mouseY >screenWidgets.get(i).y && mouseY <screenWidgets.get(i).y+screenWidgets.get(i).height){
+         return screenWidgets.get(i).event;
      }
       }
      return EVENT_NULL;
   }
   
+  // checks if mouse hovers over a widget
   boolean hover(int mouseX, int mouseY){
-      for(int i=0; i<homescreenWidgets.size();i++){
-       if(mouseX>homescreenWidgets.get(i).x && mouseX < homescreenWidgets.get(i).x+homescreenWidgets.get(i).width && mouseY >homescreenWidgets.get(i).y && mouseY <homescreenWidgets.get(i).y+homescreenWidgets.get(i).height){
-         return homescreenWidgets.get(i).hover;
+      for(int i=0; i<screenWidgets.size();i++){
+       if(mouseX>screenWidgets.get(i).x && mouseX < screenWidgets.get(i).x+screenWidgets.get(i).width && mouseY >screenWidgets.get(i).y && mouseY <screenWidgets.get(i).y+screenWidgets.get(i).height){
+         return screenWidgets.get(i).hover;
      }
       }
      return false;

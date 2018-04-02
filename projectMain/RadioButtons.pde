@@ -1,3 +1,4 @@
+// A radio button class which is an extension of the main widget class - Kamil
 class RadioButton extends Widget {
   int x, y, width, height;
   String label; 
