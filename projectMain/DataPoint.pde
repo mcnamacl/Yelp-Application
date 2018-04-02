@@ -12,8 +12,10 @@ class DataPoint {
   private int cool;
   private float longitude;
   private float latitude;
-
-  public DataPoint(String userId, String userName, String businessId, String businessName, int stars, String date, String text, int useful, int funny, int cool, float longitude, float latitude) {
+ 
+ 
+ //public DataPoint(String userId, String userName, String businessId, String businessName, int stars, String date, String text, int useful, int funny, int cool){
+ public DataPoint(String userId, String userName, String businessId, String businessName, int stars, String date, String text, int useful, int funny, int cool, float longitude, float latitude) {
     this.userId = userId;
     this.userName = userName;
     this.businessId = businessId;

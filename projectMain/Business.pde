@@ -10,11 +10,13 @@ class Business {
   private double averageStars;
   private float longitude;
   private float latitude;
-  private int amountOfReviews;
-
+  private int amountOfReviews;  
+ // constructor for a particular branch of a business - Claire/Tom
+  
+   // public Business(String businessName, String businessId) {                                //my old one
   // constructor for a particular branch of a business - Claire/Tom
   public Business(String businessName, String businessId, float longitude, float latitude) {
-    this.businessName = businessName;
+  this.businessName = businessName;
     this.businessId = businessId;
     this.longitude = longitude;
     this.latitude = latitude;
@@ -82,7 +84,7 @@ class Business {
   //returns arraylist of how many stars in each category a business has 
   public int[] returnStars() { 
     getReviews();
-    println(searchedFor + " YElp");
+    println(searchedFor + " Yelp");
     if (!searchedFor) {
       for (Review review : businessReviews) {
         int placeInArray = review.getStars();

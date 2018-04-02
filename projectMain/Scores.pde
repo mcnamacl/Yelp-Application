@@ -35,7 +35,8 @@ class Scores {
         textSize(20);
         text(months[i], (float)x, (float)y);
         popMatrix();
-        x+=60;
+        x+=38;
+        //x+=60;                                                                        ////////////////////////////////////////////// distance between month labels on line chart
       }
     }
   }
