@@ -1,7 +1,5 @@
-import controlP5.*;  //<>// //<>//
-
+import controlP5.*;   //<>//
 import peasy.PeasyCam;
-
 import java.util.Set;
 import java.util.HashSet;
 import java.util.TreeMap;
@@ -10,38 +8,46 @@ import java.util.Arrays;
 import controlP5.*;
 import java.util.*;
 
-ArrayList<ReviewBox> recentReviews;
-boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false, drawLineChart = false, listReviews=false, showTopStars=false, showMostReviewed=false, showUseful=false, showFunny=false, showCool=false,
-          drawMap = false; // <==== to draw map onto home screen change to true 
+boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false, drawLineChart = false, drawStarChart=false, listReviews=false, showTopStars=false, showMostReviewed=false, showUseful=false, showFunny=false, 
+        showCool=false, businessFound=false, drawMap = false, autoCompleteOpen; // <==== to draw map onto home screen change to true ;
 
-PFont stdFont;
-PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, backgroundPhotoBusiness, halfStar;
-Widget searchbox, searchButton, homeButton, leaderboardsButton, mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, authorPieChart;
-TitleBox recentReviewsHeader, topBusinessesHeader;
+int year;
+
 String myText = "Search...";  
-String searchText, selected, rating, reviewAmount, totalReviewsForYear, selectedAC;
+String searchText, selected, rating, reviewAmount, totalReviewsForYear, selectedAC, selectedReview, businessName;
+        
+PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, backgroundPhotoBusiness, halfStar;
+
+Widget searchbox, searchButton, homeButton, leaderboardsButton, authorPieChart;//, barChartGraph, lineChartGraph;
+RadioButton mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, barChartGraph, lineChartGraph;
+TitleBox recentReviewsHeader, topBusinessesHeader;
 Screen currentScreen, homeScreen, leaderboardsScreen, businessScreen;
+
 ArrayList<DataPoint> dataPoints;
 ArrayList<Review> reviews;
-ArrayList<Business> businesses = new ArrayList<Business>();
 ArrayList<Screen> screens = new ArrayList<Screen>();
 ArrayList<Widget> homescreenWidgets = new ArrayList<Widget>();
 ArrayList<Widget> leaderboardsWidgets = new ArrayList<Widget>();
 ArrayList<Widget> businessWidgets = new ArrayList<Widget>();
 ArrayList<String> reviewsString, topBusinesses;
-ArrayList<ReviewBox> listOfRecentReviews;
+ArrayList<String>reviewHeaders;
+ArrayList<String>reviewTexts;
 ArrayList<LeadersTable> leaderboardRungList;
+ArrayList<Business> businesses = new ArrayList<Business>();
 ArrayList<Business> searchedBusinesses;
 ArrayList<Business> reviewsPerMonth;
-
+ArrayList<ReviewBox> recentReviews;
+ArrayList<ReviewBox> listOfRecentReviews;
 Table table;
+String[] autoCompleteResults;
+
 PFont font, widgetFont, barFont, businessFont, autoCompleteFont;
+
 Search search;
 ControlP5 cp5;
 ControlP5 cp5AutoComplete;
+ControlP5 cp5Reviews;
 AutoComplete autoComplete;
-String[] autoCompleteResults;
-boolean autoCompleteOpen;
 
 WorldMap map;
 
@@ -51,11 +57,11 @@ LineGraph lineGraph;
 PieChart pieChart;
 PeasyCam cam;
 
-int year;
-
 PApplet mainClass = this;
 
 Author author;
+
+
 
 void settings() {
   size(SCREENX, SCREENY, P3D);
@@ -69,16 +75,18 @@ void setup() {
   cam.setActive(false);
 
   halfStar = loadImage("halfStar1small.png");
-  backgroundPhoto = loadImage("background photo.jpg");
-  //backgroundPhotoLeaderBoards = loadImage("leaderboards photo.jpg");
+  backgroundPhoto = loadImage("backgroundblur.jpg");
   backgroundPhotoLeaderBoards = loadImage("buildingblur.png");
   backgroundPhotoBusiness= loadImage("businessscreen.png");
   logoImage=loadImage("logo.png");
   searchImage=loadImage("search.png");
   yellowStar=loadImage("yellowStar1small.png");
   greyStar=loadImage("greyStar1small.png");
+  
   widgetFont=loadFont("Arial-ItalicMT-17.vlw");
   autoCompleteFont=loadFont("Candara-15.vlw");
+  font = loadFont("Calibri-BoldItalic-48.vlw");
+  
   searchbox=new Widget(SEARCHBOXX, SEARCHBOXY, SEARCHBOXWIDTH, SEARCHBOXHEIGHT, myText, color(190), widgetFont, EVENT_BUTTON1, 5, 5);
   searchButton=new Widget(SEARCHBUTTONX, SEARCHBUTTONY, SEARCHBUTTONWIDTH, SEARCHBOXHEIGHT, "", color(0), widgetFont, EVENT_BUTTON10, 0, 0);
   leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(190), widgetFont, EVENT_BUTTON3, 20, 20);
@@ -86,16 +94,19 @@ void setup() {
   homeScreen=new Screen(backgroundPhoto, homescreenWidgets);
   leaderboardsScreen= new Screen(backgroundPhotoLeaderBoards, leaderboardsWidgets);
   businessScreen=new Screen(backgroundPhotoBusiness, businessWidgets);
-  topStars= new Widget(RADIOBUTTONX, TOPSTARSY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top star rated", color(255), widgetFont, EVENT_BUTTON4, 10, 10 );
-  mostReviewed= new Widget(RADIOBUTTONX, MOSTREVIEWEDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most reviewed", color(255), widgetFont, EVENT_BUTTON5, 10, 10 );
-  topHundred= new Widget(RADIOBUTTONX, TOPHUNDREDY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Top 20 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
-  mostUseful= new Widget(RADIOBUTTONX, MOSTUSEFULY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
-  funniest= new Widget(RADIOBUTTONX, FUNNIESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Funniest", color(255), widgetFont, EVENT_BUTTON8, 10, 10 );
-  coolest= new Widget(RADIOBUTTONX, COOLESTY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );   
+  topStars= new RadioButton(RADIOBUTTONX, TOPSTARSY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Top star rated", color(255), widgetFont, EVENT_BUTTON4, 10, 10 );
+  mostReviewed= new RadioButton(RADIOBUTTONX, MOSTREVIEWEDY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Most reviewed", color(255), widgetFont, EVENT_BUTTON5, 10, 10 );
+  topHundred= new RadioButton(RADIOBUTTONX, TOPHUNDREDY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Top 20 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
+  mostUseful= new RadioButton(RADIOBUTTONX, MOSTUSEFULY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
+  funniest= new RadioButton(RADIOBUTTONX, FUNNIESTY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Funniest", color(255), widgetFont, EVENT_BUTTON8, 10, 10 );
+  coolest= new RadioButton(RADIOBUTTONX, COOLESTY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );
+  barChartGraph= new RadioButton(BARCHARTBUTTONX, BARCHARTBUTTONY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT,"Bar Chart", color(255), autoCompleteFont, EVENT_BUTTON13,12,10);
+  lineChartGraph = new RadioButton(LINECHARTBUTTONX, LINECHARTBUTTONY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT,"Line Chart", color(255), widgetFont, EVENT_BUTTON14,5,10);
+  
   selected=null;
   selectedAC = null;
-  // font = loadFont("Cambria-20.vlw");
-  font = loadFont("Calibri-BoldItalic-48.vlw");
+  selectedReview=null;
+
   dataPoints = new ArrayList<DataPoint>();
   table = loadTable("reviews.csv", "header");
   reviews = new ArrayList<Review>();
@@ -107,6 +118,8 @@ void setup() {
   //reviewerNames = new HashSet<String>();
   reviewerIds = new HashSet<String>();
   reviewsString = new ArrayList<String>();
+  reviewHeaders= new ArrayList<String>();
+  reviewTexts= new ArrayList<String>();
   searchedBusinesses  = new ArrayList<Business>();
   reviewsPerMonth = new ArrayList<Business>();
 
@@ -136,27 +149,41 @@ void setup() {
   leaderboardsScreen.addWidget(coolest);
   businessScreen.addWidget(searchbox);
   businessScreen.addWidget(searchButton);
+  businessScreen.addWidget(barChartGraph);
+  businessScreen.addWidget(lineChartGraph);
   currentScreen=homeScreen;
   recentReviews = initRecentReviewBoxes();
   leaderboardRungList = initTopBusinesses();
 
-  //ControlFont font = new ControlFont(widgetFont, 241);
 
   cp5 = new ControlP5(this);
   cp5.addScrollableList("TopTwenty")
-    .setPosition(400, 80)
-    .setSize(900, 750)             //size of full thing
+    .setPosition(400, 120)
+    .setSize(900, 725)             
     .setBarVisible(true)
     .setBarHeight(40)
-    .setItemHeight(50)            //size of each box
-    // .addItems(reviewsString)     add full reviews
+    .setItemHeight(50)           
     .open()
     .addItems(search.getTop20Businesses())
-    //.setFont(widgetFont)
-    .setScrollSensitivity(100.0)
+    .setFont(widgetFont)
+    .setScrollSensitivity(200.0)
     .setCaptionLabel("Top 20 rated businesses")
-    .setColorCaptionLabel(HIGHLIGHT)
+    .setColorForeground(HIGHLIGHT_LIST)
     .setColorBackground(REVIEWLISTCOLOR);
+  
+    
+  cp5Reviews = new ControlP5(this);  
+  cp5Reviews.addScrollableList("Reviews")
+    .setPosition(BUSINESSREVIEWSX, BUSINESSREVIEWSY)
+    .setSize(REVIEWTEXTWIDTH,400)
+    .setItemHeight(28)
+    .setBarHeight(30)
+    .setFont(widgetFont)
+    .setScrollSensitivity(200.0)
+    .setCaptionLabel("Reviews")
+    .setColorForeground(HIGHLIGHT_LIST)
+    .setColorBackground(REVIEWLISTCOLOR)
+    .hide();
 
   // controlP5 object for AutoComplete feature - Tom
   cp5AutoComplete = new ControlP5(this);
@@ -166,8 +193,8 @@ void setup() {
     .setBarVisible(false)
     .setItemHeight(AUTOCOMPLETE_QUERY_HEIGHT)
     .open()
-    //.setFont(autoCompleteFont)
-    .setColorCaptionLabel(HIGHLIGHT)
+    .setFont(autoCompleteFont)
+    .setColorForeground(HIGHLIGHT_LIST)
     .setColorBackground(REVIEWLISTCOLOR);
 
   map = new WorldMap();
@@ -179,18 +206,10 @@ void draw() {
   fill(#0004B4);
   currentScreen.draw();
   if (currentScreen==leaderboardsScreen) {
-    fill(0);
+    fill(HIGHLIGHT);
     noStroke();
     rect(275, 150, 1, 550);
   }
-  fill(0);
-  /*blendMode(BLEND);
-   stroke(30);
-   strokeWeight(15);
-   stroke(60);
-   strokeWeight(10);
-   stroke(100);
-   strokeWeight(5);*/
   fill(100);
   noStroke();
   rect(0, 70, SCREENX, 5);
@@ -203,13 +222,15 @@ void draw() {
   stroke(255);
   strokeWeight(3);
   fill(255);
-  line(465, 29, 475, 35);
+  line(487, 29, 497, 35);
   fill(0);
   noStroke();
   ellipse((SEARCHBUTTONX+SEARCHBUTTONWIDTH/2)-5, (SEARCHBUTTONY+SEARCHBOXHEIGHT/2), 15, 15);
 
   searchbox.draw();
   homeButton.drawImage();
+
+  autoCompleteOpen = false;
 
   //draws the pie chart for a user - Claire
   if (drawPieChart) {
@@ -224,8 +245,8 @@ void draw() {
     listReviews=false;
     fill(HIGHLIGHT, 180);
     noStroke();
-    rect(797, 247, 456, 46);
-    rect(97, 167, 386, 66);
+    rect(797,247,456,46);
+    rect(97,167,386,66);
     drawRecentReviewBoxes();
     drawTopBusinessTable();
   }
@@ -240,16 +261,9 @@ void draw() {
       }
       for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++) {
       }
-    } else {
-      stroke(#C62800);
-      strokeWeight(5);
-      fill(255);
-      rect(410, (SCREENY/2)-80, 850, 200);
-      fill(0);
-      textSize(40);
-      text("Sorry there are no ratings for this business.\nPlease try again.", 430, SCREENY/2);
-    }
+    } 
   }
+  
   if (!listReviews) {
     cp5.hide();
   } else if (listReviews) {
@@ -265,18 +279,56 @@ void draw() {
     searchbox.myText = selectedAC;
   }
 
-  if (selected!= null) {
+  if (selected!= null) {                                                                                              
     displayBusinessScreen();
   }
+   
   if (currentScreen==businessScreen) {
+    if(businessFound==false){                                                               
+      stroke(#C62800);
+      strokeWeight(5);
+      fill(255);
+      rect(320, (SCREENY/2)-80, 720, 200);
+      fill(0);
+      textFont(font);
+      text("Sorry this business doesn't exist.\nPlease try again.", 355, (SCREENY/2)+10);
+      return;
+    }
+    if(drawStarChart){
+     // drawGraph=true;
+      displayBusinessStarsChart(searchedBusinesses);
+    }
+    if(drawLineChart){
+      //drawGraph=true;
+      lineGraph.drawLineGraph();
+    }
+    drawStarChart=false;
+    fill(0,130);  //rectangle behind review text
+    noStroke();
+    rect(BUSINESSREVIEWSX,BUSINESSREVIEWSY,REVIEWTEXTWIDTH,720); 
+  if(selectedReview!=null){
+    fill(255);
+    textSize(17);
+    text(selectedReview,BUSINESSREVIEWSX+10,BUSINESSNAMEY+100,REVIEWTEXTWIDTH-10,725);    
+  } 
+    if(overReviews()){
+      cam.setActive(false);
+    }
+    else if(!overReviews()){
+      cam.setActive(true);
+    }
+    cp5.get(ScrollableList.class, "TopTwenty").hide();
+    //cp5Reviews.get(ScrollableList.class, "Reviews").setCaptionLabel("Reviews");
     fill(HIGHLIGHT);
-    rect(BUSINESSNAMEX-50, BUSINESSNAMEY+10, 900, 1);
+    rect(BUSINESSREVIEWSX, BUSINESSNAMEY+10,REVIEWTEXTWIDTH, 2);
+    cp5Reviews.get(ScrollableList.class, "Reviews").show();
     fill(255);
     textFont(font);
-    text(searchbox.myText+"  "+rating, BUSINESSNAMEX, BUSINESSNAMEY);
-    textSize(22);
-    text("Amount of reviews \nof all time" + " = " + reviewAmount, BUSINESSNAMEX, BUSINESSNAMEY+90);
-    text("Amount of reviews \nfor " + year + " = " + totalReviewsForYear, BUSINESSNAMEX, BUSINESSNAMEY+150);
+    textSize(40);
+    text(businessName+"  "+rating+"*", BUSINESSNAMEX, BUSINESSNAMEY);
+    textSize(19);
+    //text("Amount of reviews \nof all time" + " = " + reviewAmount, BUSINESSNAMEX, BUSINESSNAMEY+700);                      
+    //text("Amount of reviews \nfor " + year + " = " + totalReviewsForYear, BUSINESSNAMEX, BUSINESSNAMEY+725);
   }
   selected = null;
   selectedAC = null;
@@ -286,10 +338,15 @@ void draw() {
 }
 
 void TopTwenty(int index) {
-  selected = cp5.get(ScrollableList.class, "TopTwenty").getItem(index).get("name").toString();
+  selected = cp5.get(ScrollableList.class, "TopTwenty").getItem(index).get("name").toString();                                           
 }
 
-// gets selected AutoComplete business name and enters it into search bar
+void Reviews(int index){
+  //int selectedReviewIndex = cp5Reviews.get(ScrollableList.class, "Reviews").getItem(index);
+  //text(reviewTexts.get(index),BUSINESSNAMEX,BUSINESSNAMEY+100,800,800);
+  selectedReview=reviewTexts.get(index);
+}
+
 void Autocomplete(int index) {
   selectedAC = cp5AutoComplete.get(ScrollableList.class, "Autocomplete").getItem(index).get("name").toString();
   canType = true;
@@ -315,7 +372,7 @@ void mouseMoved() {
 
 void keyPressed() {
   if (canType) {
-    if (searchbox.myText!=null) {
+    if(searchbox.myText!=null){
       cp5AutoComplete.get(ScrollableList.class, "Autocomplete").show();
     }
     if (key == DELETE) {
@@ -336,7 +393,7 @@ void keyPressed() {
         }
       }
     } 
-    if (searchbox.myText.length() <=36) {
+    else if (searchbox.myText.length() <=36) {
       if (key != ENTER && keyCode>=32 && keyCode<=223) {
         searchbox.myText =searchbox.myText + key;
         autoCompleteResults = autoComplete.getMatches(searchbox.myText);
@@ -348,6 +405,7 @@ void keyPressed() {
         }
       }
       if (key == ENTER) {
+        prepareBusinessReviews(searchbox.myText);                                                                            
         displayBusinessScreen();
       }
     }
@@ -368,11 +426,12 @@ void mousePressed() {
     listReviews=false;
     selected=null;
     cp5AutoComplete.get(ScrollableList.class, "Autocomplete").hide();
+    cp5Reviews.get(ScrollableList.class, "Reviews").hide();
     break; 
 
   default:
     canType=false;
-    listReviews=false;
+   // listReviews=false;
     if (searchbox.myText=="") {
       searchbox.myText="Search...";
     }
@@ -387,12 +446,12 @@ void mousePressed() {
       searchbox.myText="";
     } 
     canType=true;
-    listReviews=false;
     break;
 
   case EVENT_BUTTON3:
     currentScreen=leaderboardsScreen;
     listReviews=true;
+    cp5.get(ScrollableList.class, "TopTwenty").show();
     cp5.get(ScrollableList.class, "TopTwenty").open();
     cp5.get(ScrollableList.class, "TopTwenty").setCaptionLabel("Top 20 rated businesses");
     break;
@@ -464,6 +523,7 @@ void mousePressed() {
     if (searchbox.myText=="Search..." ) {
       break;
     } else {
+      prepareBusinessReviews(searchbox.myText);                                                                                            
       displayBusinessScreen();
       break;
     }
@@ -485,13 +545,27 @@ void mousePressed() {
       }
     }
     break;
+  
+  case EVENT_BUTTON13:
+    drawGraph=false;
+    drawStarChart=true;                                                                                               
+    drawLineChart = false;
 
-  default:
+    break;
+    
+  case EVENT_BUTTON14:
+    drawGraph=false;
+    drawStarChart=false;
+    drawLineChart = true;
+    break;
+    
+ default:
     if (drawGraph) {
       listReviews=false;
     } else {  
       listReviews=true;
     }
+    //println(listReviews);
     canType=false;
     if (searchbox.myText=="") {
       searchbox.myText="Search...";
@@ -504,8 +578,7 @@ void mousePressed() {
 
 void loadData() {
   for (TableRow row : table.rows()) {
-    DataPoint dp = new DataPoint(row.getString(0), row.getString(1), row.getString(2), row.getString(3), 
-      row.getInt(4), row.getString(5), row.getString(6), row.getInt(7), row.getInt(8), row.getInt(9), row.getFloat(10), row.getFloat(11));
+    DataPoint dp = new DataPoint(row.getString(0), row.getString(1), row.getString(2), row.getString(3),  row.getInt(4), row.getString(5), row.getString(6), row.getInt(7), row.getInt(8), row.getInt(9), row.getFloat(10), row.getFloat(11));
     dataPoints.add(dp);
   }
 }
@@ -513,9 +586,7 @@ void loadData() {
 
 void loadReviewBusiness() {
   for (DataPoint dp : dataPoints) {
-    String review=(dp.getUserName()+" "+dp.getUserId()+" "+dp.getBusinessName()+" "+dp.getBusinessId()+" "+dp.getStars()+"\n "+dp.getText()+"\n "+dp.getDate()+" "+dp.getUseful()+" "+dp.getFunny()+" "+dp.getCool());
     reviews.add(new Review(dp.getUserName(), dp.getUserId(), dp.getBusinessName(), dp.getBusinessId(), dp.getStars(), dp.getText(), dp.getDate(), dp.getUseful(), dp.getFunny(), dp.getCool()));
-    reviewsString.add(review);
     businesses.add(new Business(dp.getBusinessName(), dp.getBusinessId(), dp.getLongitude(), dp.getLatitude()));
   }
 }
@@ -573,17 +644,17 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   }
   if (goToGraph) {
     drawGraph = true;
-    drawLineChart = true;
+    drawLineChart = false;                                                                                                                                            
     cam.setActive(true);
     String name = businessStarsList.get(0).getBusinessName();
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
-    barchart = new BusinessBarChart(LEADERBOARDSGRAPHX-30, LEADERBOARDSGRAPHY+100, stars, name);
+    barchart = new BusinessBarChart(BUSINESSSTARSX, BUSINESSSTARSY, stars, name);
   }
 }
 
 //draws the line chart for amount of reviews per month per year for a particular business - Claire
 String displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {
-  lineGraph = new LineGraph(LEADERBOARDSGRAPHX+320, LEADERBOARDSGRAPHY+100, reviewsPerMonth, year);
+  lineGraph = new LineGraph(LINECHARTX, LINECHARTY, reviewsPerMonth, year);
   return lineGraph.amountOfReviews();
 }
 
@@ -596,6 +667,7 @@ ArrayList<ReviewBox> initRecentReviewBoxes() {
   recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(255, 0, 0, 127), DEFAULT_TEXT_COLOUR, DEFAULT_TEXT_COLOUR, font, "Most Recent Reviews", 5);
   recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(HIGHLIGHT, 127), DEFAULT_TEXT_COLOUR, color(255), font, "Most Recent Reviews", 5);
   for (int i=0; i<=2; i++) {
+    //println(mostRecentReviews);
     Review review = mostRecentReviews.get(i);
     ReviewBox rb = new ReviewBox(x, y, 380, 180, review.getAuthor(), review.getAuthorId(), review.getBusiness(), review.getText(), review.getStars());
     y+=186;
@@ -615,14 +687,20 @@ void drawRecentReviewBoxes() {
 
 void displayBusinessScreen() {
   currentScreen=businessScreen;
-  drawGraph = true;
   searchedBusinesses = search.searchBusinessList(searchbox.myText);
+  drawGraph = true;
+  println(searchbox.myText);
+  if (searchedBusinesses==null || selected==null) {
+      businessFound=false;
+  }
   if (searchedBusinesses.size() != 0||selected!=null) {
+    businessFound=true;
     year = 2016;
     listReviews = false;
     if (selected != null) {
       String[] businessDetails = selected.split("  ", -1);
       searchbox.myText=businessDetails[1];
+      prepareBusinessReviews(searchbox.myText);
       rating=businessDetails[2];
       searchedBusinesses = search.searchBusinessList(searchbox.myText);
 
@@ -630,15 +708,19 @@ void displayBusinessScreen() {
       totalReviewsForYear = displayBusinessLineGraph(reviewsPerMonth, year);
       reviewAmount = Integer.toString(search.amountOfReviews(searchbox.myText.toLowerCase()));
     } else {
+      prepareBusinessReviews(searchbox.myText);
       reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
       totalReviewsForYear = displayBusinessLineGraph(reviewsPerMonth, year);
       reviewAmount = Integer.toString(search.amountOfReviews(searchbox.myText.toLowerCase()));
       rating = Double.toString(search.getAverageStarsOfBusiness(searchedBusinesses.get(0).getBusinessName()));
     }
+   businessName=searchbox.myText;  //permanents the business name on business screen
   } 
-  //draws the amount of the stars the business searched has if business is in data base - Claire
-  displayBusinessStarsChart(searchedBusinesses);
 
+//draws the amount of the stars the business searched has if business is in data base - Claire
+  displayBusinessStarsChart(searchedBusinesses);                                                            
+ println(searchbox.myText);                                                                                 
+  //draws the amount of the stars the business searched has if business is in data base - Claire
   for (Business business : searchedBusinesses) {
     println(business.searchedFor);
     business.searchedFor = true;
@@ -676,4 +758,36 @@ void drawTopBusinessTable() {
   for (int i=0; i<leaderboardRungList.size(); i++) {
     leaderboardRungList.get(i).draw();
   }
+}
+
+
+boolean overReviews(){
+  boolean canScroll=false;
+  if(mouseX>=BUSINESSREVIEWSX && mouseX<= BUSINESSREVIEWSX+900 && mouseY >= BUSINESSREVIEWSY && mouseY<=BUSINESSREVIEWSY+700){
+  //cam.setActive(false);
+    canScroll=true;
+  }
+  return canScroll;
+}
+
+
+
+
+void prepareBusinessReviews(String businessName){
+ drawStarChart=true;
+ selectedReview=null;
+ reviewTexts.clear();
+ reviewHeaders.clear();
+ String reviewHeader="";
+ String reviewText="";
+ for(Review review : search.getReviewsForBusiness(businessName)){
+   reviewHeader=(review.getDate()+"  "+review.getAuthor()+"  "+review.getStars()+"*");
+   reviewHeaders.add(reviewHeader);
+   reviewText=review.getText();
+   reviewTexts.add(reviewText);  
+ }
+ cp5Reviews.get(ScrollableList.class, "Reviews").clear();                                                      
+ cp5Reviews.get(ScrollableList.class, "Reviews").addItems(reviewHeaders); 
+ cp5Reviews.get(ScrollableList.class, "Reviews").setCaptionLabel("Reviews");
+ cp5Reviews.get(ScrollableList.class, "Reviews").open();
 }

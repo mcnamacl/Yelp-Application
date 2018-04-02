@@ -61,11 +61,11 @@ class LineGraph {
 
   void drawLineGraph() {
     stroke(255);
-    chart = new Chart((float)x-5, y-max*interval, (float)x-5, (float)y, (float)x+5+12*60, y+2);
+    chart = new Chart((float)x-5, y-max*interval, (float)x-5, (float)y, (float)x+(11*40), y+2);
     chart.drawChart();
     noStroke();
     fill(HIGHLIGHT, 90);
-    rect(x-30, y, ((x+5+12*60) - (x-5))+30, ((y-max*interval) - (y+2)) - 10);
+    rect(x-30, y, (x+(11*40) - (x-5))+30, ((y-max*interval) - (y+2)) - 10);                                                        ////////////////////////////////////////// draws rectangle behind the line chart 
     scores = new Scores(x, y, month);
     scores.drawScores();
     drawPoints();
@@ -90,7 +90,8 @@ class LineGraph {
       noLights();
       prevX = tmpX;
       prevY = tmpY;
-      tmpX+=60;
+      //tmpX+=60;
+      tmpX+=40;                                                                        //////////////////////////////////////////////////////////////
     }
   }
   
