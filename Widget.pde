@@ -1,3 +1,4 @@
+// A base class for all the widgets - Kamil & Ruairi
 class Widget {
   int x, y, width, height;
   String myText; 
