@@ -9,13 +9,13 @@ import controlP5.*;
 import java.util.*;
 
 boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = false, drawLineChart = false, drawStarChart=false, listTopTwenty=false, showTopStars=false, showMostReviewed=false, showUseful=false, showFunny=false, 
-        showCool=false, businessFound=false, drawMap = false; // <==== to draw map onto home screen change to true ;
+  showCool=false, businessFound=false, drawScreen=true, drawMap = false; 
 
 int year;
 
 String myText = "Search...";  
 String searchText, selectedBusiness, rating, reviewAmount, totalReviewsForYear, selectedAC, selectedReview, businessName;
-        
+
 PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, backgroundPhotoBusiness, halfStar;
 
 Widget searchbox, searchButton, homeButton, leaderboardsButton, authorPieChart;
@@ -55,12 +55,11 @@ WorldMap map;
 BusinessBarChart barchart;
 LineGraph lineGraph;
 PieChart pieChart;
-PeasyCam cam;
+PeasyCam cam; 
 
 PApplet mainClass = this;
 
 Author author;
-
 
 
 void settings() {
@@ -70,8 +69,9 @@ void settings() {
 void setup() {  
   textSize(30);
   fill(0);
-
+  
   cam = new PeasyCam(mainClass, SCREENX/2, SCREENY/2, 0, 780);
+  cam.setYawRotationMode(); 
   cam.setActive(false);
 
   halfStar = loadImage("halfStar1small.png");
@@ -82,12 +82,12 @@ void setup() {
   searchImage=loadImage("search.png");
   yellowStar=loadImage("yellowStar1small.png");
   greyStar=loadImage("greyStar1small.png");
-  
+
   widgetFont=loadFont("Calibri-Light-17.vlw");
   autoCompleteFont=loadFont("Candara-15.vlw");
   font = loadFont("Calibri-BoldItalic-48.vlw");
-  
-  //set-up of all the widgets used  -Kamil
+
+  //set-up of all the widgets used  - Kamil
   searchbox=new Widget(SEARCHBOXX, SEARCHBOXY, SEARCHBOXWIDTH, SEARCHBOXHEIGHT, myText, color(190), widgetFont, EVENT_BUTTON1, 5, 5);
   searchButton=new Widget(SEARCHBUTTONX, SEARCHBUTTONY, SEARCHBUTTONWIDTH, SEARCHBOXHEIGHT, "", color(0), widgetFont, EVENT_BUTTON10, 0, 0);
   leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(190), widgetFont, EVENT_BUTTON3, 20, 20);
@@ -101,10 +101,10 @@ void setup() {
   mostUseful= new RadioButton(RADIOBUTTONX, MOSTUSEFULY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
   funniest= new RadioButton(RADIOBUTTONX, FUNNIESTY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Funniest", color(255), widgetFont, EVENT_BUTTON8, 10, 10 );
   coolest= new RadioButton(RADIOBUTTONX, COOLESTY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );
-  barChartGraph= new RadioButton(BARCHARTBUTTONX, BARCHARTBUTTONY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT,"Bar Chart", color(255), autoCompleteFont, EVENT_BUTTON13,12,10);
-  lineChartGraph = new RadioButton(LINECHARTBUTTONX, LINECHARTBUTTONY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT,"Line Chart", color(255), widgetFont, EVENT_BUTTON14,5,10);
-  mapButton = new RadioButton(RADIOBUTTONX, MAPBUTTONY,LEADERBOARDSBUTTONWIDTH,LEADERBOARDSBUTTONHEIGHT, "Map of businesses", color(255), widgetFont, EVENT_BUTTON15, 10, 10);
-  
+  barChartGraph= new RadioButton(BARCHARTBUTTONX, BARCHARTBUTTONY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Bar Chart", color(255), autoCompleteFont, EVENT_BUTTON13, 12, 10);
+  lineChartGraph = new RadioButton(LINECHARTBUTTONX, LINECHARTBUTTONY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Line Chart", color(255), widgetFont, EVENT_BUTTON14, 5, 10);
+  mapButton = new RadioButton(RADIOBUTTONX, MAPBUTTONY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Map of businesses", color(255), widgetFont, EVENT_BUTTON15, 10, 10);
+
   selectedBusiness=null;
   selectedAC = null;
   selectedReview=null;
@@ -127,22 +127,22 @@ void setup() {
 
   loadData();
   loadReviewBusiness();
-  
+
   search = new Search();
   search.createBusinessAZMap();
   search.createReviewerMap();
   println(reviewerReviewMap.keySet());
 
   autoComplete = new AutoComplete(businessReviewMap.keySet());
-  
+
   search.mostRecentReview(reviews);
   println(businessReviewMap.keySet());
-  
+
   //homescreen widget list
   homeScreen.addWidget(searchbox);
   homeScreen.addWidget(searchButton);
   homeScreen.addWidget(leaderboardsButton);
-  
+
   //leaderboards screen widget list
   leaderboardsScreen.addWidget(searchButton);
   leaderboardsScreen.addWidget(searchbox);
@@ -153,15 +153,15 @@ void setup() {
   leaderboardsScreen.addWidget(funniest);
   leaderboardsScreen.addWidget(coolest);
   leaderboardsScreen.addWidget(mapButton);
-  
+
   //business screen widget list
   businessScreen.addWidget(searchbox);
   businessScreen.addWidget(searchButton);
   businessScreen.addWidget(barChartGraph);
   businessScreen.addWidget(lineChartGraph);
-  
+
   currentScreen=homeScreen;
-  
+
   recentReviews = initRecentReviewBoxes();
   leaderboardRungList = initTopBusinesses();
 
@@ -180,12 +180,12 @@ void setup() {
     .setCaptionLabel("Top 20 rated businesses")
     .setColorForeground(HIGHLIGHT_LIST)
     .setColorBackground(REVIEWLISTCOLOR);
-  
+
   //setup for the list of reviews on the business screen - Kamil  
   cp5Reviews = new ControlP5(this);  
   cp5Reviews.addScrollableList("Reviews")
     .setPosition(BUSINESSREVIEWSX, BUSINESSREVIEWSY)
-    .setSize(REVIEWTEXTWIDTH,400)
+    .setSize(REVIEWTEXTWIDTH, 400)
     .setItemHeight(28)
     .setBarHeight(30)
     .setFont(widgetFont)
@@ -214,30 +214,31 @@ void setup() {
 void draw() {
   background(255);
   currentScreen.draw();
-  
-  
-  // draws the rectangles on the top of the screen (black and grey) - Kamil
-  fill(100);
-  noStroke();
-  rect(0, 70, SCREENX, 5);
-  fill(0);
-  rect(0, 0, SCREENX, 70);
-  
-  // draws the magnifying glass on the search button - Kamil
-  fill(255);
-  noStroke();
-  ellipse((SEARCHBUTTONX+SEARCHBUTTONWIDTH/2)-5, (SEARCHBUTTONY+SEARCHBOXHEIGHT/2), 20, 20);
-  stroke(255);
-  strokeWeight(3);
-  fill(255);
-  line(487, 29, 497, 35);
-  fill(0);
-  noStroke();
-  ellipse((SEARCHBUTTONX+SEARCHBUTTONWIDTH/2)-5, (SEARCHBUTTONY+SEARCHBOXHEIGHT/2), 15, 15);
 
-  searchbox.draw();
-  homeButton.drawImage();
+  if (drawScreen) {
+    currentScreen.drawWidgets();
+    // draws the rectangles on the top of the screen (black and grey) - Kamil
+    fill(100);
+    noStroke();
+    rect(0, 70, SCREENX, 5);
+    fill(0);
+    rect(0, 0, SCREENX, 70);
 
+    // draws the magnifying glass on the search button - Kamil
+    fill(255);
+    noStroke();
+    ellipse((SEARCHBUTTONX+SEARCHBUTTONWIDTH/2)-5, (SEARCHBUTTONY+SEARCHBOXHEIGHT/2), 20, 20);
+    stroke(255);
+    strokeWeight(3);
+    fill(255);
+    line(487, 29, 497, 35);
+    fill(0);
+    noStroke();
+    ellipse((SEARCHBUTTONX+SEARCHBUTTONWIDTH/2)-5, (SEARCHBUTTONY+SEARCHBOXHEIGHT/2), 15, 15);
+
+    searchbox.draw();
+    homeButton.drawImage();
+  }
   //draws the pie chart for a user - Claire
   if (drawPieChart) {
     pieChart.pieChart(100, author.type);
@@ -253,16 +254,16 @@ void draw() {
       }
       for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++) {
       }
-    } 
+    }
   }
-  
+
   // boolean for determining if the top 20 list should be shown - Kamil
   if (!listTopTwenty) {
     cp5.hide();
   } else if (listTopTwenty) {
     cp5.show();
   }
-  
+
   // boolean which changes the colour of the searchbox to show the user they can type - Kamil
   if (canType) {
     searchbox.setSearchboxColor(255);
@@ -274,7 +275,7 @@ void draw() {
   if (selectedAC!=null) {
     searchbox.myText = selectedAC;
   }
-  
+
   // goes to the business page of selected business from top 20 list - Kamil
   if (selectedBusiness!= null) {                                                                                              
     displayBusinessScreen();
@@ -289,24 +290,24 @@ void draw() {
     listTopTwenty=false;
     fill(HIGHLIGHT, 180);
     noStroke();
-    rect(797,247,456,46);
-    rect(97,167,386,66);
+    rect(797, 247, 456, 46);
+    rect(97, 167, 386, 66);
     drawRecentReviewBoxes();
     drawTopBusinessTable();
   }
 
   // draws the line seperating the buttons from the graphs - Kamil
-  if (currentScreen==leaderboardsScreen) {
+  if (currentScreen==leaderboardsScreen && drawScreen==true) {
     fill(HIGHLIGHT);
     noStroke();
     rect(275, 150, 1, 590);
   }
-  
+
   // takes care of the business screen - Kamil
   if (currentScreen==businessScreen) {
-    
+
     //prints out an error if a searched business is not found
-    if(businessFound==false){                                                               
+    if (businessFound==false) {                                                               
       stroke(#C62800);
       strokeWeight(5);
       fill(255);
@@ -316,45 +317,46 @@ void draw() {
       text("Sorry this business doesn't exist.\nPlease try again.", 355, (SCREENY/2)+10);
       return;
     }
-    
+
     // draws the bar chart if the bar chart button is pressed
-    if(drawStarChart){     
+    if (drawStarChart) {     
       displayBusinessStarsChart(searchedBusinesses);
     }
-    
+
     // draws the line chart if the line chart button is pressed
-    if(drawLineChart){
+    if (drawLineChart) {
       lineGraph.drawLineGraph();
     }
     // resets the boolean to prevent constant restarts on drawing the chart
     drawStarChart=false;
     drawMap=false;
+   if(drawScreen){
     // draws the transparent rectangle behind review text
-    fill(0,130); 
+    fill(0, 130); 
     noStroke();
-    rect(BUSINESSREVIEWSX,BUSINESSREVIEWSY,REVIEWTEXTWIDTH,720);
-    
+    rect(BUSINESSREVIEWSX, BUSINESSREVIEWSY, REVIEWTEXTWIDTH, 720);
+
     // if a review is selected, print out its text on the area of the rectangle
-  if(selectedReview!=null){
-    fill(255);
-    textSize(17);
-    text(selectedReview,BUSINESSREVIEWSX+10,BUSINESSNAMEY+100,REVIEWTEXTWIDTH-10,725);    
-  } 
-  
-    // if the mouse is over the list of the reviews, you can scroll through the list, else 'scroll' zooms out/in on the screen
+    if (selectedReview!=null) {
+      fill(255);
+      textSize(17);
+      text(selectedReview, BUSINESSREVIEWSX+10, BUSINESSNAMEY+100, REVIEWTEXTWIDTH-10, 725);
+    } 
+
+    //if the mouse is over the list of the reviews, you can scroll through the list, else 'scroll' zooms out/in on the screen
     if(overReviews()){
       cam.setActive(false);
     }
     else if(!overReviews()){
       cam.setActive(true);
     }
-    
+
     cp5.get(ScrollableList.class, "TopTwenty").hide();
     // draws the line under the business page header
     fill(HIGHLIGHT);
-    rect(BUSINESSREVIEWSX, BUSINESSNAMEY+10,REVIEWTEXTWIDTH, 2);
+    rect(BUSINESSREVIEWSX, BUSINESSNAMEY+10, REVIEWTEXTWIDTH, 2);
     cp5Reviews.get(ScrollableList.class, "Reviews").show();
-    
+
     // prints the header on the business page (business name and rating)
     fill(255);
     textFont(font);
@@ -363,6 +365,10 @@ void draw() {
     textSize(19);
     //text("Amount of reviews \nof all time" + " = " + reviewAmount, BUSINESSNAMEX, BUSINESSNAMEY+700);                      
     //text("Amount of reviews \nfor " + year + " = " + totalReviewsForYear, BUSINESSNAMEX, BUSINESSNAMEY+725);
+   }
+   if(!drawScreen){
+     cp5Reviews.get(ScrollableList.class, "Reviews").hide();
+   }
   }
   //resets the values 
   selectedBusiness = null;
@@ -375,11 +381,11 @@ void draw() {
 
 // Function for getting the index of a pressed business on the Top 20 list on leaderboards screen - Kamil
 void TopTwenty(int index) {
-  selectedBusiness = cp5.get(ScrollableList.class, "TopTwenty").getItem(index).get("name").toString();                                           
+  selectedBusiness = cp5.get(ScrollableList.class, "TopTwenty").getItem(index).get("name").toString();
 }
 
 // Function for getting the index of a pressed review on the business screen - Kamil
-void Reviews(int index){
+void Reviews(int index) {
   selectedReview=reviewTexts.get(index);
 }
 
@@ -414,7 +420,7 @@ void mouseMoved() {
 // shows autocomplete suggestions - Tom
 void keyPressed() {
   if (canType) {
-    if(searchbox.myText!=null){
+    if (searchbox.myText!=null) {
       cp5AutoComplete.get(ScrollableList.class, "Autocomplete").show();
     }
     if (key == DELETE) {
@@ -434,8 +440,7 @@ void keyPressed() {
           cp5AutoComplete.get(ScrollableList.class, "Autocomplete").open();
         }
       }
-    } 
-    else if (searchbox.myText.length() <=36) {
+    } else if (searchbox.myText.length() <=36) {
       if (key != ENTER && keyCode>=32 && keyCode<=223) {
         searchbox.myText =searchbox.myText + key;
         autoCompleteResults = autoComplete.getMatches(searchbox.myText);
@@ -454,13 +459,23 @@ void keyPressed() {
   }
 }
 
+// rotates the graphs when mouse dragged - Kamil
+void mouseDragged() {
+  cam.setActive(true);
+  drawScreen=false;
+}
 
+// resets the screen back to normal when mouse released - Kamil
+void mouseReleased(){
+  drawScreen=true;
+  cam.reset();
+}
 
 // takes care of all the widget interactions - Kamil
 void mousePressed() {
   int event;
   event = homeButton.getEvent(mouseX, mouseY);
- 
+
   // in charge of the home button (top left logo) - Kamil
   switch(event) {
   case EVENT_BUTTON2:
@@ -488,8 +503,8 @@ void mousePressed() {
   event = currentScreen.getEvent(mouseX, mouseY); 
   // in charge of the other widgets
   switch(event) {
-    
-  // searchbox button
+
+    // searchbox button
   case EVENT_BUTTON1:
     if (searchbox.myText=="Search...") {
       searchbox.myText="";
@@ -497,7 +512,7 @@ void mousePressed() {
     canType=true;
     break;
 
-  // button to go to the leaderboards page - Kamil
+    // button to go to the leaderboards page - Kamil
   case EVENT_BUTTON3:
     currentScreen=leaderboardsScreen;
     listTopTwenty=true;
@@ -506,7 +521,7 @@ void mousePressed() {
     cp5.get(ScrollableList.class, "TopTwenty").setCaptionLabel("Top 20 rated businesses");
     break;
 
-  // shows top star rated graph on leaderboards screen - Kamil & Claire
+    // shows top star rated graph on leaderboards screen - Kamil & Claire
   case EVENT_BUTTON4:
     currentScreen=leaderboardsScreen;
     displayTopRatedChart();
@@ -516,8 +531,8 @@ void mousePressed() {
     listTopTwenty=false;
     drawMap=false;
     break;
-  
-  // shows most reviewed graph on leaderboards screen - Kamil & Claire
+
+    // shows most reviewed graph on leaderboards screen - Kamil & Claire
   case EVENT_BUTTON5:
     displayMostReviewed();
     listTopTwenty=false;    
@@ -525,7 +540,7 @@ void mousePressed() {
     drawMap=false;
     break;
 
-  // shows top 20 rated list on leaderboards screen - Kamil
+    // shows top 20 rated list on leaderboards screen - Kamil
   case EVENT_BUTTON6:
     cp5.get(ScrollableList.class, "TopTwenty").open();
     cp5.get(ScrollableList.class, "TopTwenty").setCaptionLabel("Top 20 rated businesses");
@@ -535,7 +550,7 @@ void mousePressed() {
     drawMap=false;
     break;
 
-  // shows most useful graph on leaderboards screen - Kamil & Claire
+    // shows most useful graph on leaderboards screen - Kamil & Claire
   case EVENT_BUTTON7:
     displayUsefulChart();
     for (Review review : search.sortByUseful()) {
@@ -546,7 +561,7 @@ void mousePressed() {
     drawMap=false;
     break;
 
-  // shows funniest reviewer graph on leaderboards screen - Kamil & Claire
+    // shows funniest reviewer graph on leaderboards screen - Kamil & Claire
   case EVENT_BUTTON8:
     displayFunniestChart();
     for (Review review : search.sortByFunny()) {
@@ -557,7 +572,7 @@ void mousePressed() {
     drawMap=false;
     break;
 
-  // shows coolest reviewer graph on leaderboards screen - Kamil & Claire
+    // shows coolest reviewer graph on leaderboards screen - Kamil & Claire
   case EVENT_BUTTON9:
     displayCoolChart();
     for (Review review : search.sortByCool()) {
@@ -568,7 +583,7 @@ void mousePressed() {
     drawMap=false;
     break;
 
-  // the search button beside the searchbox - Kamil
+    // the search button beside the searchbox - Kamil
   case EVENT_BUTTON10:
     listTopTwenty=false;
     drawLineChart = false;
@@ -582,7 +597,7 @@ void mousePressed() {
       break;
     }
 
-  // link from home page to business page when clicked on most recent business - Claire
+    // link from home page to business page when clicked on most recent business - Claire
   case EVENT_BUTTON11:
     for (int i = 0; i < listOfRecentReviews.size(); i++) {
       if (listOfRecentReviews.get(i).businessButton.getEvent(mouseX, mouseY) != EVENT_NULL) {
@@ -591,8 +606,8 @@ void mousePressed() {
       }
     }
     break;
-  
-  // link from home page to business page when clicked on business from top 15 table - Claire
+
+    // link from home page to business page when clicked on business from top 15 table - Claire
   case EVENT_BUTTON12:
     for (int i = 0; i < leaderboardRungList.size(); i++) {
       if (leaderboardRungList.get(i).rowInTable.getEvent(mouseX, mouseY) != EVENT_NULL) {
@@ -601,29 +616,29 @@ void mousePressed() {
       }
     }
     break;
-  
-  // button to display bar chart on business page - Kamil
+
+    // button to display bar chart on business page - Kamil
   case EVENT_BUTTON13:
     drawGraph=false;
     drawStarChart=true;                                                                                               
     drawLineChart = false;
     break;
-    
-  // button to display line chart on business page - Kamil
+
+    // button to display line chart on business page - Kamil
   case EVENT_BUTTON14:
     drawGraph=false;
     drawStarChart=false;
     drawLineChart = true;
     break;
-    
-  // button to display map on leaderboards page - Kamil  
+
+    // button to display map on leaderboards page - Kamil  
   case EVENT_BUTTON15:
-     listTopTwenty=false;
-     drawGraph=false;
-     drawMap=true;
-     break;
-     
- default:
+    listTopTwenty=false;
+    drawGraph=false;
+    drawMap=true;
+    break;
+
+  default:
     if (drawGraph || drawMap) {
       listTopTwenty=false;
     } else if (currentScreen==leaderboardsScreen) {  
@@ -641,7 +656,7 @@ void mousePressed() {
 
 void loadData() {
   for (TableRow row : table.rows()) {
-    DataPoint dp = new DataPoint(row.getString(0), row.getString(1), row.getString(2), row.getString(3),  row.getInt(4), row.getString(5), row.getString(6), row.getInt(7), row.getInt(8), row.getInt(9), row.getFloat(10), row.getFloat(11));
+    DataPoint dp = new DataPoint(row.getString(0), row.getString(1), row.getString(2), row.getString(3), row.getInt(4), row.getString(5), row.getString(6), row.getInt(7), row.getInt(8), row.getInt(9), row.getFloat(10), row.getFloat(11));
     dataPoints.add(dp);
   }
 }
@@ -657,7 +672,6 @@ void loadReviewBusiness() {
 
 //initialises the 10 top rated businesses bar chart and sets the screen into 3D viewing mode - Claire
 void displayTopRatedChart() {
-  cam.setActive(true);
   drawGraph = true;
   goToGraph = true;
   Business[] topRatedBusinesses = search.getTopTenBusinesses();
@@ -666,7 +680,6 @@ void displayTopRatedChart() {
 
 //initialises the funniest review bar chart and sets the screen into 3D viewing mode - Claire
 void displayFunniestChart() {
-  cam.setActive(true);
   drawGraph = true;
   goToGraph = true;
   Review[] funniest = search.sortByFunny();
@@ -675,7 +688,6 @@ void displayFunniestChart() {
 
 //initialises the most useful review bar chart and sets the screen into 3D viewing mode - Claire
 void displayUsefulChart() {
-  cam.setActive(true);
   drawGraph = true;
   goToGraph = true;
   Review[] useful = search.sortByUseful();
@@ -684,7 +696,6 @@ void displayUsefulChart() {
 
 //initialises the coolest review bar chart and sets the screen into 3D viewing mode - Claire
 void displayCoolChart() {
-  cam.setActive(true);
   drawGraph = true;
   goToGraph = true;
   Review[] cool = search.sortByCool();
@@ -693,7 +704,6 @@ void displayCoolChart() {
 
 //initialises the most reviewed bar chart and sets the screen into 3D viewing mode - Claire
 void displayMostReviewed() {
-  cam.setActive(true);
   drawGraph = true;
   goToGraph = true;
   Business[] mostReviewed = search.mostReviewed();
@@ -708,7 +718,6 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   if (goToGraph) {
     drawGraph = true;
     drawLineChart = false;                                                                                                                                            
-    cam.setActive(true);
     String name = businessStarsList.get(0).getBusinessName();
     int[] stars = search.getStarsForCollectionOfBusinesses(businessStarsList);
     barchart = new BusinessBarChart(BUSINESSSTARSX, BUSINESSSTARSY, stars, name);
@@ -754,12 +763,12 @@ void displayBusinessScreen() {
   searchedBusinesses = search.searchBusinessList(searchbox.myText);
   drawGraph = true;
   println(searchbox.myText);
-  
+
   // if no business found
   if (searchedBusinesses==null || selectedBusiness==null) {
-      businessFound=false;
+    businessFound=false;
   }
-  
+
   // if business found
   if (searchedBusinesses.size() != 0||selectedBusiness!=null) {
     businessFound=true;
@@ -782,13 +791,13 @@ void displayBusinessScreen() {
       reviewAmount = Integer.toString(search.amountOfReviews(searchbox.myText.toLowerCase()));
       rating = Double.toString(search.getAverageStarsOfBusiness(searchedBusinesses.get(0).getBusinessName()));
     }
-   //keeps the business name permanently on the screen so its not affected by changes to searchbox
-   businessName=searchbox.myText;  
+    //keeps the business name permanently on the screen so its not affected by changes to searchbox
+    businessName=searchbox.myText;
   } 
 
-//draws the amount of the stars the business searched has if business is in data base - Claire
+  //draws the amount of the stars the business searched has if business is in data base - Claire
   displayBusinessStarsChart(searchedBusinesses);                                                            
- println(searchbox.myText);                                                                                 
+  println(searchbox.myText);                                                                                 
   //draws the amount of the stars the business searched has if business is in data base - Claire
   for (Business business : searchedBusinesses) {
     println(business.searchedFor);
@@ -831,9 +840,9 @@ void drawTopBusinessTable() {
 
 
 // function for the business page to differentiate whether to scroll review list or zoom in/out the screen - Kamil
-boolean overReviews(){
+boolean overReviews() {
   boolean canScroll=false;
-  if(mouseX>=BUSINESSREVIEWSX && mouseX<= BUSINESSREVIEWSX+REVIEWTEXTWIDTH && mouseY >= BUSINESSREVIEWSY && mouseY<=BUSINESSREVIEWSY+700){
+  if (mouseX>=BUSINESSREVIEWSX && mouseX<= BUSINESSREVIEWSX+REVIEWTEXTWIDTH && mouseY >= BUSINESSREVIEWSY && mouseY<=BUSINESSREVIEWSY+700) {
     canScroll=true;
   }
   return canScroll;
@@ -843,21 +852,21 @@ boolean overReviews(){
 
 // loads in two arrayLists, one for review headers (for the scrollable list) and one with the actual text of the review
 // also resets the list to these values and opens it to be seen - Kamil
-void prepareBusinessReviews(String businessName){
- drawStarChart=true;
- selectedReview=null;
- reviewTexts.clear();
- reviewHeaders.clear();
- String reviewHeader="";
- String reviewText="";
- for(Review review : search.getReviewsForBusiness(businessName)){
-   reviewHeader=(review.getDate()+"  "+review.getAuthor()+"  "+review.getStars()+"*");
-   reviewHeaders.add(reviewHeader);
-   reviewText=review.getText();
-   reviewTexts.add(reviewText);  
- }
- cp5Reviews.get(ScrollableList.class, "Reviews").clear();                                                      
- cp5Reviews.get(ScrollableList.class, "Reviews").addItems(reviewHeaders); 
- cp5Reviews.get(ScrollableList.class, "Reviews").setCaptionLabel("Reviews");
- cp5Reviews.get(ScrollableList.class, "Reviews").open();
+void prepareBusinessReviews(String businessName) {
+  drawStarChart=true;
+  selectedReview=null;
+  reviewTexts.clear();
+  reviewHeaders.clear();
+  String reviewHeader="";
+  String reviewText="";
+  for (Review review : search.getReviewsForBusiness(businessName)) {
+    reviewHeader=(review.getDate()+"  "+review.getAuthor()+"  "+review.getStars()+"*");
+    reviewHeaders.add(reviewHeader);
+    reviewText=review.getText();
+    reviewTexts.add(reviewText);
+  }
+  cp5Reviews.get(ScrollableList.class, "Reviews").clear();                                                      
+  cp5Reviews.get(ScrollableList.class, "Reviews").addItems(reviewHeaders); 
+  cp5Reviews.get(ScrollableList.class, "Reviews").setCaptionLabel("Reviews");
+  cp5Reviews.get(ScrollableList.class, "Reviews").open();
 }
