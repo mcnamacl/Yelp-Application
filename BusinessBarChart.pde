@@ -34,14 +34,14 @@ class BusinessBarChart {
     if (label.equals("topBusinesses")) {
       lineY1 = y-interval*5;
       for (int i = 0; i < businessChart.length; i++) {
-        bars[i] = new Bar(businessChart[i].getAverageStarsOfBusiness()*interval, tmpX, tmpY, businessChart[i].getBusinessName(), lineY2, z);
+        bars[i] = new Bar(businessChart[i].getAverageStarsOfBusiness()*interval, tmpX, tmpY, businessChart[i].getBusinessName(), lineY2, z, "normal");
         amountOfType[i] = (float)businessChart[i].getAverageStarsOfBusiness();
         tmpX+=60;
       }
     } else if (label.equals("mostReviewed")) {
       lineY1 = y - businessChart[0].returnAmountOfReviews()*interval;
       for (int i = 0; i < businessChart.length; i++) {
-        bars[i] = new Bar(businessChart[i].returnAmountOfReviews()*interval, tmpX, tmpY, businessChart[i].getBusinessName(), lineY2, z);
+        bars[i] = new Bar(businessChart[i].returnAmountOfReviews()*interval, tmpX, tmpY, businessChart[i].getBusinessName(), lineY2, z, "normal");
         amountOfType[i] = businessChart[i].returnAmountOfReviews();
         tmpX+=60;
       }
@@ -105,7 +105,7 @@ class BusinessBarChart {
       max = typeReviews[0].getFunny();
       lineY1 = y-max*interval;
       for (int i = 0; i < typeReviews.length; i++) {
-        bars[i] = new Bar(typeReviews[i].getFunny()*interval, tmpX, tmpY, typeReviews[i].getAuthor(), lineY2, z);
+        bars[i] = new Bar(typeReviews[i].getFunny()*interval, tmpX, tmpY, typeReviews[i].getAuthor(), lineY2, z, "normal");
         amountOfType[i] = typeReviews[i].getFunny();
         tmpX+=60;
       }
@@ -113,7 +113,7 @@ class BusinessBarChart {
       max = typeReviews[0].getUseful();
       lineY1 = y-max*interval;
       for (int i = 0; i < typeReviews.length; i++) {
-        bars[i] = new Bar(typeReviews[i].getUseful()*interval, tmpX, tmpY, typeReviews[i].getAuthor(), lineY2, z);
+        bars[i] = new Bar(typeReviews[i].getUseful()*interval, tmpX, tmpY, typeReviews[i].getAuthor(), lineY2, z, "normal");
         amountOfType[i] = typeReviews[i].getUseful();
         tmpX+=60;
       }
@@ -121,7 +121,7 @@ class BusinessBarChart {
       max = typeReviews[0].getCool();
       lineY1 = y-max*interval;
       for (int i = 0; i < typeReviews.length; i++) {
-        bars[i] = new Bar(typeReviews[i].getCool()*interval, tmpX, tmpY, typeReviews[i].getAuthor(), lineY2, z);
+        bars[i] = new Bar(typeReviews[i].getCool()*interval, tmpX, tmpY, typeReviews[i].getAuthor(), lineY2, z, "normal");
         amountOfType[i] = typeReviews[i].getCool();
         tmpX+=60;
       }

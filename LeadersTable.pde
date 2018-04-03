@@ -1,17 +1,18 @@
 class LeadersTable {
   int x, y, placement;
-  String businessName, placementAsString;
+  String businessName, placementAsString, actualBusinessName;
   double stars;
   DisplayStars displayStars;
   Widget rowInTable;
   TitleBox placementBox;
 
-  LeadersTable(int x, int y, int placement, String businessName, double stars) {
+  LeadersTable(int x, int y, int placement, String businessName, String actualBusinessName, double stars) {
     this.x=x;
     this.y=y;
     this.placement=placement;
     this.businessName=businessName;
     this.stars=stars;
+    this.actualBusinessName = actualBusinessName;
 
     placementAsString = placement+"";   
     placementBox = new TitleBox(x, y, 30, 30, 2, 8, color(0, 127), color(255), DEFAULT_TEXT_COLOUR, widgetFont, placementAsString, 1);
@@ -19,7 +20,6 @@ class LeadersTable {
     homeScreen.addWidget(rowInTable);
     displayStars= new DisplayStars(this.stars, STAR_WIDTH, x+340, y+5, yellowStar, greyStar, halfStar);
     displayStars.initContinuousDisplayStars();
-    //println(this.stars);
   }
 
   void draw() {
@@ -29,6 +29,6 @@ class LeadersTable {
   }
 
   public String getBusinessName() {
-    return businessName;
+    return actualBusinessName;
   }
 }

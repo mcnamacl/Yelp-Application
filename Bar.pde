@@ -1,12 +1,13 @@
 //Class that deals with each individual bar of a bar chart - Claire
 class Bar {
 
-  int x, y, iY, tmpY;
+  float x, y, iY, tmpY;
   double barHeight;
-  String businessName;
+  String businessName, type;
   float startPoint, constantY, z;
+  color barColour;
 
-  Bar(double averageStarsOfBusiness, int tmpX, int tmpY, String businessName, float startPoint, float z) {
+  Bar(double averageStarsOfBusiness, float tmpX, float tmpY, String businessName, float startPoint, float z, String type) {
     barHeight = averageStarsOfBusiness;
     x = tmpX;
     y = tmpY;
@@ -15,6 +16,11 @@ class Bar {
     constantY = startPoint - (float)barHeight/2;
     this.businessName = businessName;
     this.z = z;
+    this.type = type;
+    int r = (int)random(255);
+    int g = (int)random(255);
+    int b = (int)random(255);
+    barColour = color(r, g, b); 
   }
 
   Bar(double starRatings, int tmpX, int tmpY, float startPoint, float z) {
@@ -25,6 +31,7 @@ class Bar {
     this.startPoint = startPoint;
     constantY = startPoint - (float)barHeight/2;
     this.z = z;
+    type = "normal";
   }
 
   //draws the bars in an animated way in 3D 
@@ -33,24 +40,37 @@ class Bar {
       y -=8;
       iY +=8;
     }
-    fill(BARCHART_COLOUR, 170);
-    pushMatrix();
-    translate(x, constantY, 20);
-    box(20, iY, 40);
-    popMatrix();
+    if (type.equals("normal")) {
+      fill(BARCHART_COLOUR, 170);
+      pushMatrix();
+      translate(x, constantY, 20);
+      box(20, iY, 40);
+      popMatrix();
+    } else if (type.equals("map")) {
+      noStroke();
+      fill(barColour, 170);
+      pushMatrix();
+      translate(x, constantY+30, 20);
+      rotateX(PI/2);
+      box(8.5, iY, 8.5);
+      popMatrix();
+    }
 
     //if there is a string, draw said string rotated clockwise 90 degrees upwards
     if (businessName != null) {
-      int tmpX=x;
-      tmpY=y;
-      pushMatrix();
-      translate(tmpX+20, tmpY);
-      rotate(HALF_PI);
-      translate(-tmpX, -tmpY);
-      fill(#DFFF12);
-      textSize(25);
-      text(businessName, tmpX+20, tmpY);
-      popMatrix();
+      if (type.equals("normal")) {
+        float tmpX=x;
+        tmpY=y;
+        pushMatrix();
+        translate(tmpX+20, tmpY);
+        rotate(HALF_PI);
+        translate(-tmpX, -tmpY);
+        fill(#E5802C);
+        textSize(25);
+        text(businessName, tmpX+20, tmpY);
+        popMatrix();
+      } else if (type.equals("map")) {
+      }
     }
     return (iY < barHeight);
   }

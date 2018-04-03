@@ -34,21 +34,32 @@ class Search {
     businesses += "."; 
     println(businesses);
   }
-  
-  public ArrayList<Float> getLatitudes() {
+
+  public ArrayList<Float> getLatitudes(ArrayList<Business> topFiftyBusinesses) {
     ArrayList<Float> latitudes = new ArrayList<Float>();
-    for (Business business : businesses) {
+    for (Business business : topFiftyBusinesses) {
       latitudes.add(business.getLatitude());
     }
     return latitudes;
   }
-  
-  public ArrayList<Float> getLongitudes() {
+
+  public ArrayList<Float> getLongitudes(ArrayList<Business> topFiftyBusinesses) {
     ArrayList<Float> longitudes = new ArrayList<Float>();
-    for (Business business : businesses) {
+    for (Business business : topFiftyBusinesses) {
       longitudes.add(business.getLongitude());
     }
     return longitudes;
+  }
+
+  public ArrayList<Business> getTopTwentyBusinesses() {
+    ArrayList<Business> topTwentyBusinesses = new ArrayList<Business>();
+    sortBusinesses();
+    int counter = 0;
+    for (int i  = businesses.size(); counter < 20; i--) {
+      topTwentyBusinesses.add( businesses.get(businesses.size() - i));
+      counter++;
+    }
+    return topTwentyBusinesses;
   }
 
   // sorts by most recent reviews - Tom
@@ -97,15 +108,15 @@ class Search {
     int[] starsForBusinesses = new int[5];
     int[] tmpStarsForBusinesses = new int[5];
     ArrayList<String> businessesWithReviewsGotten = new ArrayList<String>();
-      for (Business business : searchedBusinesses) {
-        if (!businessesWithReviewsGotten.contains(business.getBusinessId())) {
-          businessesWithReviewsGotten.add(business.getBusinessId());
-          tmpStarsForBusinesses = business.returnStars();
-          for (int i = 0; i < tmpStarsForBusinesses.length; i++) {
-            int tmpN = starsForBusinesses[i] + tmpStarsForBusinesses[i];
-            starsForBusinesses[i] = tmpN;
-          }
+    for (Business business : searchedBusinesses) {
+      if (!businessesWithReviewsGotten.contains(business.getBusinessId())) {
+        businessesWithReviewsGotten.add(business.getBusinessId());
+        tmpStarsForBusinesses = business.returnStars();
+        for (int i = 0; i < tmpStarsForBusinesses.length; i++) {
+          int tmpN = starsForBusinesses[i] + tmpStarsForBusinesses[i];
+          starsForBusinesses[i] = tmpN;
         }
+      }
     }
     return starsForBusinesses;
   }
