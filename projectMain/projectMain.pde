@@ -1,4 +1,4 @@
-import controlP5.*;   //<>//
+import controlP5.*;   //<>// //<>//
 import peasy.PeasyCam;
 import java.util.Set;
 import java.util.HashSet;
@@ -252,14 +252,19 @@ void draw() {
       if (drawLineChart) {
         lineGraph.drawLineGraph();
       }
-      for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++) {
-      }
+  for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++);
     }
+
+ }
+
+  if (drawMap){
+    for (int i=0; i<map.bars.length && !map.bars[i].drawBar(); i++);
   }
+
 
   // boolean for determining if the top 20 list should be shown - Kamil
   if (!listTopTwenty) {
-    cp5.hide();
+cp5.hide();
   } else if (listTopTwenty) {
     cp5.show();
   }
@@ -816,12 +821,13 @@ ArrayList<LeadersTable> initTopBusinesses() {
   topBusinessesHeader = new TitleBox(x, y-70, 450, 40, 20, 20, color(HIGHLIGHT, 127), DEFAULT_TEXT_COLOUR, color(255), font, "Top Rated Businesses", 5);
   for (int i=0; i<topBusinesses.length; i++) {
     String currentBusinessName = topBusinesses[i].getBusinessName();
+    String actualBusinessName = topBusinesses[i].getBusinessName();
     //if business name is too long to fit in row, following method will decrease its size
     if (currentBusinessName.length()>=29) {
       currentBusinessName = currentBusinessName.substring(0, Math.min(currentBusinessName.length(), 28));
       currentBusinessName+="..";
     }
-    LeadersTable rung = new LeadersTable(x, y, ranking, currentBusinessName, topBusinesses[i].getAverageStarsOfBusiness());
+    LeadersTable rung = new LeadersTable(x, y, ranking, currentBusinessName, actualBusinessName, topBusinesses[i].getAverageStarsOfBusiness());
     ranking++;
     y+=30;
     leaderboardRungList.add(rung);
