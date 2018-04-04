@@ -1,5 +1,5 @@
 //class that deals with drawing the axis for a graph - Claire
-class Chart{
+class Chart {
   
   float topX, topY, x, y, rightX, rightY;
   

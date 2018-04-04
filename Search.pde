@@ -7,8 +7,11 @@ Map<String, ArrayList<Review>> reviewerReviewMap;
 Map<String, Business> amountOfReviews;
 
 
+// Holds all the searching functionality - Claire and Tom
 class Search {
 
+  
+  // searches for a business given a string
   ArrayList<Business> searchBusinessList(String userSearch) {
     userSearch = userSearch.toLowerCase();
     ArrayList<Business> foundBusinesses = new ArrayList<Business>();
@@ -23,7 +26,7 @@ class Search {
     }
     return foundBusinesses;
   }
-
+  // prints the businesses
   public void printBusinesses() {
     String businesses = ""; 
     Set<String> keys = businessReviewMap.keySet(); 

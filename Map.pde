@@ -1,4 +1,4 @@
-
+// world map class - Tom
 class WorldMap {
   private float lon, lat;
   private int mapX, mapY, mapHeight, mapWidth;
@@ -32,7 +32,7 @@ class WorldMap {
       bars[i] = new Bar(topTwentyBusinesses.get(i).getAverageStarsOfBusiness()*20, lon, lat, businesses.get(i).getBusinessName(), lat + 2, (float) 50, "map");
     }
   }
-
+  // draws circle on map to represent each business
   public void drawMap() {
     fill(100);
     shape(map, mapX, mapY, mapWidth, mapHeight);

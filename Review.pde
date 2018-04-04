@@ -1,7 +1,7 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.text.ParseException;
-
+// object that represents a user's review of a business - Tom
 class Review {
 
   private String author;
