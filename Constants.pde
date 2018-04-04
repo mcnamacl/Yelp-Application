@@ -5,7 +5,6 @@ final int SCREENY = 900;
 // colours 
 final color TEXT_COLOUR = #D83737;
 final color BACKGROUND_COLOUR = #B8F5FA;
-final color HOMESCREEN_BACKGROUND = #CAC7E8;
 final color HIGHLIGHT = #86C232;
 final color HIGHLIGHT_LIST=#769844;
 final color DEFAULT_TEXT_COLOUR = #61892F;
@@ -61,8 +60,8 @@ final int HOMEY=1;
 final int LEADERBOARDSBUTTONWIDTH=200;
 final int LEADERBOARDSBUTTONHEIGHT=50;
 //leaderboards button on home page coordinates
-final int LEADERBOARDSX =1200;
-final int LEADERBOARDSY=90;
+final int LEADERBOARDSX =650;
+final int LEADERBOARDSY = 175;
 
 // leaderboards screen 
 final int RADIOBUTTONX=50;

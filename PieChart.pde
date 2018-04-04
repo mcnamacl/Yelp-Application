@@ -24,7 +24,7 @@ class PieChart {
   //calculates the slice of the pie chart a particular value requires
   void pieChart(float diameter, int[] data) {
     noStroke();
-    fill(255, 200);
+    fill(255, 150);
     rect(x-55,y-65,175, 125);
     
     float lastAngle = 0;
