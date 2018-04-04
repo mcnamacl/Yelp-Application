@@ -75,6 +75,7 @@ class Search {
     Collections.sort(reviews, new SortByName());
     return reviews;
   }
+  
 
   //get top 10 coolest reviews - Claire
   public Review[] sortByCool() {
@@ -255,12 +256,6 @@ class Search {
       mostReviewed[i] = amountOfReviewsPerBusiness.get(amountOfReviewsPerBusiness.size()-(i+1));
     }
     return mostReviewed;
-    /*Collections.sort(businesses, new SortByMostReviews());
-     println("\n\n\n\n\n");
-     for (Business business : businesses) {
-     println(business + " " + business.businessReviews.size());
-     }
-     return null;*/
   }
 
   //returns the amount of reviews for all branches of a business - Claire

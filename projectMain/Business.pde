@@ -11,9 +11,7 @@ class Business {
   private float longitude;
   private float latitude;
   private int amountOfReviews;  
- // constructor for a particular branch of a business - Claire/Tom
-  
-   // public Business(String businessName, String businessId) {                                //my old one
+
   // constructor for a particular branch of a business - Claire/Tom
   public Business(String businessName, String businessId, float longitude, float latitude) {
   this.businessName = businessName;
@@ -84,7 +82,6 @@ class Business {
   //returns arraylist of how many stars in each category a business has 
   public int[] returnStars() { 
     getReviews();
-    println(searchedFor + " Yelp");
     if (!searchedFor) {
       for (Review review : businessReviews) {
         int placeInArray = review.getStars();

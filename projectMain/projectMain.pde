@@ -1,4 +1,4 @@
-import controlP5.*;   //<>// //<>//
+import controlP5.*;   //<>// //<>// //<>//
 import peasy.PeasyCam;
 import java.util.Set;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ boolean canType=false, drawGraph = false, goToGraph = false, drawPieChart = fals
 int year;
 
 String myText = "Search...";  
-String searchText, selectedBusiness, rating, reviewAmount, totalReviewsForYear, selectedAC, selectedReview, businessName, header;
+String searchText, selectedBusiness, rating, reviewAmount, totalReviewsForYear, selectedAC, selectedReview, businessName, selectedAuthor, selectedAuthorId, header;
 
 PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, backgroundPhotoBusiness, halfStar;
 
@@ -32,6 +32,8 @@ ArrayList<Widget> businessWidgets = new ArrayList<Widget>();
 ArrayList<String> reviewsString, topBusinesses;
 ArrayList<String>reviewHeaders;
 ArrayList<String>reviewTexts;
+ArrayList<String> reviewerIdsForPieChart = new ArrayList<String>();
+ArrayList<String> reviewerNamesForProfile = new ArrayList<String>();
 ArrayList<LeadersTable> leaderboardRungList;
 ArrayList<Business> businesses = new ArrayList<Business>();
 ArrayList<Business> searchedBusinesses;
@@ -41,7 +43,7 @@ ArrayList<ReviewBox> listOfRecentReviews;
 Table table;
 String[] autoCompleteResults;
 
-PFont font, widgetFont, barFont, businessFont, autoCompleteFont;
+PFont font, widgetFont, barFont, businessFont, autoCompleteFont, reviewerProfileFont, reviewerProfileHeaderFont;
 
 Search search;
 ControlP5 cp5;
@@ -89,6 +91,8 @@ void setup() {
   widgetFont=loadFont("Calibri-Light-17.vlw");
   autoCompleteFont=loadFont("Candara-15.vlw");
   font = loadFont("Calibri-BoldItalic-48.vlw");
+  reviewerProfileFont = loadFont("Arial-BoldMT-25.vlw");
+  reviewerProfileHeaderFont = loadFont("Arial-ItalicMT-25.vlw");
 
   //set-up of all the widgets used  - Kamil
   searchbox=new Widget(SEARCHBOXX, SEARCHBOXY, SEARCHBOXWIDTH, SEARCHBOXHEIGHT, myText, color(190), widgetFont, EVENT_BUTTON1, 5, 5);
@@ -128,8 +132,8 @@ void setup() {
   businesses = new ArrayList<Business>();
   searchedBusinesses  = new ArrayList<Business>();
   reviewsPerMonth = new ArrayList<Business>();
-  //  loading of data
-  loadData();
+ //  loading of data
+loadData();
   loadReviewBusiness();
 
   search = new Search();
@@ -264,7 +268,6 @@ void draw() {
     for (int i=0; i<map.bars.length && !map.bars[i].drawBar(); i++);
   }
 
-
   // boolean for determining if the top 20 list should be shown - Kamil
   if (!listTopTwenty) {
     cp5.hide();
@@ -346,7 +349,7 @@ void draw() {
       lineGraph.drawLineGraph();                              
       fill(0);
       text(year, YEARBUTTONX+YEARBUTTONWIDTH+5, YEARBUTTONY+22);
-    }
+   }
     // resets the boolean to prevent constant restarts on drawing the chart
     drawStarChart=false;
     drawMap=false;
@@ -354,7 +357,7 @@ void draw() {
       // draws the transparent rectangle behind review text
       fill(0, 130); 
       noStroke();
-      rect(BUSINESSREVIEWSX, BUSINESSREVIEWSY, REVIEWTEXTWIDTH, 720);
+      rect(BUSINESSREVIEWSX, BUSINESSREVIEWSY, REVIEWTEXTWIDTH, 600);
 
       // if a review is selected, print out its text on the area of the rectangle
       if (selectedReview!=null) {
@@ -362,6 +365,9 @@ void draw() {
         textSize(17);
         text(header+"\n", BUSINESSREVIEWSX+10, BUSINESSNAMEY+80, REVIEWTEXTWIDTH-10, 725);
         text(selectedReview, BUSINESSREVIEWSX+10, BUSINESSNAMEY+100, REVIEWTEXTWIDTH-10, 725);
+
+        //method to deal with profile - Claire
+        printReviewersProfile();
       } 
 
       //if the mouse is over the list of the reviews, you can scroll through the list, else 'scroll' zooms out/in on the screen
@@ -383,8 +389,10 @@ void draw() {
       textSize(40);
       text(businessName+"  "+rating+"*", BUSINESSNAMEX, BUSINESSNAMEY);
       textSize(19);
-      //text("Amount of reviews \nof all time" + " = " + reviewAmount, BUSINESSNAMEX, BUSINESSNAMEY+700);                      
-      //text("Amount of reviews \nfor " + year + " = " + totalReviewsForYear, BUSINESSNAMEX, BUSINESSNAMEY+725);
+      if (drawLineChart){
+      text("Amount of reviews \nof all time" + " = " + reviewAmount, LINECHARTBUTTONX-120, LINECHARTBUTTONY+90);                      
+      text("Amount of reviews \nfor " + year + " = " + totalReviewsForYear, LINECHARTBUTTONX-120, LINECHARTBUTTONY+130);
+      }
     }
     if (!drawScreen) {
       cp5Reviews.get(ScrollableList.class, "Reviews").hide();
@@ -407,6 +415,10 @@ void TopTwenty(int index) {
 // Function for getting the index of a pressed review on the business screen - Kamil
 void Reviews(int index) {
   selectedReview=reviewTexts.get(index);
+
+  //getting information for reviwer profile - Claire
+  selectedAuthorId = reviewerIdsForPieChart.get(index);
+  selectedAuthor = reviewerNamesForProfile.get(index);
   header = reviewHeaders.get(index);
 }
 
@@ -416,6 +428,43 @@ void Autocomplete(int index) {
   canType = true;
 }
 
+//getting the information for the reviwer and printing out reviewers profile - Claire
+void printReviewersProfile() {
+  fill(255, 180);
+  rect(BUSINESSREVIEWSX, BUSINESSREVIEWSY + 620, REVIEWTEXTWIDTH-190, 125);
+
+  author = new Author(selectedAuthorId);
+  pieChart = new PieChart(720, 830, author.type());
+  drawPieChart = true;
+
+  fill(#58862E);
+  textSize(22);
+  textFont(reviewerProfileHeaderFont);
+  text("Reviewer Profile", BUSINESSREVIEWSX + 20, BUSINESSREVIEWSY + 650);
+
+  textSize(20);
+  text("Name: ", BUSINESSREVIEWSX + 20, BUSINESSREVIEWSY + 680);
+
+  textFont(reviewerProfileFont);
+  textSize(20);
+  text(selectedAuthor, BUSINESSREVIEWSX + 100, BUSINESSREVIEWSY + 680);
+
+  textFont(reviewerProfileHeaderFont);
+  textSize(20);
+  text("Amount of reviews: ", BUSINESSREVIEWSX + 20, BUSINESSREVIEWSY + 700);
+
+  textFont(reviewerProfileFont);
+  textSize(20);
+  text(author.getAmountOfReviews(), BUSINESSREVIEWSX + 200, BUSINESSREVIEWSY + 700);
+
+  textFont(reviewerProfileHeaderFont);
+  textSize(20);
+  text("Average star rating given: ", BUSINESSREVIEWSX + 20, BUSINESSREVIEWSY + 720);
+
+  textFont(reviewerProfileFont);
+  textSize(20);
+  text(author.getAverageStarRating(), BUSINESSREVIEWSX + 260, BUSINESSREVIEWSY + 720);
+}
 
 
 void mouseMoved() {
@@ -487,6 +536,7 @@ void mouseDragged() {
   if (currentScreen!=homeScreen && !overReviews() && !listTopTwenty) {
     cam.setActive(true);
     drawScreen=false;
+    drawPieChart = false;
   }
 }
 
@@ -663,6 +713,9 @@ void mousePressed() {
         cp5Reviews.get(ScrollableList.class, "Reviews").close(); 
         header = reviewHeaders.get(0);
         cp5Reviews.get(ScrollableList.class, "Reviews").setCaptionLabel(header);
+        author = new Author(listOfRecentReviews.get(i).reviewerId);
+        pieChart = new PieChart(500, 500, author.type());
+        drawPieChart = true;
       }
     }
     break;
@@ -692,7 +745,7 @@ void mousePressed() {
       year--;
     }
     reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
-    displayBusinessLineGraph(reviewsPerMonth, year);
+    totalReviewsForYear = displayBusinessLineGraph(reviewsPerMonth, year);
     println(year);
     println(lineGraph.amountOfReviews());
   }
@@ -706,9 +759,7 @@ void mousePressed() {
       println(year);
     }
     reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
-    displayBusinessLineGraph(reviewsPerMonth, year);
-    println(year);
-    println(lineGraph.amountOfReviews());
+    totalReviewsForYear = displayBusinessLineGraph(reviewsPerMonth, year);
   }
 }
 
@@ -783,7 +834,7 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   }
 }
 
-//draws the line chart for amount of reviews per month per year for a particular business - Claire                                            ///////////////////////////////////////////////////////////////////////
+//draws the line chart for amount of reviews per month per year for a particular business - Claire                                           
 String displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {  
   lineGraph = new LineGraph(LINECHARTX, LINECHARTY, reviewsPerMonth, year);
   return lineGraph.amountOfReviews();
@@ -856,7 +907,6 @@ void displayBusinessScreen() {
   //draws the amount of the stars the business searched has if business is in data base - Claire
   displayBusinessStarsChart(searchedBusinesses);                                                            
   println(searchbox.myText);                                                                                 
-  //draws the amount of the stars the business searched has if business is in data base - Claire
   for (Business business : searchedBusinesses) {
     println(business.searchedFor);
     business.searchedFor = true;
@@ -915,13 +965,24 @@ void prepareBusinessReviews(String businessName) {
   selectedReview=null;
   reviewTexts.clear();
   reviewHeaders.clear();
+  reviewerIdsForPieChart.clear();
+  reviewerNamesForProfile.clear();
   String reviewHeader="";
   String reviewText="";
+  String idOfReviewer = "";
+  String name = "";
   for (Review review : search.getReviewsForBusiness(businessName)) {
     reviewHeader=(review.getDate()+"  "+review.getAuthor()+"  "+review.getStars()+"*");
     reviewHeaders.add(reviewHeader);
     reviewText=review.getText();
     reviewTexts.add(reviewText);
+
+    //for piechart representation of what type of reviewer the author of the review is - Claire
+    idOfReviewer = review.getAuthorId();
+    reviewerIdsForPieChart.add(idOfReviewer);
+
+    name = review.getAuthor();
+    reviewerNamesForProfile.add(name);
   }
   cp5Reviews.get(ScrollableList.class, "Reviews").clear();                                                      
   cp5Reviews.get(ScrollableList.class, "Reviews").addItems(reviewHeaders); 
