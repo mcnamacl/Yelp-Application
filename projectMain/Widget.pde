@@ -106,6 +106,10 @@ class Widget {
     return strokeColor;
   }
   
+  void removeStroke(){
+    strokeWeight(0);
+  }
+  
   int setTextColor(int mouseX, int mouseY) {
     myTextColor = color(255);
     if (mouseX>x && mouseX < x+width && mouseY >y && mouseY <y+height) {
