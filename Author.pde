@@ -4,6 +4,7 @@ class Author {
   String name, id;
   ArrayList<Review> authorReviews;
   int[] type = new int[3];
+  double counter, totalAmountOfStars;
 
   Author(String id) {
     this.id = id;
@@ -29,6 +30,8 @@ class Author {
       if (review.getCool() != 0) {
         cool = review.getCool() + cool;
       }
+      counter++;
+      totalAmountOfStars = totalAmountOfStars + review.getStars();
     }
     type[0] = funny;
     type[1] = useful;
@@ -41,5 +44,14 @@ class Author {
   void drawPieChart() {
     PieChart pieChart = new PieChart(100, 100, type);
     pieChart.pieChart(300, type);
+  }
+  
+  int getAmountOfReviews(){
+    return authorReviews.size();
+  }
+  
+  String getAverageStarRating(){
+    String average = Double.toString(Double.parseDouble(String.format("%.2f", totalAmountOfStars/counter)));
+    return average;
   }
 }

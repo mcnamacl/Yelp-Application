@@ -24,8 +24,8 @@ class PieChart {
   //calculates the slice of the pie chart a particular value requires
   void pieChart(float diameter, int[] data) {
     noStroke();
-    fill(0,127);
-    rect(x-55,y-85,175, 170);
+    fill(255, 200);
+    rect(x-55,y-65,175, 125);
     
     float lastAngle = 0;
     float total = 0;
@@ -34,7 +34,7 @@ class PieChart {
     }
     int tmpY = y - 25;
     for (int i = 0; i < data.length; i++) {
-      fill(colours[i]);
+      fill(colours[i], 255);
       float angle = (map(data[i], 0, total, 0, 360)) * PI/180;
       arc(x, y, diameter, diameter, lastAngle, lastAngle+angle);
       lastAngle += angle;
