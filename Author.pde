@@ -8,7 +8,6 @@ class Author {
 
   Author(String id) {
     this.id = id;
-    println(id);
     authorReviews = (ArrayList<Review>)reviewerReviewMap.get(id);
     for (int i : type) {
       type[i] = 0;
@@ -36,7 +35,6 @@ class Author {
     type[0] = funny;
     type[1] = useful;
     type[2] = cool;
-    println(type);
     return type;
   }
 

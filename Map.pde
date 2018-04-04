@@ -32,7 +32,6 @@ class WorldMap {
       
       bars[i] = new Bar(topTwentyBusinesses.get(i).getAverageStarsOfBusiness()*20, lon, lat, businesses.get(i).getBusinessName(), lat + 2, (float) 50, "map", mapYText);
       mapYText+=15;
-      println( businesses.get(i).getBusinessName());
     }
   }
   // draws circle on map to represent each business

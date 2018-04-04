@@ -631,9 +631,6 @@ void mousePressed() {
     // shows most useful graph on leaderboards screen - Kamil & Claire
   case EVENT_BUTTON7:
     displayUsefulChart();
-    for (Review review : search.sortByUseful()) {
-      println(review.getAuthor() + review.getUseful());
-    }
     listTopTwenty=false;
     drawLineChart = false;
     drawMap=false;
@@ -642,9 +639,6 @@ void mousePressed() {
     // shows funniest reviewer graph on leaderboards screen - Kamil & Claire
   case EVENT_BUTTON8:
     displayFunniestChart();
-    for (Review review : search.sortByFunny()) {
-      println(review.getAuthor() + review.getFunny());
-    }
     listTopTwenty=false;
     drawLineChart = false;
     drawMap=false;
@@ -653,9 +647,6 @@ void mousePressed() {
     // shows coolest reviewer graph on leaderboards screen - Kamil & Claire
   case EVENT_BUTTON9:
     displayCoolChart();
-    for (Review review : search.sortByCool()) {
-      println(review.getAuthor() + review.getCool());
-    }
     listTopTwenty=false;
     drawLineChart = false;
     drawMap=false;
@@ -707,7 +698,6 @@ void mousePressed() {
     drawGraph=false;
     drawStarChart=false;
     drawLineChart = true;
-    println(lineGraph.amountOfReviews());
     break;
 
     // button to display map on leaderboards page - Kamil  
@@ -760,8 +750,6 @@ void mousePressed() {
     }
     reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
     totalReviewsForYear = displayBusinessLineGraph(reviewsPerMonth, year);
-    println(year);
-    println(lineGraph.amountOfReviews());
   }
 
   event= nextYear.getEvent(mouseX, mouseY);
@@ -885,7 +873,6 @@ void displayBusinessScreen() {
   currentScreen=businessScreen;
   searchedBusinesses = search.searchBusinessList(searchbox.myText);
   drawGraph = true;
-  println(searchbox.myText);
 
   // if no business found
   if (searchedBusinesses==null || selectedBusiness==null) {
@@ -920,12 +907,9 @@ void displayBusinessScreen() {
 
   //draws the amount of the stars the business searched has if business is in data base - Claire
   displayBusinessStarsChart(searchedBusinesses);                                                            
-  println(searchbox.myText);                                                                                 
   for (Business business : searchedBusinesses) {
-    println(business.searchedFor);
     business.searchedFor = true;
   }
-  println(searchbox.myText);
 }
 
 // this method creates an arraylist of leaderboard rungs containing the highest rated businesses-Ruairi
