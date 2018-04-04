@@ -1,13 +1,13 @@
 //Class that deals with each individual bar of a bar chart - Claire
 class Bar {
 
-  float x, y, iY, tmpY;
+  float x, y, iY, tmpY, mapY;
   double barHeight;
   String businessName, type;
   float startPoint, constantY, z;
   color barColour;
 
-  Bar(double averageStarsOfBusiness, float tmpX, float tmpY, String businessName, float startPoint, float z, String type) {
+  Bar(double averageStarsOfBusiness, float tmpX, float tmpY, String businessName, float startPoint, float z, String type, float mapY) {
     barHeight = averageStarsOfBusiness;
     x = tmpX;
     y = tmpY;
@@ -17,6 +17,7 @@ class Bar {
     this.businessName = businessName;
     this.z = z;
     this.type = type;
+    this.mapY = mapY;
     int r = (int)random(255);
     int g = (int)random(255);
     int b = (int)random(255);
@@ -69,7 +70,12 @@ class Bar {
         textSize(25);
         text(businessName, tmpX+20, tmpY);
         popMatrix();
-      } else if (type.equals("map")) {
+      }
+      else if (type.equals("map")){
+        //fill(255,80);
+        //rect(1190, 280, 300, 15*20 + 10);
+        fill(barColour);
+        text(businessName, 300, mapY);
       }
     }
     return (iY < barHeight);

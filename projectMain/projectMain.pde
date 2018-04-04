@@ -738,7 +738,7 @@ void mousePressed() {
   // seperate from switch statement because theyre not added to be part of a screen, so cant use currentScreen.getEvent, this is so that they are not drawn all the time and only when the line chart is shown
   // - Kamil
   event = previousYear.getEvent(mouseX, mouseY); 
-  if (event==EVENT_BUTTON17) {
+  if (event==EVENT_BUTTON17 && currentScreen == businessScreen) {
     if (year<=2007) {
       year=2007;
     } else {
@@ -751,7 +751,7 @@ void mousePressed() {
   }
 
   event= nextYear.getEvent(mouseX, mouseY);
-  if (event==EVENT_BUTTON18) {
+  if (event==EVENT_BUTTON18 && currentScreen == businessScreen) {
     if (year>=2017) {
       year=2017;
     } else {
