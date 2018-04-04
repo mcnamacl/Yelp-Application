@@ -369,7 +369,6 @@ void draw() {
         textSize(17);
         text(header+"\n", BUSINESSREVIEWSX+10, BUSINESSNAMEY+80, REVIEWTEXTWIDTH-10, 725);
         text(selectedReview, BUSINESSREVIEWSX+10, BUSINESSNAMEY+100, REVIEWTEXTWIDTH-10, 725);
-
         //method to deal with profile - Claire
         printReviewersProfile();
       } 
@@ -717,7 +716,9 @@ void mousePressed() {
         cp5Reviews.get(ScrollableList.class, "Reviews").close(); 
         header = reviewHeaders.get(0);
         cp5Reviews.get(ScrollableList.class, "Reviews").setCaptionLabel(header);
-        author = new Author(listOfRecentReviews.get(i).reviewerId);
+        selectedAuthorId = reviewerIdsForPieChart.get(0);
+        selectedAuthor = reviewerNamesForProfile.get(0);
+        author = new Author(selectedAuthorId);
         pieChart = new PieChart(500, 500, author.type());
         drawPieChart = true;
       }
