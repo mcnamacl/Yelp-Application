@@ -111,7 +111,7 @@ void setup() {
   selectedBusiness=null;
   selectedAC = null;
   selectedReview=null;
-
+  // initialising data structures
   table = loadTable("reviews.csv", "header");
   reviewerIds = new HashSet<String>();
   businessReviewMap = new TreeMap<String, ArrayList<Review>>();
@@ -125,9 +125,7 @@ void setup() {
   businesses = new ArrayList<Business>();
   searchedBusinesses  = new ArrayList<Business>();
   reviewsPerMonth = new ArrayList<Business>();
-  //businessAmountOfReviews = new <String, Integer>();
-  //reviewerNames = new HashSet<String>();
-
+//  loading of data
   loadData();
   loadReviewBusiness();
 
@@ -135,7 +133,8 @@ void setup() {
   search.createBusinessAZMap();
   search.createReviewerMap();
   println(reviewerReviewMap.keySet());
-
+  
+// autocomplete initialised with individual business names - Tom
   autoComplete = new AutoComplete(businessReviewMap.keySet());
 
   search.mostRecentReview(reviews);
@@ -180,7 +179,7 @@ void setup() {
     .setItemHeight(50)           
     .open()
     .addItems(search.getTop20Businesses())
-    .setFont(widgetFont)
+    //.setFont(widgetFont)
     .setScrollSensitivity(200.0)
     .setCaptionLabel("Top 20 rated businesses")
     .setColorForeground(HIGHLIGHT_LIST)
@@ -193,7 +192,7 @@ void setup() {
     .setSize(REVIEWTEXTWIDTH, REVIEWTEXTHEIGHT)
     .setItemHeight(28)
     .setBarHeight(30)
-    .setFont(widgetFont)
+    //.setFont(widgetFont)
     .setScrollSensitivity(200.0)
     .setCaptionLabel("Reviews")
     .setColorForeground(HIGHLIGHT_LIST)
@@ -208,7 +207,7 @@ void setup() {
     .setBarVisible(false)
     .setItemHeight(AUTOCOMPLETE_QUERY_HEIGHT)
     .open()
-    .setFont(autoCompleteFont)
+    //.setFont(autoCompleteFont)
     .setColorForeground(HIGHLIGHT_LIST)
     .setColorBackground(REVIEWLISTCOLOR);
 
@@ -257,7 +256,7 @@ void draw() {
       for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++);
     }
   }
-
+  // drawing bar charts on map
   if (drawMap) {
     for (int i=0; i<map.bars.length && !map.bars[i].drawBar(); i++);
   }
@@ -706,7 +705,7 @@ void mousePressed() {
   }
 }
 
-
+// loads raw data from table - Tom
 void loadData() {
   for (TableRow row : table.rows()) {
     DataPoint dp = new DataPoint(row.getString(0), row.getString(1), row.getString(2), row.getString(3), row.getInt(4), row.getString(5), row.getString(6), row.getInt(7), row.getInt(8), row.getInt(9), row.getFloat(10), row.getFloat(11));
@@ -714,7 +713,7 @@ void loadData() {
   }
 }
 
-
+// loads reviews and businesses array lists - Tom
 void loadReviewBusiness() {
   for (DataPoint dp : dataPoints) {
     reviews.add(new Review(dp.getUserName(), dp.getUserId(), dp.getBusinessName(), dp.getBusinessId(), dp.getStars(), dp.getText(), dp.getDate(), dp.getUseful(), dp.getFunny(), dp.getCool()));

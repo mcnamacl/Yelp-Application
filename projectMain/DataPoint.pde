@@ -1,3 +1,4 @@
+// Initial object each line of csv is loaded into - Tom
 class DataPoint {
 
   private String userId;

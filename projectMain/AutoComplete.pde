@@ -8,7 +8,7 @@ public class AutoComplete {
   public AutoComplete(Set<String> terms) {
     this.terms = terms;
   }
-
+  // searches through terms and matches prefix into String array
   public String[] getMatches(String prefix) {
     ArrayList<String> matches = new ArrayList<String>();
     for (String term : terms) {

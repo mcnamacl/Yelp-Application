@@ -29,7 +29,7 @@ class Business {
     }
   }
 
-  // constructors for all branchs of a business - Claire
+  // constructors for all branches of a business - Claire
   public Business(String businessName, int amountOfReviews, boolean searchedFor) {
     this.amountOfReviews = amountOfReviews;
     this.businessName = businessName;
@@ -42,7 +42,7 @@ class Business {
     this.month = month;
     this.searchedFor = searchedFor;
   }
-
+  // getters and setters
   int getMonth() {
     return month;
   }
