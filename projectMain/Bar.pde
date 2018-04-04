@@ -72,8 +72,6 @@ class Bar {
         popMatrix();
       }
       else if (type.equals("map")){
-        //fill(255,80);
-        //rect(1190, 280, 300, 15*20 + 10);
         fill(barColour);
         text(businessName, 300, mapY);
       }
