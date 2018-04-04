@@ -38,22 +38,23 @@ class Search {
     println(businesses);
   }
 
-  public ArrayList<Float> getLatitudes(ArrayList<Business> topFiftyBusinesses) {
+  public ArrayList<Float> getLatitudes(ArrayList<Business> topTwentyBusinesses) {
     ArrayList<Float> latitudes = new ArrayList<Float>();
-    for (Business business : topFiftyBusinesses) {
+    for (Business business : topTwentyBusinesses) {
       latitudes.add(business.getLatitude());
     }
     return latitudes;
   }
 
-  public ArrayList<Float> getLongitudes(ArrayList<Business> topFiftyBusinesses) {
+  public ArrayList<Float> getLongitudes(ArrayList<Business> topTwentyBusinesses) {
     ArrayList<Float> longitudes = new ArrayList<Float>();
-    for (Business business : topFiftyBusinesses) {
+    for (Business business : topTwentyBusinesses) {
       longitudes.add(business.getLongitude());
     }
     return longitudes;
   }
 
+//gets top 20 businesses and returns the business - Claire
   public ArrayList<Business> getTopTwentyBusinesses() {
     ArrayList<Business> topTwentyBusinesses = new ArrayList<Business>();
     sortBusinesses();
@@ -63,6 +64,17 @@ class Search {
       counter++;
     }
     return topTwentyBusinesses;
+  }
+  
+  //get highest rated business - Claire
+  public Business getTopBusiness(){
+    sortBusinesses();
+    return (businesses.get(businesses.size()-1));
+  }
+  
+  public Business getWorstBusiness(){
+    sortBusinesses();
+    return (businesses.get(0));
   }
 
   // sorts by most recent reviews - Tom
@@ -142,11 +154,10 @@ class Search {
     }
   }
 
-  // Initialises map of reviewer's name and all that reviewer's reviews
+  // Initialises map of reviewer's id and all that reviewer's reviews
   // Can be used to determine if reviewer is harsh or easliy pleased
   void createReviewerMap() {
     for (Review review : reviews) {
-      // reviewerNames.add(review.getAuthor().toLowerCase());
       reviewerIds.add(review.getAuthorId());
     }
     for (String id : reviewerIds) {
@@ -192,7 +203,7 @@ class Search {
     return top15Businesses;
   }
 
-  //gets the top 20 rated businesses - Claire
+  //gets the top 20 rated businesses and returns the name of the businesses - Claire
   public String[] getTop20Businesses() {
     String[] top20Businesses = new String[20];
     sortBusinesses();
@@ -308,6 +319,8 @@ class Search {
     return reviewsPerMonth;
   }
 
+
+//gets all the reviews for all branches of a particular business - Claire
   ArrayList<Review> getReviewsForBusiness(String businessName) {
     businessName = businessName.toLowerCase();
     ArrayList<Review> reviewsForBusiness = new ArrayList<Review>();

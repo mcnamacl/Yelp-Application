@@ -43,7 +43,7 @@ ArrayList<ReviewBox> listOfRecentReviews;
 Table table;
 String[] autoCompleteResults;
 
-PFont font, widgetFont, barFont, businessFont, autoCompleteFont, reviewerProfileFont, reviewerProfileHeaderFont;
+PFont font, widgetFont, barFont, businessFont, autoCompleteFont, reviewerProfileFont, reviewerProfileHeaderFont, reviewFont;
 
 Search search;
 ControlP5 cp5;
@@ -62,6 +62,9 @@ PeasyCam cam;
 PApplet mainClass = this;
 
 Author author;
+
+Bubble[] bubbles = new Bubble[5];
+;
 
 
 void settings() {
@@ -88,16 +91,17 @@ void setup() {
   yellowStar=loadImage("yellowStar1small.png");
   greyStar=loadImage("greyStar1small.png");
 
-  widgetFont=loadFont("Calibri-Light-17.vlw");
+  widgetFont=loadFont("Sylfaen-16.vlw");
   autoCompleteFont=loadFont("Candara-15.vlw");
   font = loadFont("Calibri-BoldItalic-48.vlw");
   reviewerProfileFont = loadFont("Arial-BoldMT-25.vlw");
   reviewerProfileHeaderFont = loadFont("Arial-ItalicMT-25.vlw");
+  reviewFont = loadFont("Cambria-BoldItalic-16.vlw");
 
   //set-up of all the widgets used  - Kamil
   searchbox=new Widget(SEARCHBOXX, SEARCHBOXY, SEARCHBOXWIDTH, SEARCHBOXHEIGHT, myText, color(190), widgetFont, EVENT_BUTTON1, 5, 5);
   searchButton=new Widget(SEARCHBUTTONX, SEARCHBUTTONY, SEARCHBUTTONWIDTH, SEARCHBOXHEIGHT, "", color(0), widgetFont, EVENT_BUTTON10, 0, 0);
-  leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(190), widgetFont, EVENT_BUTTON3, 20, 20);
+  leaderboardsButton=new Widget(LEADERBOARDSX, LEADERBOARDSY, 160, 50, "Leaderboards", color(255, 127), widgetFont, EVENT_BUTTON3, 20, 20);
   homeButton=new Widget(HOMEX, HOMEY, 60, 60, logoImage, EVENT_BUTTON2);
   homeScreen=new Screen(backgroundPhoto, homescreenWidgets);
   leaderboardsScreen= new Screen(backgroundPhotoLeaderBoards, leaderboardsWidgets);
@@ -132,8 +136,8 @@ void setup() {
   businesses = new ArrayList<Business>();
   searchedBusinesses  = new ArrayList<Business>();
   reviewsPerMonth = new ArrayList<Business>();
- //  loading of data
-loadData();
+  //  loading of data
+  loadData();
   loadReviewBusiness();
 
   search = new Search();
@@ -219,6 +223,8 @@ loadData();
     .setColorBackground(REVIEWLISTCOLOR);
 
   map = new WorldMap();
+
+  statsForNerds();
 }
 
 
@@ -300,14 +306,12 @@ void draw() {
     drawTopBusinessTable();
     cam.setActive(false);
     listTopTwenty=false;
-
-    fill(HIGHLIGHT, 127);
-    noStroke();
-
-    rect(797, 247, 456, 46);
-    rect(97, 167, 386, 66);
-    drawRecentReviewBoxes();
-    drawTopBusinessTable();
+    fill(255);
+    textSize(25);
+    text("Stats for Nerds", 650, 300);
+    for (int index = 0; index <  bubbles.length; index++) {
+    bubbles[index].drawBubblesRising();
+  }
   }
 
   // draws the line seperating the buttons from the graphs - Kamil
@@ -349,7 +353,7 @@ void draw() {
       lineGraph.drawLineGraph();                              
       fill(0);
       text(year, YEARBUTTONX+YEARBUTTONWIDTH+5, YEARBUTTONY+22);
-   }
+    }
     // resets the boolean to prevent constant restarts on drawing the chart
     drawStarChart=false;
     drawMap=false;
@@ -389,9 +393,9 @@ void draw() {
       textSize(40);
       text(businessName+"  "+rating+"*", BUSINESSNAMEX, BUSINESSNAMEY);
       textSize(19);
-      if (drawLineChart){
-      text("Amount of reviews \nof all time" + " = " + reviewAmount, LINECHARTBUTTONX-120, LINECHARTBUTTONY+90);                      
-      text("Amount of reviews \nfor " + year + " = " + totalReviewsForYear, LINECHARTBUTTONX-120, LINECHARTBUTTONY+130);
+      if (drawLineChart) {
+        text("Amount of reviews \nof all time" + " = " + reviewAmount, LINECHARTBUTTONX-120, LINECHARTBUTTONY+90);                      
+        text("Amount of reviews \nfor " + year + " = " + totalReviewsForYear, LINECHARTBUTTONX-120, LINECHARTBUTTONY+130);
       }
     }
     if (!drawScreen) {
@@ -466,6 +470,16 @@ void printReviewersProfile() {
   text(author.getAverageStarRating(), BUSINESSREVIEWSX + 260, BUSINESSREVIEWSY + 720);
 }
 
+//creation of bubble facts animation for homepage - Claire
+void statsForNerds() {
+  bubbles[0] = new Bubble(650, 400, 150, #C2BDCB, "There are currently \n" + reviews.size() + " \nreviews on this site.", 0);
+  Business[] tmpBusinesses = search.mostReviewed();
+  Business tmpBusiness = tmpBusinesses[0];
+  bubbles[1] = new Bubble(770, 550, 130, #BFADBE, tmpBusiness.getBusinessName() +  "\nhas the most \nreviews.", 150);
+  bubbles[2] = new Bubble(820, 420, 100, #AAC5E0, search.getTopBusiness().getBusinessName() + "\nis the best \nrated.", 280);
+  bubbles[3] = new Bubble(640, 650, 90, #B0E0AA, search.getWorstBusiness().getBusinessName() + "\nis the worst \nrated.", 370);
+  bubbles[4] = new Bubble(800, 760, 160, #F7CBA7, search.sortByCool()[0].getAuthor() + "\nis the coolest \nreviewer.", 550);
+}
 
 void mouseMoved() {
   searchbox.setStroke(mouseX, mouseY);
@@ -844,9 +858,9 @@ String displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {
 ArrayList<ReviewBox> initRecentReviewBoxes() {
   ArrayList<Review> mostRecentReviews = search.mostRecentReview(reviews);
   listOfRecentReviews = new ArrayList<ReviewBox>();
-  int x=100;
+  int x=60;
   int y=270;
-  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(HIGHLIGHT, 20), DEFAULT_TEXT_COLOUR, color(255), font, "Most Recent Reviews", 5);
+  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(255, 127), DEFAULT_TEXT_COLOUR, color(0), widgetFont, "Most Recent Reviews", 5);
   for (int i=0; i<=2; i++) {
     //println(mostRecentReviews);
     Review review = mostRecentReviews.get(i);
@@ -919,9 +933,9 @@ ArrayList<LeadersTable> initTopBusinesses() {
   Business[] topBusinesses = search.getTop15Businesses();
   leaderboardRungList = new ArrayList<LeadersTable>();
   int ranking = 1;
-  int x=800;
-  int y=320;
-  topBusinessesHeader = new TitleBox(x, y-70, 450, 40, 20, 20, color(HIGHLIGHT, 20), DEFAULT_TEXT_COLOUR, color(255), font, "Top Rated Businesses", 5);
+  int x=1000;
+  int y=270;
+  topBusinessesHeader = new TitleBox(x, y-100, 450, 60, 25, 25, color(255, 127), DEFAULT_TEXT_COLOUR, color(0), widgetFont, "Top Rated Businesses", 5);
   for (int i=0; i<topBusinesses.length; i++) {
     String currentBusinessName = topBusinesses[i].getBusinessName();
     String actualBusinessName = topBusinesses[i].getBusinessName();
