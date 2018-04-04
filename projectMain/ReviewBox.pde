@@ -35,7 +35,6 @@ class ReviewBox {
     seeFullReviewButton.draw();
 
     authorPieChart.draw();
-
     fill(DEFAULT_TEXT_COLOUR);
     text(review, x+5, y+50, width-30, height-65);
     text("by.", x+289, y+17);

@@ -294,8 +294,10 @@ void draw() {
     drawTopBusinessTable();
     cam.setActive(false);
     listTopTwenty=false;
-    fill(HIGHLIGHT, 180);
+
+    fill(HIGHLIGHT, 127);
     noStroke();
+
     rect(797, 247, 456, 46);
     rect(97, 167, 386, 66);
     drawRecentReviewBoxes();
@@ -408,16 +410,18 @@ void mouseMoved() {
   leaderboardsButton.setStroke(mouseX, mouseY);
 
   //gets the piechart for a reviewer if the mouse is hovered over their name - Claire
-  if (homeScreen.hover(mouseX, mouseY)) {
-    for (int i = 0; i < listOfRecentReviews.size(); i++) {
-      if (listOfRecentReviews.get(i).authorPieChart.getEvent(mouseX, mouseY) != EVENT_NULL) {
-        author = new Author(listOfRecentReviews.get(i).reviewerId);
-        pieChart = new PieChart(int(listOfRecentReviews.get(i).authorPieChart.x+150), int(listOfRecentReviews.get(i).authorPieChart.y+50), author.type());
-        drawPieChart = true;
+  if (currentScreen == homeScreen) {
+    if (homeScreen.hover(mouseX, mouseY)) {
+      for (int i = 0; i < listOfRecentReviews.size(); i++) {
+        if (listOfRecentReviews.get(i).authorPieChart.getEvent(mouseX, mouseY) != EVENT_NULL) {
+          author = new Author(listOfRecentReviews.get(i).reviewerId);
+          pieChart = new PieChart(int(listOfRecentReviews.get(i).authorPieChart.x+150), int(listOfRecentReviews.get(i).authorPieChart.y+50), author.type());
+          drawPieChart = true;
+        }
       }
+    } else {
+      drawPieChart = false;
     }
-  } else {
-    drawPieChart = false;
   }
 }
 
@@ -796,8 +800,7 @@ ArrayList<ReviewBox> initRecentReviewBoxes() {
   listOfRecentReviews = new ArrayList<ReviewBox>();
   int x=100;
   int y=270;
-  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(255, 0, 0, 127), DEFAULT_TEXT_COLOUR, DEFAULT_TEXT_COLOUR, font, "Most Recent Reviews", 5);
-  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(HIGHLIGHT, 127), DEFAULT_TEXT_COLOUR, color(255), font, "Most Recent Reviews", 5);
+  recentReviewsHeader = new TitleBox(x, y-100, 380, 60, 25, 25, color(HIGHLIGHT, 20), DEFAULT_TEXT_COLOUR, color(255), font, "Most Recent Reviews", 5);
   for (int i=0; i<=2; i++) {
     //println(mostRecentReviews);
     Review review = mostRecentReviews.get(i);
@@ -873,7 +876,7 @@ ArrayList<LeadersTable> initTopBusinesses() {
   int ranking = 1;
   int x=800;
   int y=320;
-  topBusinessesHeader = new TitleBox(x, y-70, 450, 40, 20, 20, color(HIGHLIGHT, 127), DEFAULT_TEXT_COLOUR, color(255), font, "Top Rated Businesses", 5);
+  topBusinessesHeader = new TitleBox(x, y-70, 450, 40, 20, 20, color(HIGHLIGHT, 20), DEFAULT_TEXT_COLOUR, color(255), font, "Top Rated Businesses", 5);
   for (int i=0; i<topBusinesses.length; i++) {
     String currentBusinessName = topBusinesses[i].getBusinessName();
     String actualBusinessName = topBusinesses[i].getBusinessName();
@@ -909,10 +912,10 @@ boolean overReviews() {
   return canScroll;
 }
 
-boolean overTopTwenty(){
+boolean overTopTwenty() {
   boolean canScroll=false;
   if (cp5Reviews.get(ScrollableList.class, "Reviews").isVisible() && currentScreen==leaderboardsScreen && mouseX>=TOPTWENTYLISTX && 
-      mouseX<= TOPTWENTYLISTX+TOPTWENTYWIDTH && mouseY >= TOPTWENTYLISTY && mouseY<=TOPTWENTYLISTY+TOPTWENTYHEIGHT) {
+    mouseX<= TOPTWENTYLISTX+TOPTWENTYWIDTH && mouseY >= TOPTWENTYLISTY && mouseY<=TOPTWENTYLISTY+TOPTWENTYHEIGHT) {
     canScroll=true;
   }
   return canScroll;

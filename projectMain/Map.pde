@@ -5,7 +5,7 @@ class WorldMap {
   ArrayList<Float> latitudesBar, longitudesBar, latitudes, longitudes;
   PShape map;
   Bar bars[];
-  ArrayList<Business> topFiftyBusinesses;
+  ArrayList<Business> topTwentyBusinesses;
 
   public WorldMap() {
     this.lon = 0;
@@ -16,20 +16,20 @@ class WorldMap {
     this.mapY = MAP_Y;
     this.map = loadShape("BlankMap-Equirectangular.svg");
     
-    topFiftyBusinesses = search.getTopTwentyBusinesses();
+    topTwentyBusinesses = search.getTopTwentyBusinesses();
     
     this.latitudes = search.getLatitudes(businesses);
     this.longitudes = search.getLongitudes(businesses);  
     
-    this.latitudesBar = search.getLatitudes(topFiftyBusinesses);
-    this.longitudesBar = search.getLongitudes(topFiftyBusinesses);  
+    this.latitudesBar = search.getLatitudes(topTwentyBusinesses);
+    this.longitudesBar = search.getLongitudes(topTwentyBusinesses);  
     
     bars = new Bar[latitudesBar.size()];
     for (int i = 0; i < latitudesBar.size(); i++) {
       lat = map(latitudesBar.get(i), 90, -90, 0, mapHeight) + mapY;
       lon = map(longitudesBar.get(i), -180, 180, 0, mapWidth) + mapX;
       
-      bars[i] = new Bar(topFiftyBusinesses.get(i).getAverageStarsOfBusiness()*20, lon, lat, businesses.get(i).getBusinessName(), lat + 2, (float) 50, "map");
+      bars[i] = new Bar(topTwentyBusinesses.get(i).getAverageStarsOfBusiness()*20, lon, lat, businesses.get(i).getBusinessName(), lat + 2, (float) 50, "map");
     }
   }
 
