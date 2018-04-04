@@ -18,8 +18,8 @@ String searchText, selectedBusiness, rating, reviewAmount, totalReviewsForYear, 
 
 PImage logoImage, searchImage, yellowStar, greyStar, backgroundPhoto, backgroundPhotoLeaderBoards, backgroundPhotoBusiness, halfStar;
 
-Widget searchbox, searchButton, homeButton, leaderboardsButton, authorPieChart;
-RadioButton mostReviewed, topStars, topHundred, coolest, funniest, mostUseful, mapButton, barChartGraph, lineChartGraph;
+Widget searchbox, searchButton, homeButton, leaderboardsButton, authorPieChart, previousYear, nextYear;
+RadioButton mostReviewed, topStars, topTwenty, coolest, funniest, mostUseful, mapButton, barChartGraph, lineChartGraph;
 TitleBox recentReviewsHeader, topBusinessesHeader;
 Screen currentScreen, homeScreen, leaderboardsScreen, businessScreen;
 
@@ -69,7 +69,7 @@ void settings() {
 void setup() {  
   textSize(30);
   fill(0);
-  
+
   cam = new PeasyCam(mainClass, SCREENX/2, SCREENY/2, 0, 780);
   cam.setYawRotationMode(); 
   cam.setActive(false);
@@ -97,13 +97,16 @@ void setup() {
   businessScreen=new Screen(backgroundPhotoBusiness, businessWidgets);
   topStars= new RadioButton(RADIOBUTTONX, TOPSTARSY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Top star rated", color(255), widgetFont, EVENT_BUTTON4, 10, 10 );
   mostReviewed= new RadioButton(RADIOBUTTONX, MOSTREVIEWEDY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Most reviewed", color(255), widgetFont, EVENT_BUTTON5, 10, 10 );
-  topHundred= new RadioButton(RADIOBUTTONX, TOPHUNDREDY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Top 20 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
+  topTwenty= new RadioButton(RADIOBUTTONX, TOPTWENTY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Top 20 rated", color(255), widgetFont, EVENT_BUTTON6, 10, 10 );
   mostUseful= new RadioButton(RADIOBUTTONX, MOSTUSEFULY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Most useful", color(255), widgetFont, EVENT_BUTTON7, 10, 10 );
   funniest= new RadioButton(RADIOBUTTONX, FUNNIESTY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Funniest", color(255), widgetFont, EVENT_BUTTON8, 10, 10 );
   coolest= new RadioButton(RADIOBUTTONX, COOLESTY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Coolest", color(255), widgetFont, EVENT_BUTTON9, 10, 10 );
-  barChartGraph= new RadioButton(BARCHARTBUTTONX, BARCHARTBUTTONY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Bar Chart", color(255), autoCompleteFont, EVENT_BUTTON13, 12, 10);
+  barChartGraph= new RadioButton(BARCHARTBUTTONX, BARCHARTBUTTONY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Bar Chart", color(255), widgetFont, EVENT_BUTTON13, 12, 10);
   lineChartGraph = new RadioButton(LINECHARTBUTTONX, LINECHARTBUTTONY, RADIOBUTTONWIDTH, RADIOBUTTONHEIGHT, "Line Chart", color(255), widgetFont, EVENT_BUTTON14, 5, 10);
   mapButton = new RadioButton(RADIOBUTTONX, MAPBUTTONY, LEADERBOARDSBUTTONWIDTH, LEADERBOARDSBUTTONHEIGHT, "Map of businesses", color(255), widgetFont, EVENT_BUTTON15, 10, 10);
+  previousYear= new Widget(LINECHARTBUTTONX, LINECHARTBUTTONY-40, RADIOBUTTONWIDTH-40, RADIOBUTTONHEIGHT, "< year", color(255), widgetFont, EVENT_BUTTON17, 5, 10);
+  nextYear = new Widget(LINECHARTBUTTONX+110, LINECHARTBUTTONY-40, RADIOBUTTONWIDTH-40, RADIOBUTTONHEIGHT, "year >", color(255), widgetFont, EVENT_BUTTON18, 5, 10);
+
 
   selectedBusiness=null;
   selectedAC = null;
@@ -148,7 +151,7 @@ void setup() {
   leaderboardsScreen.addWidget(searchbox);
   leaderboardsScreen.addWidget(topStars);
   leaderboardsScreen.addWidget(mostReviewed);
-  leaderboardsScreen.addWidget(topHundred);
+  leaderboardsScreen.addWidget(topTwenty);
   leaderboardsScreen.addWidget(mostUseful);
   leaderboardsScreen.addWidget(funniest);
   leaderboardsScreen.addWidget(coolest);
@@ -159,6 +162,8 @@ void setup() {
   businessScreen.addWidget(searchButton);
   businessScreen.addWidget(barChartGraph);
   businessScreen.addWidget(lineChartGraph);
+  businessScreen.addWidget(previousYear);
+  businessScreen.addWidget(nextYear);
 
   currentScreen=homeScreen;
 
@@ -168,8 +173,8 @@ void setup() {
   //setup for the Top 20 list on the leaderboards screen - Kamil
   cp5 = new ControlP5(this);
   cp5.addScrollableList("TopTwenty")
-    .setPosition(400, 120)
-    .setSize(900, 725)             
+    .setPosition(TOPTWENTYLISTX, TOPTWENTYLISTY)
+    .setSize(TOPTWENTYWIDTH, TOPTWENTYHEIGHT)             
     .setBarVisible(true)
     .setBarHeight(40)
     .setItemHeight(50)           
@@ -185,7 +190,7 @@ void setup() {
   cp5Reviews = new ControlP5(this);  
   cp5Reviews.addScrollableList("Reviews")
     .setPosition(BUSINESSREVIEWSX, BUSINESSREVIEWSY)
-    .setSize(REVIEWTEXTWIDTH, 400)
+    .setSize(REVIEWTEXTWIDTH, REVIEWTEXTHEIGHT)
     .setItemHeight(28)
     .setBarHeight(30)
     .setFont(widgetFont)
@@ -249,22 +254,18 @@ void draw() {
     noStroke();
     if (goToGraph) {
       barchart.draw();
-      if (drawLineChart) {
-        lineGraph.drawLineGraph();
-      }
-  for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++);
+      for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++);
     }
+  }
 
- }
-
-  if (drawMap){
+  if (drawMap) {
     for (int i=0; i<map.bars.length && !map.bars[i].drawBar(); i++);
   }
 
 
   // boolean for determining if the top 20 list should be shown - Kamil
   if (!listTopTwenty) {
-cp5.hide();
+    cp5.hide();
   } else if (listTopTwenty) {
     cp5.show();
   }
@@ -330,50 +331,50 @@ cp5.hide();
 
     // draws the line chart if the line chart button is pressed
     if (drawLineChart) {
-      lineGraph.drawLineGraph();
+      lineGraph.drawLineGraph();                                                                                                    ////////////////
+      text(year, LINECHARTBUTTONX+65, LINECHARTBUTTONY-15);
     }
     // resets the boolean to prevent constant restarts on drawing the chart
     drawStarChart=false;
     drawMap=false;
-   if(drawScreen){
-    // draws the transparent rectangle behind review text
-    fill(0, 130); 
-    noStroke();
-    rect(BUSINESSREVIEWSX, BUSINESSREVIEWSY, REVIEWTEXTWIDTH, 720);
+    if (drawScreen) {
+      // draws the transparent rectangle behind review text
+      fill(0, 130); 
+      noStroke();
+      rect(BUSINESSREVIEWSX, BUSINESSREVIEWSY, REVIEWTEXTWIDTH, 720);
 
-    // if a review is selected, print out its text on the area of the rectangle
-    if (selectedReview!=null) {
+      // if a review is selected, print out its text on the area of the rectangle
+      if (selectedReview!=null) {
+        fill(255);
+        textSize(17);
+        text(selectedReview, BUSINESSREVIEWSX+10, BUSINESSNAMEY+100, REVIEWTEXTWIDTH-10, 725);
+      } 
+
+      //if the mouse is over the list of the reviews, you can scroll through the list, else 'scroll' zooms out/in on the screen
+      if (overReviews()||overTopTwenty()) {
+        cam.setActive(false);
+      } else if (!overReviews() && !overTopTwenty()) {
+        cam.setActive(true);
+      }
+
+      cp5.get(ScrollableList.class, "TopTwenty").hide();
+      // draws the line under the business page header
+      fill(HIGHLIGHT);
+      rect(BUSINESSREVIEWSX, BUSINESSNAMEY+10, REVIEWTEXTWIDTH, 2);
+      cp5Reviews.get(ScrollableList.class, "Reviews").show();
+
+      // prints the header on the business page (business name and rating)
       fill(255);
-      textSize(17);
-      text(selectedReview, BUSINESSREVIEWSX+10, BUSINESSNAMEY+100, REVIEWTEXTWIDTH-10, 725);
-    } 
-
-    //if the mouse is over the list of the reviews, you can scroll through the list, else 'scroll' zooms out/in on the screen
-    if(overReviews()){
-      cam.setActive(false);
+      textFont(font);
+      textSize(40);
+      text(businessName+"  "+rating+"*", BUSINESSNAMEX, BUSINESSNAMEY);
+      textSize(19);
+      //text("Amount of reviews \nof all time" + " = " + reviewAmount, BUSINESSNAMEX, BUSINESSNAMEY+700);                      
+      //text("Amount of reviews \nfor " + year + " = " + totalReviewsForYear, BUSINESSNAMEX, BUSINESSNAMEY+725);
     }
-    else if(!overReviews()){
-      cam.setActive(true);
+    if (!drawScreen) {
+      cp5Reviews.get(ScrollableList.class, "Reviews").hide();
     }
-
-    cp5.get(ScrollableList.class, "TopTwenty").hide();
-    // draws the line under the business page header
-    fill(HIGHLIGHT);
-    rect(BUSINESSREVIEWSX, BUSINESSNAMEY+10, REVIEWTEXTWIDTH, 2);
-    cp5Reviews.get(ScrollableList.class, "Reviews").show();
-
-    // prints the header on the business page (business name and rating)
-    fill(255);
-    textFont(font);
-    textSize(40);
-    text(businessName+"  "+rating+"*", BUSINESSNAMEX, BUSINESSNAMEY);
-    textSize(19);
-    //text("Amount of reviews \nof all time" + " = " + reviewAmount, BUSINESSNAMEX, BUSINESSNAMEY+700);                      
-    //text("Amount of reviews \nfor " + year + " = " + totalReviewsForYear, BUSINESSNAMEX, BUSINESSNAMEY+725);
-   }
-   if(!drawScreen){
-     cp5Reviews.get(ScrollableList.class, "Reviews").hide();
-   }
   }
   //resets the values 
   selectedBusiness = null;
@@ -466,12 +467,14 @@ void keyPressed() {
 
 // rotates the graphs when mouse dragged - Kamil
 void mouseDragged() {
-  cam.setActive(true);
-  drawScreen=false;
+  if (currentScreen!=homeScreen && !overReviews() && !overTopTwenty()) {
+    cam.setActive(true);
+    drawScreen=false;
+  }
 }
 
 // resets the screen back to normal when mouse released - Kamil
-void mouseReleased(){
+void mouseReleased() {
   drawScreen=true;
   cam.reset();
 }
@@ -634,6 +637,7 @@ void mousePressed() {
     drawGraph=false;
     drawStarChart=false;
     drawLineChart = true;
+    println(lineGraph.amountOfReviews());
     break;
 
     // button to display map on leaderboards page - Kamil  
@@ -641,6 +645,46 @@ void mousePressed() {
     listTopTwenty=false;
     drawGraph=false;
     drawMap=true;
+    break;
+    // read full review button - Kamil
+  case EVENT_BUTTON16:
+    for (int i = 0; i < listOfRecentReviews.size(); i++) {
+      if (listOfRecentReviews.get(i).seeFullReviewButton.getEvent(mouseX, mouseY) != EVENT_NULL) {
+        searchbox.myText = listOfRecentReviews.get(i).getBusinessName();
+        displayBusinessScreen();
+        prepareBusinessReviews(searchbox.myText);
+        selectedReview= reviewTexts.get(0);
+        cp5Reviews.get(ScrollableList.class, "Reviews").close(); 
+        String header = reviewHeaders.get(0);
+        cp5Reviews.get(ScrollableList.class, "Reviews").setCaptionLabel(header);
+      }
+    }
+    break;
+
+    //previous & next year buttons for changing the line chart with respect to year - Kamil
+  case EVENT_BUTTON17:
+    if (year<=2007) {
+      year=2007;
+    } else {
+      year--;
+    }
+    reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
+    displayBusinessLineGraph(reviewsPerMonth, year);
+    println(year);
+    println(lineGraph.amountOfReviews());
+    break;
+
+  case EVENT_BUTTON18:
+    if (year>=2017) {
+      year=2017;
+    } else {
+      year++;
+      println(year);
+    }
+    reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
+    displayBusinessLineGraph(reviewsPerMonth, year);
+    println(year);
+    println(lineGraph.amountOfReviews());
     break;
 
   default:
@@ -729,11 +773,22 @@ void displayBusinessStarsChart(ArrayList<Business> businessStarsList) {
   }
 }
 
-//draws the line chart for amount of reviews per month per year for a particular business - Claire
-String displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {
+//draws the line chart for amount of reviews per month per year for a particular business - Claire                                            ///////////////////////////////////////////////////////////////////////
+String displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {  
   lineGraph = new LineGraph(LINECHARTX, LINECHARTY, reviewsPerMonth, year);
   return lineGraph.amountOfReviews();
 }
+//void displayBusinessLineGraph(ArrayList<Business> reviewsPerMonth, int year) {
+//  if (reviewsPerMonth.size() != 0) {
+//    goToGraph = true;
+//  }
+//  if (goToGraph) {
+//    drawGraph = true;
+//    drawLineChart = true;
+//    drawStarChart=false;
+//    lineGraph = new LineGraph(LINECHARTX, LINECHARTY, reviewsPerMonth, year);
+//  }
+//}
 
 // this method creates an arraylist of reviewBox containing the most recent reviews
 ArrayList<ReviewBox> initRecentReviewBoxes() {
@@ -848,7 +903,16 @@ void drawTopBusinessTable() {
 // function for the business page to differentiate whether to scroll review list or zoom in/out the screen - Kamil
 boolean overReviews() {
   boolean canScroll=false;
-  if (mouseX>=BUSINESSREVIEWSX && mouseX<= BUSINESSREVIEWSX+REVIEWTEXTWIDTH && mouseY >= BUSINESSREVIEWSY && mouseY<=BUSINESSREVIEWSY+700) {
+  if (currentScreen==businessScreen && mouseX>=BUSINESSREVIEWSX && mouseX<= BUSINESSREVIEWSX+REVIEWTEXTWIDTH && mouseY >= BUSINESSREVIEWSY && mouseY<=BUSINESSREVIEWSY+700) {
+    canScroll=true;
+  }
+  return canScroll;
+}
+
+boolean overTopTwenty(){
+  boolean canScroll=false;
+  if (cp5Reviews.get(ScrollableList.class, "Reviews").isVisible() && currentScreen==leaderboardsScreen && mouseX>=TOPTWENTYLISTX && 
+      mouseX<= TOPTWENTYLISTX+TOPTWENTYWIDTH && mouseY >= TOPTWENTYLISTY && mouseY<=TOPTWENTYLISTY+TOPTWENTYHEIGHT) {
     canScroll=true;
   }
   return canScroll;
