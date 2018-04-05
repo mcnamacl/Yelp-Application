@@ -51,7 +51,7 @@ class Bar {
       noStroke();
       fill(barColour, 170);
       pushMatrix();
-      translate(x, constantY+30, 20);
+      translate(x, constantY+30, 38);        // last value here controls the 'depth' of the graph
       rotateX(PI/2);
       box(8.5, iY, 8.5);
       popMatrix();

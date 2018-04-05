@@ -1,4 +1,4 @@
-import controlP5.*;   //<>// //<>// //<>//
+import controlP5.*;   //<>// //<>// //<>// //<>//
 import peasy.PeasyCam;
 import java.util.Set;
 import java.util.HashSet;
@@ -566,6 +566,7 @@ void mousePressed() {
   event = homeButton.getEvent(mouseX, mouseY);
   if (event==EVENT_BUTTON2) {
     searchbox.myText="Search...";
+    drawPieChart = false;
     canType=false;
     goToGraph=false;
     drawGraph = false;
@@ -573,6 +574,7 @@ void mousePressed() {
     currentScreen=homeScreen;
     listTopTwenty=false;
     selectedBusiness=null;
+    selectedReview=null;
     cp5AutoComplete.get(ScrollableList.class, "Autocomplete").hide();
     cp5Reviews.get(ScrollableList.class, "Reviews").hide();
   }
