@@ -1,4 +1,4 @@
-
+//makes bubbles rise on the screen - Claire
 class Bubble{
   
   int bubbleX, bubbleY, diameter, tmpBubbleY, waitTime;
@@ -15,6 +15,7 @@ class Bubble{
     tmpBubbleY = SCREENY;
   }
   
+  //function that draws bubbles and their facts rising up the screen 
   void drawBubblesRising(){
     if (waitTime < 0){
     if (tmpBubbleY != bubbleY) {
