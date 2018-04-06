@@ -16,10 +16,6 @@ class Line{
   
   void drawLines(){
     stroke(255);
-    //if (x!=destX&&y!=destY){
-    //  x = x + totalX;
-    //  y = y + totalY;
-    //}
     line(prevX, prevY, x, y);
     noStroke();
   } 

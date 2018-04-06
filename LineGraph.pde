@@ -59,6 +59,7 @@ class LineGraph {
     interval = (float)(SCREENY-300)/max;
   }
 
+//draws the line chart
   void drawLineGraph() {
     stroke(255);
     chart = new Chart((float)x-5, y-max*interval, (float)x-5, (float)y, (float)x+(11*40), y+2);
@@ -72,6 +73,7 @@ class LineGraph {
     drawSide();
   }
 
+//draws the spheres on the line graph
   void drawPoints() {
     float tmpX = (float) x;
     float tmpY = (float) y;
@@ -94,7 +96,8 @@ class LineGraph {
       tmpX+=40;                                                                        
     }
   }
-  
+ 
+  //draws the numbers up the side of the line chart
   void drawSide(){
     int tmpY = y;
     fill(255);
@@ -103,7 +106,9 @@ class LineGraph {
       tmpY = tmpY - (int)interval;
     }
   }
+ 
   
+  //returns the amount of reviews that are in the business
   String amountOfReviews(){
     int count = 0;
     for (Business business : reviewsPerM){

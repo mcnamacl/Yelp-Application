@@ -1,4 +1,4 @@
-import controlP5.*;   //<>// //<>// //<>// //<>//
+import controlP5.*; //<>//
 import peasy.PeasyCam;
 import java.util.Set;
 import java.util.HashSet;
@@ -269,7 +269,7 @@ void draw() {
       for (int i=0; i<barchart.bars.length && !barchart.bars[i].drawBar(); i++);
     }
   }
-  // drawing bar charts on map
+  // drawing bar charts on map - Claire
   if (drawMap) {
     for (int i=0; i<map.bars.length && !map.bars[i].drawBar(); i++);
   }
@@ -761,7 +761,6 @@ void mousePressed() {
       year=2017;
     } else {
       year++;
-      println(year);
     }
     reviewsPerMonth = search.sortReviewsByMonth(searchedBusinesses.get(0), year);
     totalReviewsForYear = displayBusinessLineGraph(reviewsPerMonth, year);
